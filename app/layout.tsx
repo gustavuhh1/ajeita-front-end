@@ -7,7 +7,6 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-roboto",
-  weight: ["400"],
 });
 
 export const metadata: Metadata = {
