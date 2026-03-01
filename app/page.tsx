@@ -8,8 +8,16 @@ import {
 } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
+  ArrowRightIcon,
+  ChatIcon,
   CheckCircleIcon,
+  CheckIcon,
+  CreditCardIcon,
+  FacebookLogoIcon,
+  HandshakeIcon,
   HouseSimpleIcon,
+  InstagramLogoIcon,
+  LogIcon,
   UserCircleGearIcon,
   UserIcon,
 } from "@phosphor-icons/react";
@@ -161,6 +169,203 @@ export default function Page() {
           />
         </div>
       </section>
+      <section className="flex flex-col gap-12 px-8 py-15 max-[1024px]:px-10 md:gap-16 lg:gap-20">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <h2>Como o Ajeita funciona</h2>
+          <span>
+            Simples, rápido e seguro. Veja como é fácil contratar ou oferecer
+            serviços na nossa plataforma em apenas 4 passos.
+          </span>
+        </div>
+        {/* Box Modals */}
+        <div className="mt-5 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {/* Modals */}
+          <div className="bg-secondary/20 hover:border-border group flex min-w-65 flex-col rounded-4xl border border-zinc-300 p-5 transition-all duration-300 hover:shadow-lg">
+            <div className="bg-primary/20 mb-5 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110">
+              <span className="text-primary">
+                <ChatIcon weight="bold" size={20} />
+              </span>
+            </div>
+            <h3 className="text-foreground mb-1 font-semibold">1. Solicite</h3>
+            <p className="text-foreground text-md font-light">
+              Descreva o serviço que você precisa com detalhes e fotos se
+              necessário.
+            </p>
+          </div>
+          <div className="bg-secondary/20 hover:border-border group flex min-w-65 flex-col rounded-4xl border border-zinc-300 p-5 transition-all duration-300 hover:shadow-lg">
+            <div className="bg-primary/20 mb-5 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110">
+              <span className="text-primary">
+                <HandshakeIcon weight="bold" size={20} />
+              </span>
+            </div>
+            <h3 className="text-foreground mb-1 font-semibold">2. Negocie</h3>
+            <p className="text-foreground text-md font-light">
+              Receba orçamentos de profissionais avaliados e escolha a melhor
+              opção.
+            </p>
+          </div>
+          <div className="bg-secondary/20 hover:border-border group flex min-w-65 flex-col rounded-4xl border border-zinc-300 p-5 transition-all duration-300 hover:shadow-lg">
+            <div className="bg-primary/20 mb-5 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110">
+              <span className="text-primary">
+                <CreditCardIcon weight="bold" size={20} />
+              </span>
+            </div>
+            <h3 className="text-foreground mb-1 font-semibold">
+              3. Pagamento seguro
+            </h3>
+            <p className="text-foreground text-md font-light">
+              O valor fica retido na plataforma e só é liberado após a
+              conclusão.
+            </p>
+          </div>
+          <div className="bg-secondary/20 hover:border-border group flex min-w-65 flex-col rounded-4xl border border-zinc-300 p-5 transition-all duration-300 hover:shadow-lg">
+            <div className="bg-primary/20 mb-5 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110">
+              <span className="text-primary">
+                <CheckCircleIcon weight="bold" size={20} />
+              </span>
+            </div>
+            <h3 className="text-foreground mb-1 font-semibold">
+              4. Serviço Realizado
+            </h3>
+            <p className="text-foreground text-md font-light">
+              O profissional realiza o serviço e você avalia a experiência.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section className="bg-secondary/50 flex flex-col items-center justify-center gap-12 px-8 py-15 lg:flex-row lg:px-15 lg:py-20">
+        <div className="flex max-w-xl flex-1 flex-col rounded-2xl bg-white shadow-lg">
+          <Image
+            src="/family-bg.png"
+            className="h-90 w-full overflow-hidden rounded-t-xl object-cover"
+            width={360}
+            height={200}
+            alt={""}
+          />
+          <div className="flex flex-col gap-2 p-6">
+            <span className="w-fit rounded-4xl bg-blue-600/40 px-2 py-1 text-xs font-semibold text-blue-900 uppercase">
+              para cliente
+            </span>
+            <h2>Resolva tudo sem sair de casa</h2>
+            <span className="flex items-center gap-2 text-zinc-700">
+              <CheckIcon weight="bold" size={18} className="text-green-500" />{" "}
+              Profissionais verificados e avaliados.
+            </span>
+            <span className="flex items-center gap-2 text-zinc-700">
+              <CheckIcon weight="bold" size={18} className="text-green-500" />{" "}
+              Garantia de satisfação ou seu dinheiro de volta.
+            </span>
+            <span className="flex items-center gap-2 text-zinc-700">
+              <CheckIcon weight="bold" size={18} className="text-green-500" />{" "}
+              Suporte dedicado 24/7.
+            </span>
+            <Link href="/profissionais" className="w-full">
+              <Button
+                className="mt-4 h-13 w-full rounded-4xl bg-black text-white"
+                size="xl"
+                type="button"
+              >
+                Encontrar profissional{" "}
+                <ArrowRightIcon size={16} weight="bold" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <div className="flex max-w-xl flex-1 flex-col rounded-2xl bg-[#1d180c] shadow-lg">
+          <Image
+            src="/worker-bg.png"
+            className="h-90 w-full overflow-hidden rounded-t-xl object-cover"
+            width={360}
+            height={200}
+            alt={""}
+          />
+          <div className="flex flex-col gap-2 p-6 text-white">
+            <span className="w-fit rounded-4xl bg-yellow-400 px-2 py-1 text-xs font-semibold text-black uppercase">
+              para profissionais
+            </span>
+            <h2>Aumente sua renda e clientela</h2>
+            <span className="flex items-center gap-2">
+              <CheckIcon weight="bold" size={18} className="text-yellow-500" />{" "}
+              Milhares de pedidos de serviço todos os dias.
+            </span>
+            <span className="flex items-center gap-2">
+              <CheckIcon weight="bold" size={18} className="text-yellow-500" />{" "}
+              Receba pagamentos garantidos sem calote.
+            </span>
+            <span className="flex items-center gap-2">
+              <CheckIcon weight="bold" size={18} className="text-yellow-500" />{" "}
+              Gerencie sua agenda e reputação online.
+            </span>
+            <Link href="/profissionais">
+              <Button
+                className="mt-4 h-13 w-full rounded-4xl bg-yellow-500 font-semibold"
+                size="xl"
+                type="button"
+              >
+                Começar a Trabalhar <ArrowRightIcon size={16} weight="bold" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+      <footer className="flex flex-col border-t border-zinc-300/50 py-5">
+        <div className="flex w-full flex-col md:flex-row justify-around px-15 py-2">
+          <div className="max-w-xs space-y-5 pt-4">
+            <span className="flex items-center gap-2 text-xl font-bold">
+              <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-full">
+                <LogIcon size={25} />
+              </div>
+              Ajeitai
+            </span>
+            <p className="text-foreground mt-2 font-light">
+              A plataforma que conecta quem precisa de ajuda com quem sabe
+              resolver.
+            </p>
+            <div className="flex gap-6">
+              <div className="mt-3 flex h-10 w-10 items-center justify-center gap-4 rounded-full bg-gray-300 text-zinc-700">
+                <FacebookLogoIcon size={20} weight="fill" />
+              </div>
+              <div className="mt-3 flex h-10 w-10 items-center justify-center gap-4 rounded-full bg-gray-300 text-zinc-700">
+                <InstagramLogoIcon size={20} weight="bold" />
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-20">
+            <div className="max-w-xs space-y-5 pt-4">
+              <ul className="space-y-2">
+                <h4 className="mb-5 font-bold">Empresa</h4>
+                <li>Sobre nós</li>
+                <li>Carreiras</li>
+                <li>Blog</li>
+                <li>Imprensa</li>
+              </ul>
+            </div>
+            <div className="max-w-xs space-y-5 pt-4">
+              <ul className="space-y-2">
+                <h4 className="mb-5 font-bold">Descubra</h4>
+                <li>Como funciona</li>
+                <li>Segurança</li>
+                <li>Serviços</li>
+                <li>Cidades</li>
+              </ul>
+            </div>
+            <div className="max-w-xs space-y-5 pt-4">
+              <ul className="space-y-2">
+                <h4 className="mb-5 font-bold">Suporte</h4>
+                <li>Central de Ajuda</li>
+                <li>Termos de Uso</li>
+                <li>Privacidade</li>
+                <li>Fale Conosco</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="flex h-20 items-center justify-center">
+          <span className="text-muted-foreground text-sm">
+            &copy; 2024 Ajeitaí. Todos os direitos reservados.
+          </span>
+        </div>
+      </footer>
     </main>
   );
 }
