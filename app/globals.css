@@ -121,10 +121,19 @@
   }
 
   a {
-    color: var(--primary);
     text-decoration: none;
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
     }
+  }
+}
+
+@layer utilities {
+  .no-mobile {
+    @apply hidden md:flex;
+  }
+
+  .mobile {
+    @apply block md:hidden;
   }
 }
