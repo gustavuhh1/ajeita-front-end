@@ -42,21 +42,18 @@ export default function Page() {
             <Link href="#">Para profissionais</Link>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button
-                variant="ghost"
-                type="button"
-                className="hover:bg-primary/20 px-4 py-2"
-                size="xl"
-              >
-                Entrar
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button type="button" className="px-4 py-2" size="xl">
-                Cadastre-se
-              </Button>
-            </Link>
+            <Button
+              asChild
+              variant="ghost"
+              type="button"
+              className="hover:bg-primary/20 px-4 py-2"
+              size="xl"
+            >
+              <Link href="/login">Entrar</Link>
+            </Button>
+            <Button asChild type="button" className="px-4 py-2" size="xl">
+              <Link href="/auth">Cadastre-se</Link>
+            </Button>
           </div>
         </div>
       </header>
@@ -77,29 +74,31 @@ export default function Page() {
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button
-                type="button"
-                className="flex h-15 items-center gap-2 rounded-full px-8 py-2 hover:cursor-pointer"
-                size="xl"
-              >
+            <Button
+              asChild
+              type="button"
+              className="flex h-15 items-center gap-2 rounded-full px-8 py-2 hover:cursor-pointer"
+              size="xl"
+            >
+              <Link href="/login">
                 <UserIcon weight="bold" size={22} />
                 <span className="text-lg font-semibold">Sou cliente</span>
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button
-                type="button"
-                variant="outline"
-                className="bg-background hover:bg-primary/10 flex h-15 items-center gap-2 rounded-full px-8 py-2 hover:cursor-pointer"
-                size="xl"
-              >
+              </Link>
+            </Button>
+            <Button
+              asChild
+              type="button"
+              variant="outline"
+              className="bg-background hover:bg-primary/10 flex h-15 items-center gap-2 rounded-full px-8 py-2 hover:cursor-pointer"
+              size="xl"
+            >
+              <Link href="/login">
                 <UserCircleGearIcon weight="bold" size={22} />
                 <span className="ml-1 text-lg font-semibold">
                   Sou profissional
                 </span>
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
           <div className="mt-5 flex items-center justify-center gap-3 md:justify-start">
             <AvatarGroup>
@@ -296,27 +295,28 @@ export default function Page() {
               <CheckIcon weight="bold" size={18} className="text-yellow-500" />{" "}
               Gerencie sua agenda e reputação online.
             </span>
-            <Link href="/profissionais">
-              <Button
-                className="mt-4 h-13 w-full rounded-4xl bg-yellow-500 font-semibold"
-                size="xl"
-                type="button"
-              >
+            <Button
+              asChild
+              className="mt-4 h-13 w-full rounded-4xl bg-yellow-500 font-semibold"
+              size="xl"
+              type="button"
+            >
+              <Link href="/profissionais">
                 Começar a Trabalhar <ArrowRightIcon size={16} weight="bold" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
       <footer className="flex flex-col border-t border-zinc-300/50 py-5">
-        <div className="flex w-full flex-col md:flex-row justify-around px-15 py-2">
+        <div className="flex w-full flex-col justify-around px-15 py-2 md:flex-row">
           <div className="max-w-xs space-y-5 pt-4">
-            <span className="flex items-center gap-2 text-xl font-bold">
+            <div className="flex items-center gap-2 text-xl font-bold">
               <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-full">
                 <LogIcon size={25} />
               </div>
               Ajeitai
-            </span>
+            </div>
             <p className="text-foreground mt-2 font-light">
               A plataforma que conecta quem precisa de ajuda com quem sabe
               resolver.
@@ -332,8 +332,8 @@ export default function Page() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 md:gap-20">
             <div className="max-w-xs space-y-5 pt-4">
+              <h4 className="mb-5 font-bold">Empresa</h4>
               <ul className="space-y-2">
-                <h4 className="mb-5 font-bold">Empresa</h4>
                 <li>Sobre nós</li>
                 <li>Carreiras</li>
                 <li>Blog</li>
@@ -341,8 +341,8 @@ export default function Page() {
               </ul>
             </div>
             <div className="max-w-xs space-y-5 pt-4">
+              <h4 className="mb-5 font-bold">Descubra</h4>
               <ul className="space-y-2">
-                <h4 className="mb-5 font-bold">Descubra</h4>
                 <li>Como funciona</li>
                 <li>Segurança</li>
                 <li>Serviços</li>
@@ -350,8 +350,8 @@ export default function Page() {
               </ul>
             </div>
             <div className="max-w-xs space-y-5 pt-4">
+              <h4 className="mb-5 font-bold">Suporte</h4>
               <ul className="space-y-2">
-                <h4 className="mb-5 font-bold">Suporte</h4>
                 <li>Central de Ajuda</li>
                 <li>Termos de Uso</li>
                 <li>Privacidade</li>
