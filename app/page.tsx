@@ -92,7 +92,7 @@ export default function Page() {
               className="bg-background hover:bg-primary/10 flex h-15 items-center gap-2 rounded-full px-8 py-2 hover:cursor-pointer"
               size="xl"
             >
-              <Link href="/login">
+              <Link href="/profissional">
                 <UserCircleGearIcon weight="bold" size={22} />
                 <span className="ml-1 text-lg font-semibold">
                   Sou profissional
