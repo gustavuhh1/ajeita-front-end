@@ -19,7 +19,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import Footer from "./components/footer";
-import z from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import api from "@/lib/api";

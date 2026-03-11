@@ -10,9 +10,10 @@ interface Step02Props {
   control: Control<FormData>;
   errors: FieldErrors<FormData>;
   handleNextStep: () => void;
+  setStep: (step: number) => void;
 }
 
-const Step02 = ({ control, errors, handleNextStep }: Step02Props) => {
+const Step02 = ({ control, errors, handleNextStep, setStep }: Step02Props) => {
   const bioValue = useWatch({ control, name: "bio" });
   return (
     <form className="flex flex-col gap-6">
@@ -93,7 +94,7 @@ const Step02 = ({ control, errors, handleNextStep }: Step02Props) => {
           variant="outline"
           size="xl"
           className="flex-1"
-          onClick={handleNextStep}
+          onClick={() => setStep(1)}
         >
           Voltar
         </Button>

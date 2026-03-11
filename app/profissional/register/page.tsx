@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowUUpLeftIcon } from "@phosphor-icons/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import { z } from "zod";
 import Step00 from "./components/step-00";
 import Step01 from "./components/step-01";
 import Step02 from "./components/step-02";
@@ -184,6 +184,7 @@ export default function RegisterPage() {
               control={control}
               errors={errors}
               handleNextStep={handleNextStep}
+              setStep={setStep}
             />
           )}
 

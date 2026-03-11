@@ -20,7 +20,12 @@ export interface UserClient extends User {
 export interface UserProvider extends User {
   id: string;
   userId: string;
-  profession: string;
+  categories: Category[];
+  othersCategory?: string;
+  bio: string;
+  neighborhood: string;
+  radius: number;
+
 }
 
 interface Category {
