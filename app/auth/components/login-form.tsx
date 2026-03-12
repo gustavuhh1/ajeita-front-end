@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import api from "@/lib/api";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EnvelopeSimpleIcon,
   EyeIcon,
@@ -14,9 +16,54 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const schemeLogin = z.object({
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(6, "A senha deve conter no mínimo 6 caracteres"),
+});
+
+type FormData = z.infer<typeof schemeLogin>;
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    setValue,
+  } = useForm<FormData>({
+    resolver: zodResolver(schemeLogin),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
+
+  // TODO: Implementar autenticação real e lidar com erros adequadamente
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    const res = await api.get("/prestadores");
+    const users = res.data as { email: string; password: string }[];
+
+    const user = users.find(
+      (u) => u.email === data.email && u.password === data.password,
+    );
+    if (user) {
+      alert("Login bem-sucedido! Redirecionando para dashboard...");
+    } else {
+      setError("email", { message: "E-mail ou senha incorretos" });
+      setError("password", { message: "E-mail ou senha incorretos" });
+      setValue("password", ""); // Limpa o campo de senha para segurança
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl">
       <div className="mb-5 flex flex-col items-start gap-8">
@@ -63,18 +110,25 @@ const LoginForm = () => {
       </div>
 
       {/* FORM */}
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-1">
           <Label htmlFor="email" className="text-sm font-medium">
             E-mail
           </Label>
           <div className="relative">
-            <Input
+            <Controller
               name="email"
-              id="email"
-              type="email"
-              placeholder="voce@exemplo.com"
-              className="h-12 rounded-full pl-9 shadow-sm"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="email"
+                  type="email"
+                  placeholder="seuemail@exemplo.com"
+                  className="h-12 rounded-full pl-9 shadow-sm"
+                  autoComplete="email"
+                />
+              )}
             />
             <EnvelopeSimpleIcon
               weight="bold"
@@ -82,6 +136,9 @@ const LoginForm = () => {
               size={18}
             />
           </div>
+          {errors.email && (
+            <p className="text-xs text-red-500">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="space-y-1">
@@ -89,12 +146,19 @@ const LoginForm = () => {
             Senha
           </Label>
           <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
+            <Controller
               name="password"
-              id="password"
-              placeholder="••••••••"
-              className="h-12 rounded-full pl-9 shadow-sm"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  className="h-12 rounded-full pl-9 shadow-sm"
+                  autoComplete="password"
+                />
+              )}
             />
             <LockIcon
               weight="fill"
@@ -117,6 +181,9 @@ const LoginForm = () => {
               />
             )}
           </div>
+          {errors.password && (
+            <p className="text-xs text-red-500">{errors.password.message}</p>
+          )}
         </div>
 
         <div className="flex justify-between text-sm">
@@ -137,7 +204,9 @@ const LoginForm = () => {
 
         <Button
           size="xl"
+          type="submit"
           className="w-full rounded-full bg-yellow-400 py-4 font-semibold"
+          disabled={isLoading}
         >
           Entrar na conta
         </Button>
