@@ -18,7 +18,7 @@ import { useState } from "react";
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   return (
-    <div className="max-w-md lg:max-w-xl">
+    <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl">
       <div className="mb-5 flex flex-col items-start gap-8">
         <div className="space-y-1">
           <h2 className="text-3xl font-bold">Bem-vindo de volta!</h2>
