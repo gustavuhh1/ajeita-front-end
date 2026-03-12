@@ -75,8 +75,8 @@ export default function ProviderPage() {
   });
 
   return (
-    <div className="flex h-[calc(100vh-80px)] flex-col justify-between">
-      <div className="flex w-full flex-col items-center justify-around gap-10 px-6 py-10 md:flex-row md:items-start md:px-12 lg:px-30">
+    <div className="relative flex min-h-[calc(100svh-80px)] flex-col">
+      <div className="flex w-full flex-1 flex-col items-center justify-around gap-10 px-6 py-10 md:flex-row md:px-12 lg:px-30">
         {/* Left Column */}
         <div className="flex w-full max-w-lg flex-col space-y-4 lg:max-w-xl">
           <h1 className="text-3xl font-semibold md:text-4xl">
@@ -263,7 +263,7 @@ export default function ProviderPage() {
           </Button>
         </div>
       </div>
-      <Footer className="" />
+      <Footer className="absolute bottom-1 left-1/2 -translate-x-1/2" />
     </div>
   );
 }
