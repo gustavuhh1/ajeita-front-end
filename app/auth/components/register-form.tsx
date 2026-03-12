@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import api from "@/lib/api";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EnvelopeSimpleIcon,
   GithubLogoIcon,
@@ -13,8 +15,65 @@ import {
   UserIcon,
 } from "@phosphor-icons/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const schemeLogin = z
+  .object({
+    name: z.string().min(3, "Nome deve ter ao menos 3 caracteres"),
+    email: z.string().email("E-mail inválido"),
+    cpf: z
+      .string()
+      .min(14, "CPF inválido")
+      .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "Formato: 000.000.000-00"),
+    telefone: z.string().optional(),
+    password: z.string().min(8, "Senha deve ter ao menos 8 caracteres"),
+    confirmPassword: z.string(),
+  })
+  .refine(
+    (data: { password: string; confirmPassword: string }) =>
+      data.password === data.confirmPassword,
+    {
+      message: "As senhas não coincidem",
+      path: ["confirmPassword"],
+    },
+  );
+
+type FormData = z.infer<typeof schemeLogin>;
 
 const RegisterForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schemeLogin),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
+
+  // TODO: Implementar autenticação real e lidar com erros adequadamente
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    const res = await api.post("/prestadores", data);
+    if (res.status === 201) {
+      alert("Conta criada com sucesso! Redirecionando para login...");
+      // router.push("/auth?mode=login");
+    }
+    if (res.status !== 201) {
+      alert("Ocorreu um erro ao criar sua conta. Tente novamente.");
+    }
+
+    setIsLoading(false);
+  };
   return (
     <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl">
       <div className="mb-5 flex flex-col items-start gap-8">
@@ -60,25 +119,34 @@ const RegisterForm = () => {
       </div>
 
       {/* FORM */}
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-1">
           <Label htmlFor="name" className="text-sm font-medium">
             Nome Completo
           </Label>
           <div className="relative">
-            <Input
-              name="name"
-              id="name"
-              type="name"
-              placeholder="Seu nome completo"
-              className="h-12 rounded-full pl-9 shadow-sm"
-            />
             <UserIcon
-              weight="bold"
-              className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
-              size={18}
+              size={16}
+              className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
+            />
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="name"
+                  type="text"
+                  placeholder="Ex: Maria Silva"
+                  className="h-12 rounded-full pl-9 shadow-sm"
+                  autoComplete="name"
+                />
+              )}
             />
           </div>
+          {errors.name && (
+            <p className="text-xs text-red-500">{errors.name.message}</p>
+          )}
         </div>
 
         <div className="space-y-1">
@@ -86,12 +154,19 @@ const RegisterForm = () => {
             E-mail
           </Label>
           <div className="relative">
-            <Input
+            <Controller
               name="email"
-              id="email"
-              type="email"
-              placeholder="voce@exemplo.com"
-              className="h-12 rounded-full pl-9 shadow-sm"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  id="email"
+                  type="email"
+                  placeholder="seuemail@exemplo.com"
+                  className="h-12 rounded-full pl-9 shadow-sm"
+                  autoComplete="email"
+                />
+              )}
             />
             <EnvelopeSimpleIcon
               weight="bold"
@@ -99,6 +174,9 @@ const RegisterForm = () => {
               size={18}
             />
           </div>
+          {errors.email && (
+            <p className="text-xs text-red-500">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="flex w-full items-center gap-4">
@@ -110,13 +188,28 @@ const RegisterForm = () => {
               </span>
             </Label>
             <div className="relative">
-              <Input
-                type="text"
+              {/* TODO: Ver Error dps */}
+              <Controller
                 name="cpf"
-                id="cpf"
-                maxLength={14}
-                placeholder="000.000.000-00"
-                className="h-12 rounded-full pl-9 shadow-sm"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    id="cpf"
+                    type="text"
+                    placeholder="000.000.000-00"
+                    className="h-12 rounded-full pl-9 shadow-sm"
+                    maxLength={14}
+                    onChange={(e) => {
+                      const masked = e.target.value
+                        .replace(/\D/g, "")
+                        .replace(/(\d{3})(\d)/, "$1.$2")
+                        .replace(/(\d{3})(\d)/, "$1.$2")
+                        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+                      field.onChange(masked);
+                    }}
+                  />
+                )}
               />
               <IdentificationCardIcon
                 weight="bold"
@@ -124,6 +217,9 @@ const RegisterForm = () => {
                 size={18}
               />
             </div>
+            {errors.cpf && (
+            <p className="text-xs text-red-500">{errors.cpf.message}</p>
+          )}
           </div>
           <div className="flex-1 space-y-1">
             <Label htmlFor="telefone">Telefone </Label>
@@ -202,6 +298,8 @@ const RegisterForm = () => {
         <Button
           size="xl"
           className="w-full rounded-full bg-yellow-400 py-4 font-semibold"
+          type="submit"
+          disabled={isLoading}
         >
           Criar minha conta
         </Button>
