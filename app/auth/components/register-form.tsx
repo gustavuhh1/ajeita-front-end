@@ -194,7 +194,6 @@ const RegisterForm = () => {
               </span>
             </Label>
             <div className="relative">
-              {/* TODO: Ver Error dps */}
               <Controller
                 name="cpf"
                 control={control}
@@ -319,12 +318,13 @@ const RegisterForm = () => {
             />
           </div>
           {errors.confirmPassword && (
-            <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+            <p className="text-xs text-red-500">
+              {errors.confirmPassword.message}
+            </p>
           )}
         </div>
 
         <Label className="flex items-center gap-2">
-          {/* TODO: adicionar estado ao checkbox e atualizar o valor e aumentar duração de Session de acordo */}
           <Checkbox />
           <p className="text-sm font-medium">
             Li e concordo com os{" "}
