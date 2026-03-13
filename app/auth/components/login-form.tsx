@@ -13,22 +13,23 @@ import {
   GithubLogoIcon,
   LockIcon,
 } from "@phosphor-icons/react";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 const schemeLogin = z.object({
   email: z.string().email("E-mail inválido"),
-  password: z.string().min(6, "A senha deve conter no mínimo 6 caracteres"),
+  password: z.string().min(8, "A senha deve conter no mínimo 6 caracteres"),
+  rememberMe: z.boolean().optional(),
 });
 
 type FormData = z.infer<typeof schemeLogin>;
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -36,32 +37,51 @@ const LoginForm = () => {
     formState: { errors },
     setError,
     setValue,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(schemeLogin),
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
     mode: "onChange",
   });
 
-  // TODO: Implementar autenticação real e lidar com erros adequadamente
-  const onSubmit = async (data: FormData) => {
-    setIsLoading(true);
-    const res = await api.get("/prestadores");
-    const users = res.data as { email: string; password: string }[];
+  const rememberMe = useWatch({ control, name: "rememberMe" });
 
-    const user = users.find(
-      (u) => u.email === data.email && u.password === data.password,
-    );
-    if (user) {
-      alert("Login bem-sucedido! Redirecionando para dashboard...");
-    } else {
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: async (data: FormData) => {
+      // TODO: Implementar autenticação real e lidar com erros adequadamente
+
+      console.log(data);
+      const res = await api.get("/users");
+      const users = res.data as { email: string; password: string }[];
+
+      const user = users.find(
+        (u) => u.email === data.email && u.password === data.password,
+      );
+      if (!user) {
+        throw new Error("E-mail ou senha incorretos");
+      }
+      return user;
+    },
+    mutationKey: ["login-client"],
+    onSuccess(data) {
+      if (data) {
+        alert("Login bem-sucedido! Redirecionando...");
+        reset();
+      }
+    },
+    onError() {
       setError("email", { message: "E-mail ou senha incorretos" });
       setError("password", { message: "E-mail ou senha incorretos" });
       setValue("password", ""); // Limpa o campo de senha para segurança
-    }
-    setIsLoading(false);
+    },
+    retry: false, // Não tenta novamente automaticamente em caso de erro
+  });
+  const onSubmit = async (data: FormData) => {
+    await mutateAsync(data);
   };
 
   return (
@@ -153,7 +173,7 @@ const LoginForm = () => {
                 <Input
                   {...field}
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   className="h-12 rounded-full pl-9 shadow-sm"
                   autoComplete="password"
@@ -188,8 +208,13 @@ const LoginForm = () => {
 
         <div className="flex justify-between text-sm">
           <Label className="flex items-center gap-2">
-            {/* TODO: adicionar estado ao checkbox e atualizar o valor e aumentar duração de Session de acordo */}
-            <Checkbox />
+            <Checkbox
+              id="rememberMe"
+              checked={rememberMe}
+              onCheckedChange={(checked) =>
+                setValue("rememberMe", Boolean(checked))
+              }
+            />
             <p className="text-sm font-medium">Lembrar de mim</p>
           </Label>
 
@@ -206,7 +231,7 @@ const LoginForm = () => {
           size="xl"
           type="submit"
           className="w-full rounded-full bg-yellow-400 py-4 font-semibold"
-          disabled={isLoading}
+          disabled={isPending}
         >
           Entrar na conta
         </Button>
