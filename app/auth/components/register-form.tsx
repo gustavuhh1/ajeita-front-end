@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-const schemeLogin = z
+const schemeRegister = z
   .object({
     name: z.string().min(3, "Nome deve ter ao menos 3 caracteres"),
     email: z.string().email("E-mail inválido"),
@@ -37,11 +37,11 @@ const schemeLogin = z
       data.password === data.confirmPassword,
     {
       message: "As senhas não coincidem",
-      path: ["password"],
+      path: ["confirmPassword"],
     },
   );
 
-type FormData = z.infer<typeof schemeLogin>;
+type FormData = z.infer<typeof schemeRegister>;
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -54,7 +54,7 @@ const RegisterForm = () => {
     mutationKey: ["register-client"],
     onSuccess(data) {
       router.refresh();
-      alert("Conta criada com sucesso! Redirecionando para login...");
+      alert("Conta criada com sucesso!");
       console.log(data);
     },
     onError(error) {
@@ -68,10 +68,14 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(schemeLogin),
+    resolver: zodResolver(schemeRegister),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
+      cpf: "",
+      telefone: "",
     },
     mode: "onBlur",
   });
@@ -351,7 +355,12 @@ const RegisterForm = () => {
 
       <p className="text-muted-foreground mt-6 text-center text-sm">
         Já tem uma conta?{" "}
-        <Button size="link" variant="link" className="text-yellow-600">
+        <Button
+          size="link"
+          variant="link"
+          className="text-yellow-600"
+          onClick={() => router.push("/auth?mode=login")}
+        >
           Faça login
         </Button>
       </p>
