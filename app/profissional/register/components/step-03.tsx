@@ -170,11 +170,10 @@ const Step03 = ({ control, errors, onSubmit, setStep }: Step03Props) => {
             type="button"
             className="absolute right-3 text-xs font-medium text-yellow-500 hover:text-yellow-600"
             onClick={() => {
-              // navigator.geolocation.getCurrentPosition(...)
               navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
                 console.log("Latitude:", latitude, "Longitude:", longitude);
-                // Aqui você pode usar uma API de geocodificação reversa para obter o bairro a partir das coordenadas
+                //TODO: Aqui você pode usar uma API de geocodificação reversa para obter o bairro a partir das coordenadas
               });
             }}
           >

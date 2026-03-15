@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground",
         destructive:
           "bg-destructive hover:bg-destructive/60 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-white focus-visible:border-destructive/40 dark:hover:bg-destructive/30",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-4 hover:text-primary aria-expanded:underline cursor-pointer",
         custom: "",
       },
       size: {
@@ -35,6 +35,7 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        link: ""
       },
     },
     defaultVariants: {
