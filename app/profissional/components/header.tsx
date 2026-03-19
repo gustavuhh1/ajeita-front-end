@@ -36,7 +36,7 @@ const Header = () => {
             className="rounded-4xl px-4 py-2"
             size="xl"
           >
-            <Link href="/auth">Baixar App</Link>
+            <Link href="#">Baixar App</Link>
           </Button>
         </div>
       </div>
