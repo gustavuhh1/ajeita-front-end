@@ -12,9 +12,9 @@ import Step00 from "./components/step-00";
 import Step01 from "./components/step-01";
 import Step02 from "./components/step-02";
 import Step03 from "./components/step-03";
-import api from "@/lib/api";
 import Step04 from "./components/step-04";
 import { cn } from "@/lib/utils";
+import { registerPrestador } from "@/app/api/auth";
 
 const step1Schema = z
   .object({
@@ -66,9 +66,9 @@ const fullSchema = step1Schema
   .extend(step2Schema.shape)
   .extend(step3Schema.shape);
 
-export type FormData = z.infer<typeof fullSchema>;
+export type FormRegisterData = z.infer<typeof fullSchema>;
 
-const stepFields: Record<number, (keyof FormData)[]> = {
+const stepFields: Record<number, (keyof FormRegisterData)[]> = {
   1: ["image", "name", "email", "cpf", "password", "confirmPassword"],
   2: ["bio"],
   3: ["categories", "otherCategory", "neighborhood", "radius"],
@@ -85,7 +85,7 @@ export default function RegisterPage() {
     handleSubmit,
     trigger,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<FormRegisterData>({
     resolver: zodResolver(fullSchema),
     defaultValues: {
       image: null,
@@ -121,9 +121,9 @@ export default function RegisterPage() {
 
   const onSubmit = handleSubmit(
     async (data) => {
-      const res = await api.post("/prestadores", data);
-      if (res.status === 201) setStep(4);
-      if (res.status !== 201) {
+      const res = await registerPrestador(data);
+      if (res === 201) setStep(4);
+      if (res !== 201) {
         alert("Ocorreu um erro ao criar sua conta. Tente novamente.");
         setStep(1);
       }
