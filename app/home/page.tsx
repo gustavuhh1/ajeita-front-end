@@ -6,6 +6,9 @@ import {
   Zap,
   Search,
   FilePlus,
+  Bell,
+  User,
+  Plus
 } from "lucide-react";
 
 import "./HomeHero.css";
@@ -46,19 +49,48 @@ export default function Home() {
       img: "https://randomuser.me/api/portraits/men/4.jpg",
     },
     {
-  nome: "Carlos Pereira",
-  servico: "Encanador",
-  nota: 4.7,
-  preco: "R$ 120/visita",
-  tags: ["Vazamento", "Instalação"],
-  img: "https://randomuser.me/api/portraits/men/32.jpg",
-},
+      nome: "Carlos Pereira",
+      servico: "Encanador",
+      nota: 4.7,
+      preco: "R$ 120/visita",
+      tags: ["Vazamento", "Instalação"],
+      img: "https://randomuser.me/api/portraits/men/32.jpg",
+    },
   ];
 
   return (
     <div>
+      <div className="header-container">
 
-    
+        <div className="header-left">
+          <div className="logo">
+            <Wrench size={18} />
+          </div>
+
+          <h2>Ajeitai</h2>
+
+          <nav className="menu">
+            <span className="active">Início</span>
+            <span>Buscar Profissionais</span>
+            <span>Meus Pedidos</span>
+            <span>Mensagens</span>
+          </nav>
+        </div>
+
+        <div className="header-right">
+          <button className="btn-create">
+            <Plus size={16} />
+            Criar Pedido
+          </button>
+
+          <Bell size={20} className="icon" />
+
+          <div className="avatar">
+            <User size={16} />
+          </div>
+        </div>
+
+      </div>
       <div className="container">
 
         <div className="card-left">
@@ -118,7 +150,6 @@ export default function Home() {
             Criar Pedido Agora →
           </button>
         </div>
-
       </div>
       <div className="profissionais-container">
 
@@ -132,7 +163,6 @@ export default function Home() {
         </div>
 
         <div className="cards">
-
           {profissionais.map((p, index) => (
             <div className="card" key={index}>
 
