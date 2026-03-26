@@ -138,7 +138,7 @@ export default function RegisterPage() {
       <div className="bg-secondary relative flex flex-col items-center justify-center gap-10 px-6 py-8 md:px-12">
         <div className="absolute top-3 left-5 h-12 w-12">
           <Link
-            href="/profissional"
+            href="/profissional/entrar"
             className="flex h-full w-full transform items-center justify-center rounded-full border transition-colors duration-200 hover:bg-white"
           >
             <ArrowUUpLeftIcon size={24} className="text-black" />
@@ -199,7 +199,7 @@ export default function RegisterPage() {
         </div>
         {step === 4 && <Step04 />}
       </div>
-      <Footer className="bg-secondary" />
+      <Footer variant="default" />
     </div>
   );
 }

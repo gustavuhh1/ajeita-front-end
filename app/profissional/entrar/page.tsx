@@ -259,7 +259,7 @@ export default function ProviderPage() {
           </Button>
         </div>
       </div>
-      <Footer className="absolute bottom-1 left-1/2 -translate-x-1/2" />
+      <Footer variant="auth" />
     </div>
   );
 }
