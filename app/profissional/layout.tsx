@@ -1,4 +1,3 @@
-import Header from "./components/header";
 
 export default function AuthLayout({
   children,
@@ -7,7 +6,6 @@ export default function AuthLayout({
 }) {
   return (
     <div className="flex min-h-svh w-full flex-col">
-      <Header />
       <main className="flex-1">{children}</main>
     </div>
   );
