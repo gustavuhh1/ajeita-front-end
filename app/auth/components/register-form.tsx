@@ -1,10 +1,10 @@
 "use client";
 
+import { registerCliente } from "@/app/api/auth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EnvelopeSimpleIcon,
@@ -41,16 +41,13 @@ const schemeRegister = z
     },
   );
 
-type FormData = z.infer<typeof schemeRegister>;
+export type RegisterClientForm = z.infer<typeof schemeRegister>;
 
 const RegisterForm = () => {
   const router = useRouter();
 
   const { isPending, mutateAsync } = useMutation({
-    mutationFn: async (data: FormData) => {
-      const res = await api.post("/users", data);
-      return res.data;
-    },
+    mutationFn: registerCliente,
     mutationKey: ["register-client"],
     onSuccess(data) {
       router.refresh();
@@ -67,7 +64,7 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<RegisterClientForm>({
     resolver: zodResolver(schemeRegister),
     defaultValues: {
       name: "",
@@ -81,7 +78,7 @@ const RegisterForm = () => {
   });
 
   // TODO: Implementar autenticação real e lidar com erros adequadamente
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: RegisterClientForm) => {
     await mutateAsync(data);
   };
   return (
