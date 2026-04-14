@@ -90,7 +90,68 @@ export default function PedidosPage() {
           </button>
         </aside>
 
+        
+        <main className="flex-1">
 
+          <h1 className="text-[28px] font-semibold text-gray-800">
+            Meus Pedidos
+          </h1>
+
+          <p className="mt-1 text-sm text-gray-500">
+            Acompanhe seus serviços em andamento e veja seu histórico.
+          </p>
+
+          
+          <div className="mt-6 flex gap-6 border-b text-sm">
+            <span className="border-b-2 border-yellow-400 pb-3 font-medium text-yellow-600">
+              Ativos
+            </span>
+            <span className="pb-3 text-gray-400">
+              Histórico
+            </span>
+          </div>
+
+          
+          <div className="mt-6 space-y-5">
+
+            
+            <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-5">
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-100">
+                  🔧
+                </div>
+
+                <div>
+                  <h3 className="font-medium text-gray-800">
+                    Conserto de Vazamento
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Solicitado em 12 de Out, 2023
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Profissional sendo selecionado...
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="rounded-full bg-orange-100 px-3 py-1 text-[11px] font-medium text-orange-600">
+                  EM NEGOCIAÇÃO
+                </span>
+
+                <button className="rounded-full bg-gray-100 px-4 py-2 text-sm">
+                  Ver Detalhes
+                </button>
+              </div>
+            </div>
+
+            
+
+            
+
+
+          </div>
+        </main>
       </div>
 
       
