@@ -72,8 +72,8 @@ export default function PedidosPage() {
               <User size={16} /> Dados Pessoais
             </div>
 
-            <div className="flex items-center gap-3 rounded-full bg-yellow-100 px-4 py-2 font-medium text-yellow-700">
-              📄 Meus Pedidos
+            <div className="flex items-center gap-3 text-gray-500">
+              <ShoppingCart size={16} /> Meus Pedidos
             </div>
 
             <div className="flex items-center gap-3 text-gray-500">
@@ -146,9 +146,66 @@ export default function PedidosPage() {
             </div>
 
             
+            <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-5">
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-100">
+                  ⚡
+                </div>
+
+                <div>
+                  <h3 className="font-medium text-gray-800">
+                    Instalação de Tomadas
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Agendado para 15 de Out, 2023 às 09:00
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Profissional: Marcos Oliveira
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="rounded-full bg-green-100 px-3 py-1 text-[11px] font-medium text-green-600">
+                  AGENDADO
+                </span>
+
+                <button className="rounded-full bg-gray-100 px-4 py-2 text-sm">
+                  Ver Detalhes
+                </button>
+              </div>
+            </div>
 
             
+            <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-5">
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-100">
+                  🎨
+                </div>
 
+                <div>
+                  <h3 className="font-medium text-gray-800">
+                    Pintura de Parede (Sala)
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Solicitado em 10 de Out, 2023
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Profissional: Ana Costa
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="rounded-full bg-blue-100 px-3 py-1 text-[11px] font-medium text-blue-600">
+                  AGUARDANDO PAGAMENTO
+                </span>
+
+                <button className="rounded-full bg-yellow-400 px-5 py-2 text-sm font-medium">
+                  Pagar Agora
+                </button>
+              </div>
+            </div>
 
           </div>
         </main>
