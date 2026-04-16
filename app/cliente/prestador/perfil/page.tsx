@@ -10,7 +10,7 @@ const ProfilePage = () => {
       
       {/* 1. HEADER (Início sem fundo) */}
       <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-        <div className="max-w-[1400px] mx-auto px-6 py-3 flex items-center justify-between">
+        <div className="max-w-350 mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-10">
             <div className="flex items-center gap-2.5">
               <div className="bg-yellow-400 p-3 rounded-full flex items-center justify-center text-white text-lg font-bold">
@@ -68,11 +68,11 @@ const ProfilePage = () => {
         <div className="rounded-3xl shadow-sm border border-gray-100 overflow-hidden bg-white mb-8">
           <div className="relative p-6">
             {/* Degradê de fundo integrado */}
-            <div className="absolute inset-x-0 top-0 h-48 w-full bg-gradient-to-r from-[#d68a8a] via-[#915c5c] to-[#6b4242] -z-0"></div>
+            <div className="absolute inset-x-0 top-0 h-48 w-full bg-linear-to-r from-[#d68a8a] via-[#915c5c] to-[#6b4242] z-0"></div>
             
             <div className="relative flex items-end justify-between mt-32 px-4">
               <div className="flex items-end gap-6">
-                <div className="w-36 h-36 rounded-full border-4 border-white overflow-hidden bg-gradient-to-br from-orange-100 to-rose-200 shadow-md"></div>
+                <div className="w-36 h-36 rounded-full border-4 border-white overflow-hidden bg-linear-to-br from-orange-100 to-rose-200 shadow-md"></div>
                 <div className="pb-4">
                   <h1 className="text-2xl font-bold text-gray-900">Carlos Silva</h1>
                   <p className="text-gray-500 flex items-center gap-2 text-sm mt-1">
@@ -173,9 +173,9 @@ const ProfilePage = () => {
                 <button className="text-xs text-yellow-500 font-bold hover:underline">Ver tudo</button>
               </div>
               <div className="grid grid-cols-3 gap-4">
-                <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-orange-200 to-orange-300"></div>
-                <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-pink-100 to-pink-200"></div>
-                <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-rose-300 to-rose-400"></div>
+                <div className="aspect-4/3 rounded-2xl bg-linear-to-br from-orange-200 to-orange-300"></div>
+                <div className="aspect-4/3 rounded-2xl bg-linear-to-br from-pink-100 to-pink-200"></div>
+                <div className="aspect-4/3 rounded-2xl bg-linear-to-br from-rose-300 to-rose-400"></div>
               </div>
             </section>
 

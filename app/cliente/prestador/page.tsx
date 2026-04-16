@@ -15,6 +15,7 @@ const ProfessionalsPage = () => {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
 
   // Dados dos Profissionais
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const allProfessionals = [
     { id: 1, name: "João Silva", role: "Eletricista Residencial", rating: 4.8, reviews: 124, price: 80, unit: "hora", tags: ["Instalação", "Reparos", "Fiação"], category: "Eletricista" },
     { id: 2, name: "Maria Oliveira", role: "Pintura e Acabamentos", rating: 5.0, reviews: 89, price: 150, unit: "dia", tags: ["Pintura Interna", "Textura"], category: "Pintura" },
@@ -38,14 +39,14 @@ const ProfessionalsPage = () => {
       
       return matchesSearch && matchesCategory && matchesRating && matchesMinPrice && matchesMaxPrice;
     });
-  }, [searchQuery, selectedCategory, minRating, priceRange]);
+  }, [allProfessionals, searchQuery, selectedCategory, minRating, priceRange.min, priceRange.max]);
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
       
       {/* HEADER PADRONIZADO */}
       <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-              <div className="max-w-[1400px] mx-auto px-6 py-3 flex items-center justify-between">
+              <div className="max-w-350 mx-auto px-6 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-10">
                   <div className="flex items-center gap-2.5">
                     <div className="bg-yellow-400 p-3 rounded-full flex items-center justify-center text-white text-lg font-bold">
@@ -99,10 +100,10 @@ const ProfessionalsPage = () => {
               </div>
             </nav>
 
-      <div className="max-w-[1400px] mx-auto flex gap-8 p-8">
+      <div className="max-w-350 mx-auto flex gap-8 p-8">
         
         {/* SIDEBAR DE FILTROS COMPLETA */}
-        <aside className="w-64 flex-shrink-0 space-y-8">
+        <aside className="w-64 shrink-0 space-y-8">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-lg text-gray-900">Filtros</h2>
             <button 
@@ -216,7 +217,7 @@ const ProfessionalsPage = () => {
         </aside>
 
         {/* CONTEÚDO PRINCIPAL */}
-        <main className="flex-grow space-y-8">
+        <main className="grow space-y-8">
           {/* Banner Publicar Pedido */}
           <div className="bg-yellow-50 rounded-3xl p-8 border border-yellow-100 flex justify-between items-center">
             <div>
@@ -244,7 +245,7 @@ const ProfessionalsPage = () => {
               <div key={pro.id} className="bg-white rounded-[32px] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all group">
                 <div className="flex items-start justify-between mb-4">
                   <div className="relative">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200"></div>
+                    <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-gray-100 to-gray-200"></div>
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                   </div>
                   <button className="p-2 text-gray-300 hover:text-rose-500 transition-colors">
