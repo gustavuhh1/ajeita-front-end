@@ -1,10 +1,10 @@
 "use client";
 
+import { loginCliente } from "@/app/api/auth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EnvelopeSimpleIcon,
@@ -16,6 +16,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -26,10 +27,11 @@ const schemeLogin = z.object({
   rememberMe: z.boolean().optional(),
 });
 
-type FormData = z.infer<typeof schemeLogin>;
+export type LoginClientForm = z.infer<typeof schemeLogin>;
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const {
     control,
@@ -38,7 +40,7 @@ const LoginForm = () => {
     setError,
     setValue,
     reset,
-  } = useForm<FormData>({
+  } = useForm<LoginClientForm>({
     resolver: zodResolver(schemeLogin),
     defaultValues: {
       email: "",
@@ -51,26 +53,14 @@ const LoginForm = () => {
   const rememberMe = useWatch({ control, name: "rememberMe" });
 
   const { isPending, mutateAsync } = useMutation({
-    mutationFn: async (data: FormData) => {
-      // TODO: Implementar autenticação real e lidar com erros adequadamente
+    mutationFn: loginCliente,
 
-      console.log(data);
-      const res = await api.get("/users");
-      const users = res.data as { email: string; password: string }[];
-
-      const user = users.find(
-        (u) => u.email === data.email && u.password === data.password,
-      );
-      if (!user) {
-        throw new Error("E-mail ou senha incorretos");
-      }
-      return user;
-    },
     mutationKey: ["login-client"],
     onSuccess(data) {
       if (data) {
         alert("Login bem-sucedido! Redirecionando...");
-        reset();
+        reset(); // Limpa o formulário após o login bem-sucedido
+        router.push("/cliente/home"); // Redireciona para o dashboard do cliente
       }
     },
     onError() {
@@ -80,7 +70,7 @@ const LoginForm = () => {
     },
     retry: false, // Não tenta novamente automaticamente em caso de erro
   });
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: LoginClientForm) => {
     await mutateAsync(data);
   };
 
