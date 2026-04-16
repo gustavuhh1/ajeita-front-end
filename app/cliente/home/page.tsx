@@ -3,49 +3,10 @@ import Header from "../components/header";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass";
 import { Button } from "@/components/ui/button";
 import NavCategory from "../components/nav-category";
-
-const profissionais = [
-  {
-    nome: "João Silva",
-    servico: "Eletricista Residencial",
-    nota: 4.8,
-    preco: "R$ 80/h",
-    tags: ["Instalação", "Reparos"],
-    img: "https://randomuser.me/api/portraits/men/1.jpg",
-  },
-  {
-    nome: "Maria Oliveira",
-    servico: "Pintura e Acabamentos",
-    nota: 5.0,
-    preco: "R$ 150/dia",
-    tags: ["Pintura", "Textura"],
-    img: "https://randomuser.me/api/portraits/women/2.jpg",
-  },
-  {
-    nome: "Ana Costa",
-    servico: "Limpeza Profissional",
-    nota: 5.0,
-    preco: "R$ 180/dia",
-    tags: ["Faxina", "Pós-obra"],
-    img: "https://randomuser.me/api/portraits/women/3.jpg",
-  },
-  {
-    nome: "Pedro Santos",
-    servico: "Marido de Aluguel",
-    nota: 4.9,
-    preco: "R$ 60/h",
-    tags: ["Montagem", "Reparos"],
-    img: "https://randomuser.me/api/portraits/men/4.jpg",
-  },
-  {
-    nome: "Carlos Pereira",
-    servico: "Encanador",
-    nota: 4.7,
-    preco: "R$ 120/visita",
-    tags: ["Vazamento", "Instalação"],
-    img: "https://randomuser.me/api/portraits/men/32.jpg",
-  },
-];
+import Link from "next/link";
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { ClipboardPlus } from "lucide-react";
+import ProvidersWeek from "../components/providers-week";
 
 const nameUser = "Gustavo";
 
@@ -53,10 +14,10 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <main className="p-12">
+      <main className="space-y-8 p-12">
         <div className="flex w-full flex-col gap-8 md:flex-row">
           {/* Caixa Procurar Profissional */}
-          <div className="flex w-full flex-col gap-4 rounded-[24px] bg-white p-4 shadow-lg lg:p-8">
+          <div className="relative flex w-full flex-col gap-4 rounded-[24px] bg-white p-4 shadow-sm lg:p-8">
             <div className="max-w-lg space-y-2">
               <h2 className="text-[30px]">Olá, {nameUser}!</h2>
               <p className="text-lg text-zinc-600">
@@ -66,13 +27,14 @@ export default function Home() {
             </div>
             <div className="relative flex w-full max-w-200 items-center">
               <Input
-                className="bg-background flex h-14 max-w-200 items-center gap-3 rounded-lg border border-zinc-300/80 px-4 pl-10 shadow-sm placeholder:text-zinc-400"
+                className="bg-background flex h-14 max-w-200 items-center gap-3 rounded-lg border border-zinc-300/80 px-4 pl-10 shadow-xs placeholder:text-zinc-400"
                 placeholder="Qual serviço você precisa? (ex: Eletricista, Faxina)"
               />
               <MagnifyingGlassIcon
                 size={20}
                 className="absolute left-3 text-zinc-400"
               />
+              {/* TODO: Adicionar funcionalidade de busca */}
               <Button
                 size="custom"
                 className="absolute right-2 gap-2 rounded-[32px] px-5 py-2.5 font-semibold hover:opacity-90"
@@ -84,8 +46,50 @@ export default function Home() {
               <NavCategory />
             </div>
           </div>
+
           {/* Caixa "não encontrou oque procura" */}
-          <div className="bg-primary rounded-[24px] p-8 shadow-lg md:min-w-1/3"></div>
+          <div className="bg-primary flex min-h-84.75 flex-col justify-around gap-4 rounded-[24px] p-8 shadow-md">
+            <div className="bg-secondary flex h-12 w-12 items-center justify-center rounded-full">
+              <ClipboardPlus />
+            </div>
+            <div className="max-w-lg">
+              <h2 className="text-3xl">Não encontrou o que procura?</h2>
+              <p className="text-md mt-2">
+                Crie um pedido personalizado agora e receba propostas de
+                profissionais qualificados em minutos.
+              </p>
+            </div>
+            <Button
+              asChild
+              variant="custom"
+              size="xl"
+              className="bg-black shadow-2xl"
+            >
+              <Link
+                href="/cliente/pedidos/novo"
+                className="flex items-center gap-1 text-white"
+              >
+                Criar Pedido Agora <ArrowRightIcon size={20} weight="bold" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h1 className="text-3xl font-bold">Profissionais em Destaque</h1>
+              <p className="text-zinc-600">
+                Os melhores avaliados da sua região está semana
+              </p>
+            </div>
+            <Link
+              href="/cliente/profissionais"
+              className="text-primary flex items-center gap-1 text-sm font-semibold hover:underline"
+            >
+              Ver todos <ArrowRightIcon size={16} weight="bold" />
+            </Link>
+          </div>
+          <ProvidersWeek />
         </div>
       </main>
     </div>
