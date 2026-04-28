@@ -4,17 +4,56 @@ import {
   Bell,
   ShoppingCart,
   ShieldCheck,
-  Copy,
   CreditCard,
   QrCode,
+  Loader2,
 } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function PagamentoPage() {
+  const router = useRouter()
+
+  const [metodo, setMetodo] = useState<"pix" | "cartao">("pix")
+  const [loading, setLoading] = useState(false)
+
+  const [form, setForm] = useState({
+    nome: "",
+    email: "",
+    documento: "",
+  })
+
+  const [errors, setErrors] = useState<any>({})
+
+  function validar() {
+    const newErrors: any = {}
+
+    if (!form.nome) newErrors.nome = "Nome obrigatório"
+    if (!form.email.includes("@")) newErrors.email = "Email inválido"
+    if (form.documento.length < 11)
+      newErrors.documento = "CPF/CNPJ inválido"
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  function handleSubmit() {
+    if (!validar()) return
+
+    setLoading(true)
+
+    
+    setTimeout(() => {
+      setLoading(false)
+
+    
+      router.push("/pagamento/status?status=sucesso")
+    }, 2000)
+  }
+
   return (
     <div className="min-h-screen bg-[#f6f8fb]">
 
-      
       <header className="flex items-center justify-between border-b border-gray-200 bg-white px-10 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
@@ -49,11 +88,9 @@ export default function PagamentoPage() {
         </div>
       </header>
 
-     
       <div className="mx-auto max-w-6xl px-4 py-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
 
-    
-        <div className="rounded-3xl border border-gray-200 bg-white p-6">
+                <div className="rounded-3xl border border-gray-200 bg-white p-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-5">
             Resumo do Pedido
           </h2>
@@ -100,74 +137,91 @@ export default function PagamentoPage() {
           </div>
         </div>
 
-        
         <div className="rounded-3xl border border-gray-200 bg-white p-6">
 
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-800">
-                Método de Pagamento
-              </h2>
-              <p className="text-xs text-gray-400">
-                Processado por AbacatePay
-              </p>
-            </div>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            Pagamento
+          </h2>
 
-            <span className="rounded-md bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-              AbacatePay
-            </span>
-          </div>
-
-         
           <div className="flex gap-3 mb-6">
-            <button className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-yellow-400 bg-yellow-50 py-2 text-sm font-medium">
+            <button
+              onClick={() => setMetodo("pix")}
+              className={`flex-1 py-2 rounded-xl border flex items-center justify-center gap-2 text-sm
+                ${metodo === "pix" ? "bg-yellow-50 border-yellow-400" : "border-gray-200"}
+              `}
+            >
               <QrCode size={16} />
               Pix
             </button>
 
-            <button className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 py-2 text-sm text-gray-500">
+            <button
+              onClick={() => setMetodo("cartao")}
+              className={`flex-1 py-2 rounded-xl border flex items-center justify-center gap-2 text-sm
+                ${metodo === "cartao" ? "bg-yellow-50 border-yellow-400" : "border-gray-200"}
+              `}
+            >
               <CreditCard size={16} />
               Cartão
             </button>
           </div>
 
-        
-          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-gray-400 mb-4">
-            <QrCode size={60} />
-            <p className="text-xs mt-2">QR Code Pix</p>
+          <div className="space-y-4 mb-6">
+            <input
+              placeholder="Nome completo / Razão social"
+              className="w-full border rounded-xl px-4 py-2 text-sm"
+              value={form.nome}
+              onChange={(e) => setForm({ ...form, nome: e.target.value })}
+            />
+            {errors.nome && <p className="text-xs text-red-500">{errors.nome}</p>}
+
+            <input
+              placeholder="Email"
+              className="w-full border rounded-xl px-4 py-2 text-sm"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+            {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
+
+            <input
+              placeholder="CPF ou CNPJ"
+              className="w-full border rounded-xl px-4 py-2 text-sm"
+              value={form.documento}
+              onChange={(e) => setForm({ ...form, documento: e.target.value })}
+            />
+            {errors.documento && (
+              <p className="text-xs text-red-500">{errors.documento}</p>
+            )}
           </div>
 
-          <p className="text-center text-sm text-gray-500 mb-4">
-            O código expira em{" "}
-            <span className="text-yellow-600 font-medium">14:59</span>
-          </p>
+          {metodo === "pix" && (
+            <div className="mb-6 text-sm text-gray-500">
+              Após confirmar, você receberá o QR Code para pagamento.
+            </div>
+          )}
 
-         
-          <div className="flex items-center justify-between rounded-xl border bg-gray-50 px-4 py-3 text-sm mb-5">
-            <span className="truncate text-gray-500">
-              00020126580014BR.GOV.BCB.PIX0136...
-            </span>
+          {metodo === "cartao" && (
+            <div className="mb-6 text-sm text-gray-500">
+              Integração com cartão será feita no backend.
+            </div>
+          )}
 
-            <button className="flex items-center gap-1 text-yellow-600 text-xs font-medium">
-              <Copy size={14} />
-              COPIAR
-            </button>
-          </div>
-
-          
-          <button className="w-full rounded-full bg-yellow-400 py-3 font-medium hover:bg-yellow-500 transition">
-            Confirmar e Pagar →
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full rounded-full bg-yellow-400 py-3 font-medium hover:bg-yellow-500 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin" size={16} />
+                Processando...
+              </>
+            ) : (
+              "Confirmar e Pagar"
+            )}
           </button>
-
-        
-          <div className="mt-6 flex justify-center gap-6 text-xs text-gray-400">
-            <span>SSL Encrypted</span>
-            <span>PCI-DSS Compliant</span>
-          </div>
         </div>
       </div>
 
-      
       <footer className="text-center text-xs text-gray-400 py-6">
         © 2026 Ajeitai - Todos os direitos reservados.
       </footer>
