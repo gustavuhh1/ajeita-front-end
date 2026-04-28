@@ -13,7 +13,7 @@ export default function PagamentoErro() {
   return (
     <div className="min-h-screen bg-[#f6f8fb]">
 
-      {/* HEADER (igual ao resto do app) */}
+      
       <header className="flex items-center justify-between border-b border-gray-200 bg-white px-10 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
@@ -48,16 +48,16 @@ export default function PagamentoErro() {
         </div>
       </header>
 
-      {/* CONTEÚDO */}
+      
       <div className="flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white p-8 text-center">
 
-          {/* Ícone */}
+          
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
             <XCircle size={40} className="text-red-600" />
           </div>
 
-          {/* Texto */}
+          
           <h1 className="text-2xl font-semibold text-gray-800 mb-2">
             Pagamento não aprovado
           </h1>
@@ -66,7 +66,7 @@ export default function PagamentoErro() {
             Não foi possível concluir o pagamento. Verifique os dados ou tente novamente com outro método.
           </p>
 
-          {/* Resumo */}
+         
           <div className="rounded-2xl bg-gray-50 p-4 text-sm text-gray-600 mb-6">
             <p>
               Pedido <span className="font-medium text-gray-800">#AJ-88291</span>
@@ -77,7 +77,7 @@ export default function PagamentoErro() {
             </p>
           </div>
 
-          {/* Ações */}
+          
           <div className="flex flex-col gap-3">
             <Link href="/pagamento">
               <button className="w-full rounded-full bg-yellow-400 py-3 font-medium hover:bg-yellow-500 transition flex items-center justify-center gap-2">
@@ -96,7 +96,6 @@ export default function PagamentoErro() {
         </div>
       </div>
 
-      {/* FOOTER */}
       <footer className="text-center text-xs text-gray-400 py-6">
         © 2026 Ajeitai - Todos os direitos reservados.
       </footer>
