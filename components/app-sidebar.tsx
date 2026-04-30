@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -27,23 +29,23 @@ const links = [
     icon: LayoutIcon,
   },
   {
-    name: "Pedidos",
-    url: "/profissional/pedidos",
+    name: "Serviços",
+    url: "/profissional/dashboard/servicos",
     icon: ListBulletsIcon,
   },
   {
     name: "Agenda",
-    url: "/profissional/agendamentos",
+    url: "/profissional/dashboard/agendamentos",
     icon: CalendarDotsIcon,
   },
   {
     name: "Perfil",
-    url: "/profissional/perfil",
+    url: "/profissional/dashboard/perfil",
     icon: UserIcon,
   },
   {
     name: "Faturamento",
-    url: "/profissional/faturamento",
+    url: "/profissional/dashboard/faturamento",
     icon: MoneyIcon,
   },
 ];
