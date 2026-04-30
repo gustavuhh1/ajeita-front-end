@@ -52,3 +52,22 @@ export enum Role {
   USER = "user",
   PROVIDER = "provider",
 }
+
+export interface Provider {
+  id: number;
+  name: string;
+  role: string;
+  rating?: number;
+  reviews?: number;
+  price: number;
+  unit: string;
+  tags: string[];
+  category: string; 
+  image?: string | null; 
+  location?: string;
+}
+
+export interface FileWithPreview {
+  file: File;
+  preview: string;
+}

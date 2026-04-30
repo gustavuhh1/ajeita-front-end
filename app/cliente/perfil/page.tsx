@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState,  FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { 
-  Search, Plus, Bell, MapPin, 
-  Edit2, Trash2, Home, Briefcase, 
+  Plus, MapPin, Edit2, Trash2, Home, Briefcase, 
   Umbrella, Info, LogOut, Settings, 
-  ClipboardList, UserCircle, X 
+  ClipboardList, UserCircle, X, Search 
 } from 'lucide-react';
 
+// Importação dos componentes globais
+import { MainHeader } from '../components/MainHeader';
+import { ProviderAvatar } from '../components/ProviderAvatar';
 
 interface Address {
   id: number;
@@ -53,68 +55,22 @@ const ProfileAddressesPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 flex flex-col">
       
-      {/* HEADER */}
-      <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-        {/* CORREÇÃO TAILWIND: max-w-[1400px] -> max-w-7xl para evitar alertas de escala */}
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-10">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-yellow-400 p-3 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                ⚒
-              </div>
-              <span className="font-bold text-gray-900 text-2xl tracking-tight">Ajeitai</span>
-            </div>
+      {/* Componente Header Centralizado */}
+      <MainHeader />
 
-            <div className="hidden md:flex items-center gap-1.5 text-sm font-medium">
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors">Início</a>
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors flex items-center gap-2">
-                <Search size={16} className="text-gray-400" />
-                Buscar Profissionais
-              </a>
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors">Meus Pedidos</a>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <button type="button" className="bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold px-6 py-3 rounded-2xl flex items-center gap-2.5 transition-colors">
-              <div className="bg-gray-950 p-1.5 rounded-full flex items-center justify-center text-white text-xs">
-                <Plus size={14} strokeWidth={3} />
-              </div>
-              Criar Pedido
-            </button>
-            <div className="h-8 w-px bg-gray-100"></div>
-            <div className="flex items-center gap-4">
-              <div className="relative p-1">
-                <Bell className="text-gray-400" size={24} />
-                <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
-              </div>
-              <div className="w-10 h-10 rounded-full border border-gray-200 bg-orange-100 overflow-hidden cursor-pointer relative">
-                <img 
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ricardo" 
-                  alt="Ricardo Silva"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* CONTEÚDO */}
-      {/* CORREÇÃO TAILWIND: grow em vez de flex-grow */}
-      <div className="max-w-7xl mx-auto flex gap-10 p-10 grow w-full">
-        {/* CORREÇÃO TAILWIND: shrink-0 em vez de flex-shrink-0 */}
-        <aside className="w-72 shrink-0">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 p-10 grow w-full">
+        
+        {/* ASIDE - Usando o ProviderAvatar */}
+        <aside className="w-full md:w-72 shrink-0">
           <div className="bg-white rounded-[40px] p-8 border border-gray-100 shadow-sm flex flex-col h-fit sticky top-24">
             <div className="flex items-center gap-4 mb-10">
-              <div className="w-14 h-14 rounded-2xl bg-orange-100 overflow-hidden border-2 border-white shadow-sm relative">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ricardo" alt="Ricardo" />
-              </div>
+              <ProviderAvatar name="Ricardo Silva" size="lg" />
               <div>
                 <h3 className="font-bold text-gray-900 leading-tight">Ricardo Silva</h3>
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Cliente Prime</p>
               </div>
             </div>
+            
             <nav className="space-y-1">
               {[
                 { name: 'Dados Pessoais', icon: <UserCircle size={20} /> },
@@ -134,6 +90,7 @@ const ProfileAddressesPage = () => {
                 </button>
               ))}
             </nav>
+            
             <div className="mt-10 pt-6 border-t border-gray-50">
               <button className="w-full flex items-center gap-4 px-5 py-3 rounded-2xl font-bold text-sm text-rose-500 hover:bg-rose-50 transition-all">
                 <LogOut size={18} /> Sair da Conta
@@ -142,22 +99,23 @@ const ProfileAddressesPage = () => {
           </div>
         </aside>
 
+        {/* MAIN CONTENT */}
         <main className="grow">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
               <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Meus Endereços</h2>
               <p className="text-gray-500 text-sm mt-1">Gerencie seus locais de atendimento para pedidos rápidos.</p>
             </div>
             <button onClick={() => setIsModalOpen(true)} className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-6 py-4 rounded-[24px] flex items-center gap-3 shadow-lg shadow-yellow-100 transition-all active:scale-95">
-              <Plus size={20} strokeWidth={3} /> Adicionar Novo Endereço
+              <Plus size={20} strokeWidth={3} /> Adicionar Novo
             </button>
           </div>
 
           <div className="space-y-4">
             {addresses.map((addr) => (
-              <div key={addr.id} className="bg-white rounded-[35px] p-6 border border-gray-100 flex items-center justify-between group hover:border-yellow-200 transition-all">
+              <div key={addr.id} className="bg-white rounded-[35px] p-6 border border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-yellow-200 transition-all">
                 <div className="flex items-center gap-6">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${addr.isPrimary ? 'bg-yellow-400 text-white' : 'bg-gray-50 text-gray-300'}`}>
+                  <div className={`w-14 h-14 rounded-2xl shrink-0 flex items-center justify-center ${addr.isPrimary ? 'bg-yellow-400 text-white' : 'bg-gray-50 text-gray-300'}`}>
                     {addr.icon}
                   </div>
                   <div>
@@ -182,7 +140,7 @@ const ProfileAddressesPage = () => {
           </div>
 
           <div className="mt-8 bg-gray-50 rounded-[30px] p-6 border border-gray-100 flex gap-4 items-center">
-            <div className="bg-yellow-400 p-1.5 rounded-full text-white"><Info size={14} /></div>
+            <div className="bg-yellow-400 p-1.5 rounded-full text-white shrink-0"><Info size={14} /></div>
             <p className="text-sm text-gray-500 leading-relaxed">
               Você pode cadastrar até 5 endereços. O marcado como <span className="font-bold text-gray-700">Principal</span> será sugerido automaticamente.
             </p>
@@ -192,8 +150,8 @@ const ProfileAddressesPage = () => {
 
       {/* FOOTER */}
       <footer className="w-full py-8 border-t border-gray-100 bg-white mt-auto">
-        <div className="max-w-7xl mx-auto px-10 flex justify-between items-center text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-          <p>© 2024 Ajeitai - Todos os direitos reservados.</p>
+        <div className="max-w-7xl mx-auto px-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest text-center sm:text-left">
+          <p>© 2026 Ajeitai - Todos os direitos reservados.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-gray-800 transition-colors">Termos</a>
             <a href="#" className="hover:text-gray-800 transition-colors">Privacidade</a>
@@ -204,12 +162,12 @@ const ProfileAddressesPage = () => {
 
       {/* MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
           <div className="bg-white w-full max-w-2xl rounded-[40px] overflow-hidden shadow-2xl">
             <div className="px-10 pt-10 pb-4 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="bg-yellow-50 p-2.5 rounded-2xl text-yellow-500"><MapPin size={22} /></div>
-                <h2 className="text-2xl font-bold text-gray-900">Adicionar Novo Endereço</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Novo Endereço</h2>
               </div>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-300 hover:text-gray-500 transition-colors"><X size={28} /></button>
             </div>
@@ -225,7 +183,7 @@ const ProfileAddressesPage = () => {
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Logradouro</label>
-                <input required value={formData.rua} onChange={(e) => setFormData({...formData, rua: e.target.value})} type="text" placeholder="Ex: Rua das Flores" className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium" />
+                <input required value={formData.rua} onChange={(e) => setFormData({...formData, rua: e.target.value})} type="text" placeholder="Rua..." className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium" />
               </div>
               <div className="grid grid-cols-2 gap-5">
                 <div>
@@ -234,29 +192,11 @@ const ProfileAddressesPage = () => {
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Complemento</label>
-                  <input type="text" placeholder="Apto, Bloco..." className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium" />
+                  <input type="text" placeholder="Opcional" className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium" />
                 </div>
-              </div>
-              <div className="grid grid-cols-3 gap-5">
-                <div className="col-span-1">
-                  <label className="block text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Bairro</label>
-                  <input required value={formData.bairro} onChange={(e) => setFormData({...formData, bairro: e.target.value})} type="text" placeholder="Bairro" className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium" />
-                </div>
-                <div className="col-span-1">
-                  <label className="block text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Cidade</label>
-                  <input required value={formData.cidade} onChange={(e) => setFormData({...formData, cidade: e.target.value})} type="text" placeholder="Cidade" className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium" />
-                </div>
-                <div className="col-span-1">
-                  <label className="block text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Estado</label>
-                  <input required value={formData.estado} onChange={(e) => setFormData({...formData, estado: e.target.value})} type="text" placeholder="UF" className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium text-center" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Apelido</label>
-                <input required value={formData.apelido} onChange={(e) => setFormData({...formData, apelido: e.target.value})} type="text" placeholder="Ex: Casa, Trabalho..." className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium" />
               </div>
               <div className="flex gap-4 pt-4">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="grow py-5 text-gray-400 font-bold rounded-2xl hover:bg-gray-50 transition-colors border border-transparent">Cancelar</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="grow py-5 text-gray-400 font-bold rounded-2xl hover:bg-gray-50 transition-colors">Cancelar</button>
                 <button type="submit" className="grow py-5 bg-yellow-400 text-gray-900 font-bold rounded-[22px] hover:bg-yellow-500 shadow-xl shadow-yellow-100 transition-all">Salvar Endereço</button>
               </div>
             </form>

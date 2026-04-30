@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useRef, ChangeEvent, FormEvent } from 'react';
-import { Plus, Bell, Camera, X, CheckCircle2, ChevronLeft, Info, ChevronDown, ListChecks, Home, Search } from 'lucide-react';
-// Importamos o componente Image do Next.js para resolver o alerta de performance
+import { Camera, X, CheckCircle2, ChevronLeft, Info, ChevronDown, ListChecks, Home, Plus } from 'lucide-react';
 import Image from 'next/image';
+
+// Importação dos componentes globais
+import { MainHeader } from '../components/MainHeader';
 
 interface ImageObject {
   file: File;
@@ -13,9 +15,6 @@ interface ImageObject {
 const CreateOrderPage = () => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  
-  // CORREÇÃO: Definimos explicitamente que o estado é um array de ImageObject
-  // Isso resolve o erro "Property 'preview' does not exist on type 'never'"
   const [images, setImages] = useState<ImageObject[]>([]);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +26,6 @@ const CreateOrderPage = () => {
     { id: 'limpeza', name: 'Limpeza' }
   ];
 
-  // CORREÇÃO: Tipagem do evento 'e' como ChangeEvent<HTMLInputElement>
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
     if (!selectedFiles) return;
@@ -47,7 +45,6 @@ const CreateOrderPage = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // CORREÇÃO: Tipagem do parâmetro 'index' como number
   const removeImage = (index: number) => {
     const imageToRemove = images[index];
     if (imageToRemove) {
@@ -56,7 +53,6 @@ const CreateOrderPage = () => {
     }
   };
 
-  // CORREÇÃO: Tipagem do evento de submit como FormEvent
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsSuccess(true);
@@ -65,24 +61,11 @@ const CreateOrderPage = () => {
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-gray-50 font-sans text-gray-800 flex flex-col">
-        <nav className="bg-white border-b border-gray-100 shadow-sm py-3 px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="bg-yellow-400 p-3 rounded-full text-white font-bold">⚒</div>
-            <span className="font-bold text-gray-900 text-2xl">Ajeitai</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Bell className="text-gray-400" size={24} />
-            <div className="w-10 h-10 rounded-full bg-orange-100 border border-gray-200 overflow-hidden relative">
-               {/* CORREÇÃO: Usando tag img com unoptimized para avatares externos rápidos ou componente Image */}
-               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ricardo" alt="User" />
-            </div>
-          </div>
-        </nav>
+        {/* Componente Header Centralizado */}
+        <MainHeader activePage="pedidos" />
 
-        {/* Ajuste de Tailwind: flex-grow vira grow */}
         <main className="grow flex items-center justify-center p-8">
-          {/* Ajuste de Tailwind: max-w-[500px] para max-w-lg (ou manter se preferir precisão) */}
-          <div className="max-w-125 w-full bg-white rounded-[40px] shadow-sm border border-gray-100 p-12 text-center">
+          <div className="max-w-md w-full bg-white rounded-[40px] shadow-sm border border-gray-100 p-12 text-center">
             <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 border border-green-100">
               <CheckCircle2 size={40} strokeWidth={2.5} />
             </div>
@@ -94,7 +77,7 @@ const CreateOrderPage = () => {
             </p>
 
             <div className="flex flex-col gap-4 items-center">
-              <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold px-8 py-4 rounded-4xl flex items-center justify-center gap-2.5 shadow-lg shadow-yellow-100 transition-all active:scale-95">
+              <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold px-8 py-4 rounded-3xl flex items-center justify-center gap-2.5 shadow-lg shadow-yellow-100 transition-all active:scale-95">
                 <ListChecks size={20} strokeWidth={2.5} />
                 Ver Meus Pedidos
               </button>
@@ -114,53 +97,8 @@ const CreateOrderPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 flex flex-col">
-      <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-        {/* Ajuste de Tailwind: max-w-[1400px] para max-w-7xl */}
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-10">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-yellow-400 p-3 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                ⚒
-              </div>
-              <span className="font-bold text-gray-900 text-2xl tracking-tight">Ajeitai</span>
-            </div>
-
-            <div className="hidden md:flex items-center gap-1.5 text-sm font-medium">
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors">Início</a>
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors flex items-center gap-2">
-                <Search size={16} className="text-gray-400" />
-                Buscar Profissionais
-              </a>
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors">Meus Pedidos</a>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <button type="button" className="bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold px-6 py-3 rounded-2xl flex items-center gap-2.5 transition-colors">
-              <div className="bg-gray-950 p-1.5 rounded-full flex items-center justify-center text-white text-xs">
-                <Plus size={14} strokeWidth={3} />
-              </div>
-              Criar Pedido
-            </button>
-            
-            <div className="h-8 w-px bg-gray-100"></div>
-            
-            <div className="flex items-center gap-4">
-              <div className="relative p-1">
-                <Bell className="text-gray-400" size={24} />
-                <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
-              </div>
-              <div className="w-10 h-10 rounded-full border border-gray-200 bg-orange-100 overflow-hidden cursor-pointer relative">
-                <img 
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ricardo" 
-                  alt="Ricardo Silva"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Componente Header Centralizado */}
+      <MainHeader />
 
       <main className="max-w-3xl mx-auto w-full p-8 grow">
         <button className="flex items-center gap-2 text-gray-400 hover:text-gray-600 font-bold text-xs uppercase tracking-widest mb-6 transition-colors">
@@ -235,7 +173,7 @@ const CreateOrderPage = () => {
                         </>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center opacity-20">
-                           <Plus size={20} className="text-gray-400" />
+                            <Plus size={20} className="text-gray-400" />
                         </div>
                       )}
                     </div>
@@ -255,7 +193,7 @@ const CreateOrderPage = () => {
 
       <footer className="w-full py-8 border-t border-gray-100 bg-white mt-auto text-center">
         <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-4">
-          © 2024 Ajeitai - Todos os direitos reservados.
+          © 2026 Ajeitai - Todos os direitos reservados.
         </p>
       </footer>
     </div>
