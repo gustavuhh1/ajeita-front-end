@@ -46,7 +46,7 @@ export default function Step04() {
 
       {/* Botão de ação */}
       <button
-        onClick={() => router.push("/profissional")}
+        onClick={() => router.push("/profissional/dashboard")}
         data-testid="btn-ir-home"
         className="flex w-full max-w-sm items-center justify-center gap-2 rounded-full bg-yellow-400 py-4 text-base font-semibold text-gray-900 transition-colors hover:bg-yellow-500"
       >

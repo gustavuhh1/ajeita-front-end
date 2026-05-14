@@ -49,10 +49,10 @@ export default function Page() {
               className="hover:bg-primary/20 px-4 py-2"
               size="xl"
             >
-              <Link href="/login">Entrar</Link>
+              <Link href="/auth?mode=login">Entrar</Link>
             </Button>
             <Button asChild type="button" className="px-4 py-2" size="xl">
-              <Link href="/auth">Cadastre-se</Link>
+              <Link href="/auth?mode=register">Cadastre-se</Link>
             </Button>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function Page() {
               className="flex h-15 items-center gap-2 rounded-full px-8 py-2 hover:cursor-pointer"
               size="xl"
             >
-              <Link href="/login">
+              <Link href="/auth?mode=login">
                 <UserIcon weight="bold" size={22} />
                 <span className="text-lg font-semibold">Sou cliente</span>
               </Link>
@@ -92,7 +92,7 @@ export default function Page() {
               className="bg-background hover:bg-primary/10 flex h-15 items-center gap-2 rounded-full px-8 py-2 hover:cursor-pointer"
               size="xl"
             >
-              <Link href="/profissional">
+              <Link href="/profissional/entrar">
                 <UserCircleGearIcon weight="bold" size={22} />
                 <span className="ml-1 text-lg font-semibold">
                   Sou profissional
@@ -258,7 +258,7 @@ export default function Page() {
               <CheckIcon weight="bold" size={18} className="text-green-500" />{" "}
               Suporte dedicado 24/7.
             </span>
-            <Link href="/profissionais" className="w-full">
+            <Link href="/auth?mode=login" className="w-full">
               <Button
                 className="mt-4 h-13 w-full rounded-4xl bg-black text-white"
                 size="xl"
@@ -301,7 +301,7 @@ export default function Page() {
               size="xl"
               type="button"
             >
-              <Link href="/profissionais">
+              <Link href="/profissional/cadastro">
                 Começar a Trabalhar <ArrowRightIcon size={16} weight="bold" />
               </Link>
             </Button>

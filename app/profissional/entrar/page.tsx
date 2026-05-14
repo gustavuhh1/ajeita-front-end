@@ -18,14 +18,14 @@ import {
   UserGearIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-import Footer from "./components/footer";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import api from "@/lib/api";
 import { EnvelopeIcon, LockIcon } from "@phosphor-icons/react";
-import { UserProvider } from "@/types";
 import { useRouter } from "next/navigation";
+import Footer from "../components/footer";
+import Header from "../components/header";
+import { loginPrestador } from "@/app/api/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -40,6 +40,7 @@ export default function ProviderPage() {
   const {
     control,
     handleSubmit,
+    resetField,
     formState: { errors },
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -52,19 +53,13 @@ export default function ProviderPage() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const res = await api.get(`/prestadores`);
-      console.log(res.data);
-      if (res.status === 200) {
-        res.data.forEach((prestador: UserProvider) => {
-          if (
-            prestador.email === data.email &&
-            prestador.password === data.password
-          ) {
-            alert("Login bem-sucedido!");
-            // TODO: Redirecionar para a dashboard do profissional
-            router.push(`#`);
-          }
-        });
+      const prestador = await loginPrestador(data.email, data.password);
+
+      if (prestador) {
+        router.push("/profissional/dashboard");
+      } else {
+        resetField("password");
+        alert("Email ou senha inválidos.");
       }
     } catch (error) {
       console.error("Erro ao fazer login:", error);
@@ -75,8 +70,9 @@ export default function ProviderPage() {
   });
 
   return (
-    <div className="flex h-[calc(100vh-80px)] flex-col justify-between">
-      <div className="flex w-full flex-col items-center justify-around gap-10 px-6 py-10 md:flex-row md:items-start md:px-12 lg:px-30">
+    <div className="relative flex min-h-svh flex-col">
+      <Header variant="auth" />
+      <div className="flex w-full flex-1 flex-col items-center justify-around gap-10 px-6 py-10 md:flex-row md:px-12 lg:px-30">
         {/* Left Column */}
         <div className="flex w-full max-w-lg flex-col space-y-4 lg:max-w-xl">
           <h1 className="text-3xl font-semibold md:text-4xl">
@@ -257,13 +253,13 @@ export default function ProviderPage() {
             className="w-full font-semibold"
             asChild
           >
-            <Link href="/profissional/register">
+            <Link href="/profissional/cadastro">
               Quero ser um Prestador <ArrowRightIcon size={18} />
             </Link>
           </Button>
         </div>
       </div>
-      <Footer className="" />
+      <Footer variant="auth" />
     </div>
   );
 }
