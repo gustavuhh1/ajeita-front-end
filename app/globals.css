@@ -138,4 +138,51 @@
   .mobile {
     @apply block md:hidden;
   }
+
+  /* Range slider thumb */
+  .range-thumb::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #111827; /* gray-900 */
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .range-thumb::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #111827;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .range-thumb:hover::-webkit-slider-thumb,
+  .range-thumb:focus::-webkit-slider-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .range-thumb:hover::-moz-range-thumb,
+  .range-thumb:focus::-moz-range-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Hide native track so our custom track shows through */
+  .range-thumb::-webkit-slider-runnable-track {
+    background: transparent;
+  }
+
+  .range-thumb::-moz-range-track {
+    background: transparent;
+  }
 }

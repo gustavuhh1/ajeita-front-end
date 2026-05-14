@@ -232,10 +232,6 @@ export default function ServicosPage() {
         filters.categories.length === 0 ||
         filters.categories.includes(s.category);
 
-      // Type filter
-      const matchesType =
-        filters.types.length === 0 || filters.types.includes(s.type);
-
       // Price filter
       const matchesPrice =
         (s.priceMax ?? 0) >= filters.priceMin && (s.priceMin ?? 0) <= filters.priceMax;
@@ -246,7 +242,6 @@ export default function ServicosPage() {
       return (
         matchesSearch &&
         matchesCategory &&
-        matchesType &&
         matchesPrice &&
         matchesDistance
       );
@@ -270,9 +265,9 @@ export default function ServicosPage() {
 
   const hasActiveFilters =
     filters.categories.length > 0 ||
-    filters.types.length > 0 ||
-    filters.priceMax < 9999 ||
-    filters.distanceMax < 99;
+    filters.priceMin > 0 ||
+    filters.priceMax < 1000 ||
+    filters.distanceMax < 20;
 
   const clearAll = () => {
     setSearchTerm("");
@@ -317,9 +312,8 @@ export default function ServicosPage() {
                 {hasActiveFilters && (
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-[10px] font-bold text-white">
                     {filters.categories.length +
-                      filters.types.length +
-                      (filters.priceMax < 9999 ? 1 : 0) +
-                      (filters.distanceMax < 99 ? 1 : 0)}
+                      (filters.priceMin > 0 || filters.priceMax < 1000 ? 1 : 0) +
+                      (filters.distanceMax < 20 ? 1 : 0)}
                   </span>
                 )}
               </button>
@@ -431,7 +425,7 @@ export default function ServicosPage() {
             </div>
 
             {/* Active filter pills */}
-            {(filters.categories.length > 0 || filters.types.length > 0) && (
+            {filters.categories.length > 0 && (
               <div className="mb-4 flex flex-wrap gap-2">
                 {filters.categories.map((cat) => (
                   <span
@@ -444,24 +438,6 @@ export default function ServicosPage() {
                         setFilters((f) => ({
                           ...f,
                           categories: f.categories.filter((c) => c !== cat),
-                        }))
-                      }
-                    >
-                      <X className="h-3 w-3 opacity-70 hover:opacity-100" />
-                    </button>
-                  </span>
-                ))}
-                {filters.types.map((t) => (
-                  <span
-                    key={t}
-                    className="flex items-center gap-1.5 rounded-full bg-gray-700 px-3 py-1 text-xs font-semibold text-white"
-                  >
-                    {t}
-                    <button
-                      onClick={() =>
-                        setFilters((f) => ({
-                          ...f,
-                          types: f.types.filter((x) => x !== t),
                         }))
                       }
                     >

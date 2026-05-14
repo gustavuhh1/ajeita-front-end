@@ -105,7 +105,7 @@ export function ServiceCard({
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
               {React.cloneElement(icon as React.ReactElement<any>, {
                 className: "h-14 w-14 text-gray-300",
               })}
@@ -113,7 +113,7 @@ export function ServiceCard({
           )}
 
           {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
 
           {/* Top badges */}
           <div className="absolute left-3 top-3 flex items-center gap-2">
@@ -229,14 +229,14 @@ export function ServiceCard({
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
             {React.cloneElement(icon as React.ReactElement<any>, {
               className: "h-12 w-12 text-gray-300",
             })}
           </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/10" />
+        <div className="absolute inset-0 bg-linear-to-r from-transparent to-black/10" />
 
         {/* Top badges */}
         <div className="absolute left-3 top-3 flex items-center gap-2">

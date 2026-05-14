@@ -24,7 +24,6 @@ export interface FilterState {
   priceMin: number;
   priceMax: number;
   distanceMax: number;
-  types: string[];
 }
 
 interface ServiceFilterProps {
@@ -46,35 +45,16 @@ const CATEGORY_OPTIONS = [
   { id: "SEGURANÇA", label: "Segurança", icon: Shield, color: "text-indigo-500 bg-indigo-50" },
 ];
 
-const TYPE_OPTIONS = [
-  { id: "URGENTE", label: "Urgente" },
-  { id: "RESIDENCIAL", label: "Residencial" },
-  { id: "COMERCIAL", label: "Comercial" },
-  { id: "REFORMA", label: "Reforma" },
-  { id: "MONTAGEM", label: "Montagem" },
-  { id: "PESADA", label: "Pesada" },
-];
-
-const PRICE_PRESETS = [
-  { label: "Até R$ 100", min: 0, max: 100 },
-  { label: "R$ 100 – 200", min: 100, max: 200 },
-  { label: "R$ 200 – 400", min: 200, max: 400 },
-  { label: "Acima de R$ 400", min: 400, max: 9999 },
-];
-
-const DISTANCE_PRESETS = [
-  { label: "Até 1 km", max: 1 },
-  { label: "Até 3 km", max: 3 },
-  { label: "Até 5 km", max: 5 },
-  { label: "Qualquer", max: 99 },
-];
+// Variaveis importantes a definir
+const PRICE_MIN_LIMIT = 0;
+const PRICE_MAX_LIMIT = 1000;
+const DISTANCE_MAX_LIMIT = 20;
 
 export const DEFAULT_FILTERS: FilterState = {
   categories: [],
-  priceMin: 0,
-  priceMax: 9999,
-  distanceMax: 99,
-  types: [],
+  priceMin: PRICE_MIN_LIMIT,
+  priceMax: PRICE_MAX_LIMIT,
+  distanceMax: DISTANCE_MAX_LIMIT,
 };
 
 function Section({
@@ -109,9 +89,9 @@ function Section({
 export function ServiceFilter({ filters, onChange, totalResults }: ServiceFilterProps) {
   const hasActiveFilters =
     filters.categories.length > 0 ||
-    filters.types.length > 0 ||
-    filters.priceMax < 9999 ||
-    filters.distanceMax < 99;
+    filters.priceMin > PRICE_MIN_LIMIT ||
+    filters.priceMax < PRICE_MAX_LIMIT ||
+    filters.distanceMax < DISTANCE_MAX_LIMIT;
 
   const toggleCategory = (id: string) => {
     const updated = filters.categories.includes(id)
@@ -120,25 +100,32 @@ export function ServiceFilter({ filters, onChange, totalResults }: ServiceFilter
     onChange({ ...filters, categories: updated });
   };
 
-  const toggleType = (id: string) => {
-    const updated = filters.types.includes(id)
-      ? filters.types.filter((t) => t !== id)
-      : [...filters.types, id];
-    onChange({ ...filters, types: updated });
+  const handlePriceMin = (val: number) => {
+    onChange({ ...filters, priceMin: Math.min(val, filters.priceMax - 50) });
   };
 
-  const setPrice = (min: number, max: number) => {
-    onChange({ ...filters, priceMin: min, priceMax: max });
+  const handlePriceMax = (val: number) => {
+    onChange({ ...filters, priceMax: Math.max(val, filters.priceMin + 50) });
   };
 
-  const setDistance = (max: number) => {
-    onChange({ ...filters, distanceMax: max });
+  const handleDistance = (val: number) => {
+    onChange({ ...filters, distanceMax: val });
   };
+
+  // % positions for the track fill
+  const priceMinPct = ((filters.priceMin - PRICE_MIN_LIMIT) / (PRICE_MAX_LIMIT - PRICE_MIN_LIMIT)) * 100;
+  const priceMaxPct = ((filters.priceMax - PRICE_MIN_LIMIT) / (PRICE_MAX_LIMIT - PRICE_MIN_LIMIT)) * 100;
+  const distPct = (filters.distanceMax / DISTANCE_MAX_LIMIT) * 100;
 
   const reset = () => onChange({ ...DEFAULT_FILTERS });
 
+  const activeCount =
+    filters.categories.length +
+    (filters.priceMin > PRICE_MIN_LIMIT || filters.priceMax < PRICE_MAX_LIMIT ? 1 : 0) +
+    (filters.distanceMax < DISTANCE_MAX_LIMIT ? 1 : 0);
+
   return (
-    <aside className="sticky top-6 flex h-fit flex-col gap-0 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+    <aside className="sticky top-19.25 flex flex-col max-h-[calc(100vh-100px)] rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
         <div className="flex items-center gap-2">
@@ -146,10 +133,7 @@ export function ServiceFilter({ filters, onChange, totalResults }: ServiceFilter
           <span className="text-sm font-bold text-gray-800">Filtros</span>
           {hasActiveFilters && (
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-[10px] font-bold text-white">
-              {filters.categories.length +
-                filters.types.length +
-                (filters.priceMax < 9999 ? 1 : 0) +
-                (filters.distanceMax < 99 ? 1 : 0)}
+              {activeCount}
             </span>
           )}
         </div>
@@ -164,7 +148,7 @@ export function ServiceFilter({ filters, onChange, totalResults }: ServiceFilter
         )}
       </div>
 
-      <div className="flex flex-col gap-5 p-5">
+      <div className="flex flex-col gap-5 p-5 overflow-y-auto flex-1">
         {/* Categoria */}
         <Section title="Categoria">
           <div className="flex flex-col gap-1.5">
@@ -195,73 +179,94 @@ export function ServiceFilter({ filters, onChange, totalResults }: ServiceFilter
           </div>
         </Section>
 
-        {/* Faixa de Preço */}
+        {/* Faixa de Preço — dual range */}
         <Section title="Faixa de Preço">
-          <div className="flex flex-col gap-1.5">
-            {PRICE_PRESETS.map(({ label, min, max }) => {
-              const active = filters.priceMin === min && filters.priceMax === max;
-              return (
-                <button
-                  key={label}
-                  onClick={() => setPrice(min, max)}
-                  className={`flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                    active
-                      ? "bg-gray-900 text-white shadow-sm"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {label}
-                  {active && <X className="h-3.5 w-3.5 opacity-60" />}
-                </button>
-              );
-            })}
+          <div className="flex flex-col gap-4">
+            {/* Value display */}
+            <div className="flex items-center justify-between">
+              <span className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-bold text-gray-700">
+                R$ {filters.priceMin}
+              </span>
+              <span className="text-xs text-gray-400">até</span>
+              <span className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-bold text-gray-700">
+                {filters.priceMax >= PRICE_MAX_LIMIT ? `R$ ${PRICE_MAX_LIMIT}+` : `R$ ${filters.priceMax}`}
+              </span>
+            </div>
+
+            {/* Dual slider track */}
+            <div className="relative h-5 w-full">
+              {/* Background track */}
+              <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded-full bg-gray-200" />
+              {/* Active track fill */}
+              <div
+                className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gray-900"
+                style={{ left: `${priceMinPct}%`, right: `${100 - priceMaxPct}%` }}
+              />
+              {/* Min thumb */}
+              <input
+                type="range"
+                min={PRICE_MIN_LIMIT}
+                max={PRICE_MAX_LIMIT}
+                step={50}
+                value={filters.priceMin}
+                onChange={(e) => handlePriceMin(Number(e.target.value))}
+                className="range-thumb absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent"
+              />
+              {/* Max thumb */}
+              <input
+                type="range"
+                min={PRICE_MIN_LIMIT}
+                max={PRICE_MAX_LIMIT}
+                step={50}
+                value={filters.priceMax}
+                onChange={(e) => handlePriceMax(Number(e.target.value))}
+                className="range-thumb absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent"
+              />
+            </div>
+
+            <div className="flex justify-between text-[10px] text-gray-400">
+              <span>R$ {PRICE_MIN_LIMIT}</span>
+              <span>R$ {PRICE_MAX_LIMIT}+</span>
+            </div>
           </div>
         </Section>
 
-        {/* Distância */}
+        {/* Distância — single range */}
         <Section title="Distância">
-          <div className="flex flex-col gap-1.5">
-            {DISTANCE_PRESETS.map(({ label, max }) => {
-              const active = filters.distanceMax === max;
-              return (
-                <button
-                  key={label}
-                  onClick={() => setDistance(max)}
-                  className={`flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                    active
-                      ? "bg-gray-900 text-white shadow-sm"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {label}
-                  {active && <X className="h-3.5 w-3.5 opacity-60" />}
-                </button>
-              );
-            })}
+          <div className="flex flex-col gap-4">
+            {/* Value display */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">Raio máximo</span>
+              <span className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-bold text-gray-700">
+                {filters.distanceMax >= DISTANCE_MAX_LIMIT ? `${DISTANCE_MAX_LIMIT}+ km` : `${filters.distanceMax} km`}
+              </span>
+            </div>
+
+            {/* Single slider */}
+            <div className="relative h-5 w-full">
+              <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded-full bg-gray-200" />
+              <div
+                className="absolute top-1/2 left-0 h-1.5 -translate-y-1/2 rounded-full bg-gray-900"
+                style={{ width: `${distPct}%` }}
+              />
+              <input
+                type="range"
+                min={1}
+                max={DISTANCE_MAX_LIMIT}
+                step={0.5}
+                value={filters.distanceMax}
+                onChange={(e) => handleDistance(Number(e.target.value))}
+                className="range-thumb absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent"
+              />
+            </div>
+
+            <div className="flex justify-between text-[10px] text-gray-400">
+              <span>1 km</span>
+              <span>{DISTANCE_MAX_LIMIT}+ km</span>
+            </div>
           </div>
         </Section>
 
-        {/* Tipo */}
-        <Section title="Tipo de Serviço" defaultOpen={false}>
-          <div className="flex flex-wrap gap-2">
-            {TYPE_OPTIONS.map(({ id, label }) => {
-              const active = filters.types.includes(id);
-              return (
-                <button
-                  key={id}
-                  onClick={() => toggleType(id)}
-                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all ${
-                    active
-                      ? "bg-gray-900 text-white shadow-sm"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-        </Section>
       </div>
 
       {/* Footer */}
