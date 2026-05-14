@@ -19,12 +19,12 @@ import {
   WrenchIcon,
 } from "@phosphor-icons/react";
 import { Control, Controller, FieldErrors } from "react-hook-form";
-import { FormData } from "../page";
+import { FormRegisterData } from "../page";
 import { Input } from "@/components/ui/input";
 
 interface Step03Props {
-  control: Control<FormData>;
-  errors: FieldErrors<FormData>;
+  control: Control<FormRegisterData>;
+  errors: FieldErrors<FormRegisterData>;
   onSubmit: () => void;
   setStep: (step: number) => void;
 }
