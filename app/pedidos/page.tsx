@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import {
   User,
   MapPin,
@@ -9,11 +10,59 @@ import {
   ShoppingCart,
 } from "lucide-react"
 
+type Pedido = {
+  id: number
+  titulo: string
+  descricao: string
+  data: string
+  status: string
+  corStatus: string
+  icone: string
+}
+
 export default function PedidosPage() {
+  const router = useRouter()
+
+  const verDetalhes = (id: number): void => {
+    router.push(`/pedidos/${id}`)
+  }
+
+  const pagarAgora = (id: number): void => {
+    router.push(`/pagamento?id=${id}`)
+  }
+
+  const pedidos: Pedido[] = [
+    {
+      id: 1,
+      titulo: "Conserto de Vazamento",
+      descricao: "Profissional sendo selecionado...",
+      data: "Solicitado em 12 de Out, 2023",
+      status: "EM NEGOCIAÇÃO",
+      corStatus: "bg-orange-100 text-orange-600",
+      icone: "🔧",
+    },
+    {
+      id: 2,
+      titulo: "Instalação de Tomadas",
+      descricao: "Profissional: Marcos Oliveira",
+      data: "Agendado para 15 de Out, 2023 às 09:00",
+      status: "AGENDADO",
+      corStatus: "bg-green-100 text-green-600",
+      icone: "⚡",
+    },
+    {
+      id: 3,
+      titulo: "Pintura de Parede (Sala)",
+      descricao: "Profissional: Ana Costa",
+      data: "Solicitado em 10 de Out, 2023",
+      status: "AGUARDANDO PAGAMENTO",
+      corStatus: "bg-blue-100 text-blue-600",
+      icone: "🎨",
+    },
+  ]
+
   return (
     <div className="min-h-screen bg-[#f6f8fb]">
-
-      
       <header className="flex items-center justify-between border-b border-gray-200 bg-white px-10 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
@@ -48,12 +97,8 @@ export default function PedidosPage() {
         </div>
       </header>
 
-      
       <div className="mx-auto flex max-w-7xl gap-8 px-6 py-10">
-
-        
         <aside className="w-[280px] rounded-3xl bg-white p-6 shadow-sm">
-
           <div className="flex items-center gap-4">
             <div className="h-14 w-14 rounded-full bg-gray-200" />
             <div>
@@ -67,7 +112,6 @@ export default function PedidosPage() {
           </div>
 
           <div className="mt-8 space-y-3 text-sm">
-
             <div className="flex items-center gap-3 text-gray-500">
               <User size={16} /> Dados Pessoais
             </div>
@@ -90,9 +134,7 @@ export default function PedidosPage() {
           </button>
         </aside>
 
-        
         <main className="flex-1">
-
           <h1 className="text-[28px] font-semibold text-gray-800">
             Meus Pedidos
           </h1>
@@ -101,7 +143,6 @@ export default function PedidosPage() {
             Acompanhe seus serviços em andamento e veja seu histórico.
           </p>
 
-          
           <div className="mt-6 flex gap-6 border-b text-sm">
             <span className="border-b-2 border-yellow-400 pb-3 font-medium text-yellow-600">
               Ativos
@@ -111,107 +152,59 @@ export default function PedidosPage() {
             </span>
           </div>
 
-          
           <div className="mt-6 space-y-5">
+            {pedidos.map((pedido) => (
+              <div
+                key={pedido.id}
+                className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-5"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-100">
+                    {pedido.icone}
+                  </div>
 
-            
-            <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-5">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-100">
-                  🔧
+                  <div>
+                    <h3 className="font-medium text-gray-800">
+                      {pedido.titulo}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {pedido.data}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {pedido.descricao}
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="font-medium text-gray-800">
-                    Conserto de Vazamento
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Solicitado em 12 de Out, 2023
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    Profissional sendo selecionado...
-                  </p>
+                <div className="flex items-center gap-4">
+                  <span
+                    className={`rounded-full px-3 py-1 text-[11px] font-medium ${pedido.corStatus}`}
+                  >
+                    {pedido.status}
+                  </span>
+
+                  {pedido.status === "AGUARDANDO PAGAMENTO" ? (
+                    <button
+                      onClick={() => pagarAgora(pedido.id)}
+                      className="rounded-full bg-yellow-400 px-5 py-2 text-sm font-medium"
+                    >
+                      Pagar Agora
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => verDetalhes(pedido.id)}
+                      className="rounded-full bg-gray-100 px-4 py-2 text-sm"
+                    >
+                      Ver Detalhes
+                    </button>
+                  )}
                 </div>
               </div>
-
-              <div className="flex items-center gap-4">
-                <span className="rounded-full bg-orange-100 px-3 py-1 text-[11px] font-medium text-orange-600">
-                  EM NEGOCIAÇÃO
-                </span>
-
-                <button className="rounded-full bg-gray-100 px-4 py-2 text-sm">
-                  Ver Detalhes
-                </button>
-              </div>
-            </div>
-
-            
-            <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-5">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-100">
-                  ⚡
-                </div>
-
-                <div>
-                  <h3 className="font-medium text-gray-800">
-                    Instalação de Tomadas
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Agendado para 15 de Out, 2023 às 09:00
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    Profissional: Marcos Oliveira
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="rounded-full bg-green-100 px-3 py-1 text-[11px] font-medium text-green-600">
-                  AGENDADO
-                </span>
-
-                <button className="rounded-full bg-gray-100 px-4 py-2 text-sm">
-                  Ver Detalhes
-                </button>
-              </div>
-            </div>
-
-            
-            <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-5">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gray-100">
-                  🎨
-                </div>
-
-                <div>
-                  <h3 className="font-medium text-gray-800">
-                    Pintura de Parede (Sala)
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Solicitado em 10 de Out, 2023
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    Profissional: Ana Costa
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="rounded-full bg-blue-100 px-3 py-1 text-[11px] font-medium text-blue-600">
-                  AGUARDANDO PAGAMENTO
-                </span>
-
-                <button className="rounded-full bg-yellow-400 px-5 py-2 text-sm font-medium">
-                  Pagar Agora
-                </button>
-              </div>
-            </div>
-
+            ))}
           </div>
         </main>
       </div>
 
-      
       <footer className="text-center text-xs text-gray-400 py-6">
         © 2026 Ajeitai. Todos os direitos reservados.
       </footer>
