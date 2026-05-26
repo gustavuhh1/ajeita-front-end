@@ -1,72 +1,186 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Bell, Plus } from 'lucide-react'; // Removi o 'User' que não estava sendo usado
-import { NavLink, HeaderSearchBar } from './HeaderElements';
-import { ProviderAvatar } from './ProviderAvatar';
 
-export const MainHeader = ({ activePage = 'inicio' }: { activePage?: string }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import Link from "next/link";
+
+import {
+  Bell,
+  Plus,
+} from "lucide-react";
+
+import {
+  HeaderSearchBar,
+  NavLink,
+} from "@/app/cliente/components/HeaderElements";
+
+import { ProviderAvatar } from "@/app/cliente/components/ProviderAvatar";
+
+interface MainHeaderProps {
+  activePage?:
+    | "inicio"
+    | "pedidos"
+    | "mensagens"
+    | "perfil";
+}
+
+export const MainHeader = ({
+  activePage = "inicio",
+}: MainHeaderProps) => {
+  const [
+    searchQuery,
+    setSearchQuery,
+  ] = useState("");
+
+  const [
+    profileImage,
+    setProfileImage,
+  ] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
-    const fetchSavedImage = async () => {
-      const savedImage = localStorage.getItem('userProfileImage');
-      if (savedImage) {
-        setProfileImage(savedImage);
-      }
-    };
+    const loadProfileImage =
+      () => {
+        const savedImage =
+          localStorage.getItem(
+            "userProfileImage",
+          );
 
-    fetchSavedImage();
+        setProfileImage(
+          savedImage,
+        );
+      };
+
+    loadProfileImage();
+
+    window.addEventListener(
+      "profileImageUpdated",
+      loadProfileImage,
+    );
+
+    window.addEventListener(
+      "storage",
+      loadProfileImage,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "profileImageUpdated",
+        loadProfileImage,
+      );
+
+      window.removeEventListener(
+        "storage",
+        loadProfileImage,
+      );
+    };
   }, []);
 
   return (
-    // Troquei max-w-[1400px] por max-w-7xl para evitar o aviso do Tailwind
-    <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        
-        {/* Lado Esquerdo: Logo e Navegação */}
+    <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white shadow-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+        {/* ESQUERDA */}
         <div className="flex items-center gap-10">
-          <div className="flex items-center gap-2.5 cursor-pointer">
-            <div className="bg-yellow-400 p-2.5 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-sm">
+          {/* LOGO */}
+          <Link
+            href="/cliente/home"
+            className="flex items-center gap-2.5"
+          >
+            <div className="flex items-center justify-center rounded-full bg-yellow-400 p-2.5 text-lg font-bold text-white shadow-sm">
               ⚒
             </div>
-            <span className="font-bold text-gray-900 text-2xl tracking-tight italic">Ajeitai</span>
-          </div>
 
-          <div className="hidden lg:flex items-center gap-1.5">
-            <NavLink label="Início" href="/" active={activePage === 'inicio'} />
-            <HeaderSearchBar value={searchQuery} onChange={setSearchQuery} />
-            <NavLink label="Meus Pedidos" href="/pedidos" active={activePage === 'pedidos'} />
-            <NavLink label="Mensagens" href="/mensagens" active={activePage === 'mensagens'} />
+            <span className="text-2xl font-bold italic tracking-tight text-gray-900">
+              Ajeitai
+            </span>
+          </Link>
+
+          {/* MENU */}
+          <div className="hidden items-center gap-1.5 lg:flex">
+            <NavLink
+              label="Início"
+              href="/cliente/home"
+              active={
+                activePage ===
+                "inicio"
+              }
+            />
+
+            <HeaderSearchBar
+              value={
+                searchQuery
+              }
+              onChange={
+                setSearchQuery
+              }
+            />
+
+            <NavLink
+              label="Meus Pedidos"
+              href="/pedidos"
+              active={
+                activePage ===
+                "pedidos"
+              }
+            />
+
+            <NavLink
+              label="Mensagens"
+              href="/mensagens"
+              active={
+                activePage ===
+                "mensagens"
+              }
+            />
           </div>
         </div>
 
-        {/* Lado Direito: Ações e Perfil */}
+        {/* DIREITA */}
         <div className="flex items-center gap-6">
-          <button className="hidden sm:flex bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold px-6 py-3 rounded-2xl items-center gap-2.5 transition-all shadow-sm active:scale-95">
-            <div className="bg-gray-950 p-1 rounded-full flex items-center justify-center text-white">
-              <Plus size={14} strokeWidth={3} />
-            </div>
-            Criar Pedido
-          </button>
-
-          <div className="h-8 w-px bg-gray-100 hidden sm:block"></div>
-
-          <div className="flex items-center gap-4">
-            {/* Notificações */}
-            <div className="relative p-2 text-gray-400 hover:text-yellow-500 hover:bg-gray-50 rounded-xl cursor-pointer transition-all">
-              <Bell size={24} />
-              <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
-            </div>
-
-            {/* Avatar Dinâmico */}
-            <a href="/perfil" className="transition-transform hover:scale-105">
-              <ProviderAvatar 
-                src={profileImage} 
-                name="Usuário" 
-                size="sm" 
+          {/* BOTÃO */}
+          <Link
+            href="/cliente/criar-pedido"
+            className="hidden items-center gap-2.5 rounded-2xl bg-yellow-400 px-6 py-3 font-bold text-gray-950 shadow-sm transition-all hover:bg-yellow-500 active:scale-95 sm:flex"
+          >
+            <div className="flex items-center justify-center rounded-full bg-gray-950 p-1 text-white">
+              <Plus
+                size={14}
+                strokeWidth={3}
               />
-            </a>
+            </div>
+
+            Criar Pedido
+          </Link>
+
+          <div className="hidden h-8 w-px bg-gray-100 sm:block" />
+
+          {/* AÇÕES */}
+          <div className="flex items-center gap-4">
+            {/* NOTIFICAÇÃO */}
+            <button
+              type="button"
+              className="relative rounded-xl p-2 text-gray-400 transition-all hover:bg-gray-50 hover:text-yellow-500"
+            >
+              <Bell size={24} />
+
+              <div className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full border-2 border-white bg-red-500" />
+            </button>
+
+            {/* PERFIL */}
+            <Link
+              href="/cliente/perfil"
+              className="transition-transform hover:scale-105"
+            >
+              <ProviderAvatar
+                src={profileImage}
+                name="Usuário"
+                size="sm"
+              />
+            </Link>
           </div>
         </div>
       </div>
