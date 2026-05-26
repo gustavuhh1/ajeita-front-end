@@ -34,18 +34,27 @@ interface Category {
   icon?: string;
 }
 
-interface Service {
-  id: string;
-  name: string;
+
+export interface Servico {
+  id: number;
+  title: string;
+  category: string;
+  type: string;
+  location: string;
+  distance: string;
+  distanceValue: number;
+  priceRange: string;
+  priceMin: number;
+  priceMax: number;
+  timeAgo: string;
+  isNew: boolean;
+  highlighted: boolean;
+  rating: number;
+  reviewCount: number;
   description: string;
   photos: string[];
-  price: number;
-  providerId: string;
-  clientId: string;
-  category: Category;
-  createdAt: Date;
-  updatedAt: Date;
 }
+
 
 export enum Role {
   ADMIN = "admin",
