@@ -249,30 +249,7 @@ export default function ProfessionalsPage() {
         {/* CONTEÚDO PRINCIPAL */}
         <section className="min-w-0 flex-1 space-y-8">
           
-          {/* HERO BANNER */}
-          <div className="relative overflow-hidden rounded-[36px] border border-yellow-100 bg-gradient-to-br from-yellow-50 via-white to-yellow-100/60 p-8 shadow-sm sm:p-10">
-            <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-yellow-200/20 blur-3xl" />
 
-            <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-              <div className="max-w-2xl">
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-yellow-700">
-                  <Sparkles size={14} />
-                  Profissionais verificados
-                </div>
-                <h1 className="text-4xl font-black tracking-tight text-gray-950">
-                  Encontre o profissional ideal
-                </h1>
-                <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-500 sm:text-base">
-                  Compare avaliações, preços e especialidades para contratar com segurança e rapidez.
-                </p>
-              </div>
-
-              <button className="flex shrink-0 items-center justify-center gap-3 rounded-[24px] bg-yellow-400 px-8 py-5 text-sm font-black text-gray-950 shadow-xl shadow-yellow-100 transition-all hover:bg-yellow-500 active:scale-95">
-                <Plus size={20} strokeWidth={3} />
-                Publicar Pedido
-              </button>
-            </div>
-          </div>
 
           {/* BARRA DE BUSCA */}
           <div className="group relative">
