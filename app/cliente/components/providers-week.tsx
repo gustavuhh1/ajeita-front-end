@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 
 const profissionais = [
   {
+    id: "joao-silva",
     nome: "João Silva",
     servico: "Eletricista Residencial",
     nota: 4.8,
@@ -16,6 +18,7 @@ const profissionais = [
     online: true,
   },
   {
+    id: "maria-oliveira",
     nome: "Maria Oliveira",
     servico: "Pintura e Acabamentos",
     nota: 5.0,
@@ -27,6 +30,7 @@ const profissionais = [
     online: false,
   },
   {
+    id: "ana-costa",
     nome: "Ana Costa",
     servico: "Limpeza Profissional",
     nota: 5.0,
@@ -38,6 +42,7 @@ const profissionais = [
     online: true,
   },
   {
+    id: "pedro-santos",
     nome: "Pedro Santos",
     servico: "Marido de Aluguel",
     nota: 4.9,
@@ -53,9 +58,9 @@ const profissionais = [
 const ProvidersWeek = () => {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {profissionais.map((profissional, index) => (
+      {profissionais.map((profissional) => (
         <div
-          key={index}
+          key={profissional.id}
           className="group flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md"
         >
           <div className="flex items-center gap-3">
@@ -116,12 +121,15 @@ const ProvidersWeek = () => {
                 </span>
               </p>
             </div>
-            <button
+
+            {/* Redirecionamento configurado para buscar-profissional/perfil/[id] */}
+            <Link
+              href={`/cliente/buscar-profissional/perfil/${profissional.id}`}
               aria-label={`Ver perfil de ${profissional.nome}`}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-400 text-white transition-colors hover:bg-amber-500 active:bg-amber-600"
             >
               <ArrowUpRight className="h-4 w-4" />
-            </button>
+            </Link>
           </div>
         </div>
       ))}
