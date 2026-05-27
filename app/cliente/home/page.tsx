@@ -1,9 +1,6 @@
 import Link from "next/link";
 
-import {
-  ArrowRightIcon,
-} from "@phosphor-icons/react/dist/ssr";
-
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass";
 
 import { ClipboardPlus } from "lucide-react";
@@ -23,9 +20,7 @@ export default function Home() {
       <Header />
 
       <main className="space-y-10 p-6 lg:p-12">
-        {/* HERO */}
         <div className="flex w-full flex-col gap-8 xl:flex-row">
-          {/* BUSCA */}
           <section className="relative flex w-full flex-col gap-6 rounded-[32px] bg-white p-6 shadow-sm lg:p-8">
             <div className="max-w-xl space-y-2">
               <h1 className="text-3xl font-bold text-zinc-900 lg:text-4xl">
@@ -33,13 +28,11 @@ export default function Home() {
               </h1>
 
               <p className="text-lg text-zinc-600">
-                Encontre o profissional
-                ideal para resolver seu
-                problema hoje mesmo.
+                Encontre o profissional ideal para resolver seu problema hoje
+                mesmo.
               </p>
             </div>
 
-            {/* INPUT */}
             <div className="relative flex w-full items-center">
               <MagnifyingGlassIcon
                 size={20}
@@ -59,13 +52,11 @@ export default function Home() {
               </Button>
             </div>
 
-            {/* CATEGORIAS */}
             <div className="mt-2 flex flex-wrap items-center gap-4">
               <NavCategory />
             </div>
           </section>
 
-          {/* CARD PEDIDO */}
           <section className="bg-primary flex min-h-[340px] w-full max-w-full flex-col justify-between gap-6 rounded-[32px] p-8 shadow-md xl:max-w-[420px]">
             <div className="bg-secondary flex h-14 w-14 items-center justify-center rounded-full">
               <ClipboardPlus size={24} />
@@ -73,16 +64,12 @@ export default function Home() {
 
             <div className="space-y-3">
               <h2 className="text-3xl font-bold text-zinc-950">
-                Não encontrou o que
-                procura?
+                Não encontrou o que procura?
               </h2>
 
               <p className="text-md text-zinc-800">
-                Crie um pedido
-                personalizado agora e
-                receba propostas de
-                profissionais
-                qualificados em minutos.
+                Crie um pedido personalizado agora e receba propostas de
+                profissionais qualificados em minutos.
               </p>
             </div>
 
@@ -107,18 +94,15 @@ export default function Home() {
           </section>
         </div>
 
-        {/* PROFISSIONAIS */}
         <section className="space-y-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <h2 className="text-3xl font-bold">
-                Profissionais em
-                Destaque
+                Profissionais em Destaque
               </h2>
 
               <p className="text-zinc-600">
-                Os melhores avaliados da
-                sua região esta semana.
+                Os melhores avaliados da sua região esta semana.
               </p>
             </div>
 

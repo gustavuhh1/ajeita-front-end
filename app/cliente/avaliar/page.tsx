@@ -1,15 +1,15 @@
 "use client";
 
-import {
-  Star,
-  Loader2,
-  CheckCircle2,
-  ArrowLeft,
-  ShieldCheck,
-} from "lucide-react";
-
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Loader2,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 
 import Header from "../components/header";
 
@@ -26,7 +26,7 @@ export default function AvaliarPrestadorPage() {
 
   useEffect(() => {
     const jaAvaliou = localStorage.getItem(
-      `avaliado-${pedidoId}`,
+      `avaliado-${pedidoId}`
     );
 
     if (jaAvaliou) {
@@ -47,7 +47,7 @@ export default function AvaliarPrestadorPage() {
 
       localStorage.setItem(
         `avaliado-${pedidoId}`,
-        "true",
+        "true"
       );
 
       setTimeout(() => {
@@ -70,7 +70,6 @@ export default function AvaliarPrestadorPage() {
         </button>
 
         <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-[36px] border border-gray-100 bg-white shadow-sm">
-          {/* HERO */}
           <div className="relative overflow-hidden border-b border-gray-100 bg-gradient-to-br from-yellow-50 via-white to-yellow-100/60 px-6 py-10 text-center sm:px-10">
             <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-yellow-200/20 blur-3xl" />
 
@@ -98,11 +97,9 @@ export default function AvaliarPrestadorPage() {
             </div>
           </div>
 
-          {/* CONTEÚDO */}
           <div className="p-6 sm:p-10">
             {!enviado ? (
               <div className="space-y-8">
-                {/* CARD PEDIDO */}
                 <div className="rounded-[28px] border border-gray-100 bg-gray-50/80 p-6">
                   <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -126,7 +123,6 @@ export default function AvaliarPrestadorPage() {
                   </div>
                 </div>
 
-                {/* ESTRELAS */}
                 <div className="rounded-[32px] border border-yellow-100 bg-yellow-50/40 px-6 py-10 text-center">
                   <h3 className="text-2xl font-black text-gray-950">
                     Avalie o prestador
@@ -180,7 +176,6 @@ export default function AvaliarPrestadorPage() {
                   )}
                 </div>
 
-                {/* COMENTÁRIO */}
                 <div>
                   <div className="mb-3 flex items-center justify-between">
                     <label className="text-sm font-black text-gray-800">
@@ -198,13 +193,12 @@ export default function AvaliarPrestadorPage() {
                     value={comentario}
                     onChange={(e) =>
                       setComentario(
-                        e.target.value,
+                        e.target.value
                       )
                     }
                   />
                 </div>
 
-                {/* DICA */}
                 <div className="flex gap-4 rounded-[28px] border border-blue-100 bg-blue-50/60 p-5">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
                     <ShieldCheck size={20} />
@@ -223,7 +217,6 @@ export default function AvaliarPrestadorPage() {
                   </div>
                 </div>
 
-                {/* BOTÕES */}
                 <div className="flex flex-col gap-4 pt-2 sm:flex-row">
                   <button
                     onClick={() =>

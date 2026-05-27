@@ -78,7 +78,6 @@ export function AppSidebar() {
       </SidebarContent>
       <Separator className="border-sidebar" />
       <SidebarFooter className="p-4">
-        {/* TODO: Inserir valores dinâmicos */}
         <div className="flex items-center gap-2">
           <Avatar>
             <AvatarImage src="https://github.com/gustavuhh1.png" alt="shadcn" />
@@ -87,7 +86,6 @@ export function AppSidebar() {
           <h2 className="text-sm font-semibold text-white">
             Carlos Nascimento
           </h2>
-          {/* TODO: Fazer lógica logout */}
           <SignOutIcon
             weight="bold"
             className="ml-auto cursor-pointer text-white"

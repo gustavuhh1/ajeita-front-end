@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 import React, {
   ReactNode,
   useEffect,
   useState,
-} from "react";
+} from "react"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import {
   ClipboardList,
@@ -15,17 +15,16 @@ import {
   MapPin,
   ShieldCheck,
   UserCircle,
-} from "lucide-react";
+} from "lucide-react"
 
-import { ProviderAvatar } from "@/app/cliente/components/ProviderAvatar";
+import Header from "@/app/cliente/components/header"
 
-// Importação da topbar oficial unificada que limpa a duplicação
-import Header from "@/app/cliente/components/header";
+import { ProviderAvatar } from "@/app/cliente/components/ProviderAvatar"
 
 interface PerfilPageLayoutProps {
-  children: ReactNode;
-  title: string;
-  description: string;
+  children: ReactNode
+  title: string
+  description: string
 }
 
 const menuItems = [
@@ -49,44 +48,60 @@ const menuItems = [
     href: "#",
     icon: ShieldCheck,
   },
-];
+]
 
 export function PerfilPageLayout({
   children,
   title,
   description,
 }: PerfilPageLayoutProps) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] =
+    useState<string | null>(null)
 
   useEffect(() => {
     const loadProfileImage = () => {
-      const savedImage = localStorage.getItem("userProfileImage");
-      setProfileImage(savedImage);
-    };
+      const savedImage =
+        localStorage.getItem(
+          "userProfileImage",
+        )
 
-    loadProfileImage();
+      setProfileImage(savedImage)
+    }
 
-    window.addEventListener("profileImageUpdated", loadProfileImage);
-    window.addEventListener("storage", loadProfileImage);
+    loadProfileImage()
+
+    window.addEventListener(
+      "profileImageUpdated",
+      loadProfileImage,
+    )
+
+    window.addEventListener(
+      "storage",
+      loadProfileImage,
+    )
 
     return () => {
-      window.removeEventListener("profileImageUpdated", loadProfileImage);
-      window.removeEventListener("storage", loadProfileImage);
-    };
-  }, []);
+      window.removeEventListener(
+        "profileImageUpdated",
+        loadProfileImage,
+      )
+
+      window.removeEventListener(
+        "storage",
+        loadProfileImage,
+      )
+    }
+  }, [])
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FFFCF5] font-sans text-gray-800">
-      {/* Substituído MainHeader pela Topbar oficial unificada */}
       <Header />
 
       <main className="mx-auto flex w-full max-w-6xl grow flex-col gap-8 px-6 py-10 lg:flex-row">
-        {/* SIDEBAR */}
         <aside className="w-full shrink-0 lg:w-72">
           <section className="sticky top-24 rounded-[40px] border border-gray-100 bg-white p-8 shadow-sm">
-            {/* PERFIL */}
             <div className="mb-10 flex items-center gap-4">
               <ProviderAvatar
                 name="Ricardo Silva"
@@ -105,11 +120,11 @@ export function PerfilPageLayout({
               </div>
             </div>
 
-            {/* MENU */}
             <nav className="space-y-2">
               {menuItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
+                const Icon = item.icon
+                const isActive =
+                  pathname === item.href
 
                 if (item.href === "#") {
                   return (
@@ -118,10 +133,14 @@ export function PerfilPageLayout({
                       type="button"
                       className="relative flex w-full items-center gap-4 rounded-3xl px-5 py-4 text-left text-sm font-black text-gray-400 transition-all hover:bg-gray-50 hover:text-gray-700"
                     >
-                      <Icon size={18} className="text-gray-400" />
+                      <Icon
+                        size={18}
+                        className="text-gray-400"
+                      />
+
                       {item.name}
                     </button>
-                  );
+                  )
                 }
 
                 return (
@@ -136,7 +155,11 @@ export function PerfilPageLayout({
                   >
                     <Icon
                       size={18}
-                      className={isActive ? "text-yellow-500" : "text-gray-400"}
+                      className={
+                        isActive
+                          ? "text-yellow-500"
+                          : "text-gray-400"
+                      }
                     />
 
                     {item.name}
@@ -145,11 +168,10 @@ export function PerfilPageLayout({
                       <span className="absolute left-0 h-6 w-1.5 rounded-r-full bg-yellow-400" />
                     )}
                   </Link>
-                );
+                )
               })}
             </nav>
 
-            {/* LOGOUT */}
             <div className="mt-10 border-t border-gray-50 pt-6">
               <button
                 type="button"
@@ -162,7 +184,6 @@ export function PerfilPageLayout({
           </section>
         </aside>
 
-        {/* CONTEÚDO */}
         <section className="min-w-0 flex-1">
           <div className="mb-7">
             <h1 className="text-3xl font-black tracking-tight text-gray-950">
@@ -178,7 +199,6 @@ export function PerfilPageLayout({
         </section>
       </main>
 
-      {/* FOOTER */}
       <footer className="border-t border-gray-100 bg-white py-7">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-center text-[11px] font-bold uppercase tracking-widest text-gray-400 sm:flex-row sm:text-left">
           <p>
@@ -186,20 +206,29 @@ export function PerfilPageLayout({
           </p>
 
           <div className="flex gap-8">
-            <Link href="#" className="transition-colors hover:text-gray-800">
+            <Link
+              href="#"
+              className="transition-colors hover:text-gray-800"
+            >
               Termos
             </Link>
 
-            <Link href="#" className="transition-colors hover:text-gray-800">
+            <Link
+              href="#"
+              className="transition-colors hover:text-gray-800"
+            >
               Privacidade
             </Link>
 
-            <Link href="#" className="transition-colors hover:text-gray-800">
+            <Link
+              href="#"
+              className="transition-colors hover:text-gray-800"
+            >
               Ajuda
             </Link>
           </div>
         </div>
       </footer>
     </div>
-  );
+  )
 }

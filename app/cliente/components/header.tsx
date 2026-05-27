@@ -1,25 +1,25 @@
-import Link from "next/link";
+import Link from "next/link"
 
 import {
   PlusCircleIcon,
   WrenchIcon,
-} from "@phosphor-icons/react/dist/ssr";
+} from "@phosphor-icons/react/dist/ssr"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 
-import NavLinks from "@/app/cliente/components/nav-links";
-import NotificationBell from "@/app/cliente/components/notification-bell";
+import NavLinks from "@/app/cliente/components/nav-links"
+import NotificationBell from "@/app/cliente/components/notification-bell"
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/avatar";
+} from "@/components/ui/avatar"
 
 interface HeaderProps {
-  hasNav?: boolean;
-  hasSearch?: boolean;
-  hasBtnService?: boolean;
+  hasNav?: boolean
+  hasSearch?: boolean
+  hasBtnService?: boolean
 }
 
 export default function Header({
@@ -29,15 +29,14 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header className="flex h-18 w-full items-center gap-10 border-b border-gray-200 bg-white px-6 py-4 lg:px-12">
-      {/* LOGO */}
       <Link
         href="/cliente/home"
         className="flex items-center gap-2"
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
           <WrenchIcon
-            weight="fill"
             size={20}
+            weight="fill"
             className="text-black"
           />
         </div>
@@ -47,12 +46,9 @@ export default function Header({
         </h2>
       </Link>
 
-      {/* NAV */}
       {hasNav && <NavLinks />}
 
-      {/* AÇÕES */}
       <div className="ml-auto flex items-center gap-4">
-        {/* BOTÃO */}
         {hasBtnService && (
           <Button
             asChild
@@ -62,8 +58,8 @@ export default function Header({
           >
             <Link href="/cliente/criar-pedido">
               <PlusCircleIcon
-                weight="bold"
                 size={18}
+                weight="bold"
               />
 
               Criar Pedido
@@ -71,13 +67,10 @@ export default function Header({
           </Button>
         )}
 
-        {/* DIVISOR */}
         <hr className="hidden w-6 rotate-90 border-zinc-300 md:flex" />
 
-        {/* NOTIFICAÇÃO */}
         <NotificationBell />
 
-        {/* AVATAR */}
         <Link href="/cliente/perfil">
           <Avatar className="transition-transform hover:scale-105">
             <AvatarImage src="https://github.com/shadcn.png" />
@@ -89,5 +82,5 @@ export default function Header({
         </Link>
       </div>
     </header>
-  );
+  )
 }

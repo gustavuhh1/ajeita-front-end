@@ -85,7 +85,6 @@ const LoginForm = () => {
           </p>
         </div>
 
-        {/* LOGIN SOCIAL */}
         <div className="flex w-full gap-4">
           <Button
             variant="custom"
@@ -98,7 +97,6 @@ const LoginForm = () => {
               src="/google-icon.png"
               alt="google-logo"
             />
-            {/* TODO: Implementar login com Google */}
             Google
           </Button>
 
@@ -108,7 +106,6 @@ const LoginForm = () => {
             className="flex flex-1 items-center justify-center gap-2 rounded-full border border-zinc-200 py-3 hover:bg-zinc-200"
           >
             <GithubLogoIcon weight="bold" size={20} />
-            {/* TODO: Implementar login com Github */}
             Github
           </Button>
         </div>
@@ -119,7 +116,6 @@ const LoginForm = () => {
         </div>
       </div>
 
-      {/* FORM */}
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-1">
           <Label htmlFor="email" className="text-sm font-medium">
@@ -208,7 +204,6 @@ const LoginForm = () => {
             <p className="text-sm font-medium">Lembrar de mim</p>
           </Label>
 
-          {/* TODO: Implementar rota de recuperação de senha */}
           <Link
             href="#"
             className="text-sm font-medium text-yellow-600 hover:underline"

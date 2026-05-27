@@ -21,11 +21,9 @@ export function AuthContainer() {
 
   return (
     <div className="relative flex flex-1 px-4 py-20 md:px-8 lg:px-12">
-      {/* LOGO */}
       <Link href="/" className="flex">
         <div className="absolute top-8 flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
-            {/* TODO: Mudar logo para a oficial */}
             🔧
           </div>
           <h1 className="text-2xl font-semibold">Ajeitai</h1>

@@ -59,7 +59,6 @@ export default function PedidosPage() {
       title="Meus Pedidos"
       description="Acompanhe seus serviços em lifestyle, andamento e veja seu histórico."
     >
-      {/* Abas Internas */}
       <div className="mt-2 flex gap-6 border-b text-sm">
         <span className="border-b-2 border-yellow-400 pb-3 font-medium text-yellow-600 cursor-pointer">
           Ativos
@@ -69,7 +68,6 @@ export default function PedidosPage() {
         </span>
       </div>
 
-      {/* Lista de Pedidos */}
       <div className="mt-6 space-y-5">
         {pedidos.map((pedido) => (
           <div

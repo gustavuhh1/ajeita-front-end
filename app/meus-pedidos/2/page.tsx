@@ -1,146 +1,127 @@
 "use client"
 
-import {
-  ArrowLeft,
-  MapPin,
-  Star,
-  MessageSquare,
-} from "lucide-react"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 
-// Importação da Topbar unificada do seu projeto
-import Header from "@/app/cliente/components/header"
+import { PerfilPageLayout } from "@/app/cliente/perfil/components/PerfilPageLayout"
 
-export default function PedidoDetalhe2() {
+type Pedido = {
+  id: number
+  titulo: string
+  descricao: string
+  data: string
+  status: string
+  corStatus: string
+  icone: string
+}
+
+export default function PedidosPage() {
+  const router = useRouter()
+
+  const verDetalhes = (id: number): void => {
+    router.push(`/meus-pedidos/${id}`)
+  }
+
+  const pagarAgora = (id: number): void => {
+    router.push(`/pagamento?id=${id}`)
+  }
+
+  const pedidos: Pedido[] = [
+    {
+      id: 1,
+      titulo: "Conserto de Vazamento",
+      descricao: "Profissional sendo selecionado...",
+      data: "Solicitado em 12 de Out, 2023",
+      status: "EM NEGOCIAÇÃO",
+      corStatus: "bg-orange-100 text-orange-600",
+      icone: "🔧",
+    },
+    {
+      id: 2,
+      titulo: "Instalação de Tomadas",
+      descricao: "Profissional: Marcos Oliveira",
+      data: "Agendado para 15 de Out, 2023 às 09:00",
+      status: "AGENDADO",
+      corStatus: "bg-green-100 text-green-600",
+      icone: "⚡",
+    },
+    {
+      id: 3,
+      titulo: "Pintura de Parede (Sala)",
+      descricao: "Profissional: Ana Costa",
+      data: "Solicitado em 10 de Out, 2023",
+      status: "AGUARDANDO PAGAMENTO",
+      corStatus: "bg-blue-100 text-blue-600",
+      icone: "🎨",
+    },
+  ]
+
   return (
-    <div className="min-h-screen bg-[#faf8f5]">
-      {/* Topbar unificada aplicada aqui */}
-      <Header />
+    <PerfilPageLayout
+      title="Meus Pedidos"
+      description="Acompanhe seus serviços em lifestyle, andamento e veja seu histórico."
+    >
+      <div className="mt-2 flex gap-6 border-b text-sm">
+        <span className="cursor-pointer border-b-2 border-yellow-400 pb-3 font-medium text-yellow-600">
+          Ativos
+        </span>
 
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-10">
-        {/* BREADCRUMB */}
-        <Link
-          href="/meus-pedidos"
-          className="mb-6 flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700"
-        >
-          <ArrowLeft size={16} />
-          Voltar para Meus Pedidos
-        </Link>
-
-        {/* TÍTULO E STATUS */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-800 md:text-[28px]">
-              Instalação de Tomadas
-            </h1>
-            <p className="text-sm text-gray-500">
-              Pedido #AJ-99321 · Criado em 10 de Outubro, 2023
-            </p>
-          </div>
-
-          <span className="w-fit rounded-full bg-green-100 px-4 py-2 text-xs font-medium text-green-700">
-            ● AGENDADO
-          </span>
-        </div>
-
-        {/* CONTEÚDO PRINCIPAL */}
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          
-          {/* COLUNA ESQUERDA: DETALHES */}
-          <div className="rounded-3xl border border-gray-200 bg-white p-5 md:p-6">
-            <h2 className="mb-5 text-sm font-semibold text-gray-700">
-              Detalhes do Pedido
-            </h2>
-
-            <div className="space-y-5 text-sm">
-              <div>
-                <p className="text-xs text-gray-400">CATEGORIA</p>
-                <p className="mt-1 font-medium text-gray-700">
-                  ⚡ Elétrica / Eletricista
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-400">LOCALIZAÇÃO</p>
-                <p className="mt-1 flex items-center gap-2 text-gray-700">
-                  <MapPin size={14} /> Fortaleza, CE
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-400">DESCRIÇÃO</p>
-                <p className="mt-1 leading-relaxed text-gray-600">
-                  Instalação de novas tomadas na sala e cozinha. Necessário verificar a fiação existente e garantir a segurança da instalação elétrica.
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-400">FOTOS ANEXADAS</p>
-                <div className="mt-3 flex flex-wrap gap-3">
-                  <img
-                    src="https://i.pravatar.cc/100?img=6"
-                    className="h-16 w-16 rounded-xl object-cover"
-                    alt="Foto do local 1"
-                  />
-                  <img
-                    src="https://i.pravatar.cc/100?img=7"
-                    className="h-16 w-16 rounded-xl object-cover"
-                    alt="Foto do local 2"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* COLUNA DIREITA: PROFISSIONAL */}
-          <div className="lg:col-span-2">
-            <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <h2 className="text-sm font-semibold text-gray-700">
-                Profissional Selecionado
-              </h2>
-              <span className="text-xs text-gray-400">
-                Serviço já confirmado
-              </span>
-            </div>
-
-            <div className="space-y-5">
-              <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-white p-4 md:flex-row md:items-center md:justify-between md:p-5">
-                <div className="flex items-center gap-4">
-                  <img
-                    src="https://i.pravatar.cc/100?img=3"
-                    className="h-14 w-14 rounded-full object-cover"
-                    alt="Marcos Oliveira"
-                  />
-                  <div>
-                    <h3 className="font-medium text-gray-800">
-                      Marcos Oliveira
-                    </h3>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Star size={14} className="text-yellow-500" />
-                      4.9 <span>(124)</span>
-                    </div>
-                    <p className="text-xs text-gray-400">
-                      Eletricista • 10 anos de exp.
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-gray-800">
-                      R$ 200,00
-                    </p>
-                  </div>
-                </div>
-                <button className="flex w-full items-center justify-center gap-2 rounded-full bg-yellow-400 px-5 py-3 text-sm font-medium hover:bg-yellow-500 md:w-auto">
-                  <MessageSquare size={16} />
-                  Conversar / Ver Proposta
-                </button>
-              </div>
-            </div>
-          </div>
-
-        </div>
+        <span className="cursor-pointer pb-3 text-gray-400 transition-colors hover:text-gray-600">
+          Histórico
+        </span>
       </div>
 
-      <footer className="text-center text-xs text-gray-400 py-6">
-        © 2026 Ajeitai - Todos os direitos reservados.
-      </footer>
-    </div>
+      <div className="mt-6 space-y-5">
+        {pedidos.map((pedido) => (
+          <div
+            key={pedido.id}
+            className="flex flex-col justify-between gap-4 rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:flex-row sm:items-center"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gray-50 text-xl">
+                {pedido.icone}
+              </div>
+
+              <div>
+                <h3 className="font-black text-gray-950">
+                  {pedido.titulo}
+                </h3>
+
+                <p className="mt-0.5 text-xs font-medium text-gray-400">
+                  {pedido.data}
+                </p>
+
+                <p className="mt-1 text-sm font-bold text-gray-500">
+                  {pedido.descricao}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-4 border-t border-gray-50 pt-3 sm:justify-end sm:border-0 sm:pt-0">
+              <span
+                className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${pedido.corStatus}`}
+              >
+                {pedido.status}
+              </span>
+
+              {pedido.status === "AGUARDANDO PAGAMENTO" ? (
+                <button
+                  onClick={() => pagarAgora(pedido.id)}
+                  className="rounded-2xl bg-yellow-400 px-5 py-3 text-sm font-black text-gray-950 shadow-sm transition-all hover:bg-yellow-500 active:scale-95"
+                >
+                  Pagar Agora
+                </button>
+              ) : (
+                <button
+                  onClick={() => verDetalhes(pedido.id)}
+                  className="rounded-2xl bg-gray-50 px-5 py-3 text-sm font-black text-gray-600 transition-all hover:bg-gray-100 active:scale-95"
+                >
+                  Ver Detalhes
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </PerfilPageLayout>
   )
 }

@@ -130,9 +130,7 @@ export default function Page() {
           </div>
         </div>
         <div className="no-mobile relative h-110 items-center justify-center rounded-4xl shadow-lg">
-          {/* Gradiente de fundo */}
           <div className="absolute inset-0 z-0 rounded-4xl bg-linear-to-r from-zinc-700 to-white opacity-10" />
-          {/* Caixa animada */}
           <motion.div
             animate={{ y: [20, 0] }}
             transition={{
@@ -176,9 +174,7 @@ export default function Page() {
             serviços na nossa plataforma em apenas 4 passos.
           </span>
         </div>
-        {/* Box Modals */}
         <div className="mt-5 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {/* Modals */}
           <div className="bg-secondary/20 hover:border-border group flex min-w-65 flex-col rounded-4xl border border-zinc-300 p-5 transition-all duration-300 hover:shadow-lg">
             <div className="bg-primary/20 mb-5 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110">
               <span className="text-primary">

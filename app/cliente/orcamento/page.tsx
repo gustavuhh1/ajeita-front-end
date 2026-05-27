@@ -145,8 +145,9 @@ export default function ClienteOrcamentoPage() {
       (!message.trim() &&
         !attachedImage) ||
       isSending
-    )
+    ) {
       return;
+    }
 
     setIsSending(true);
 
@@ -207,7 +208,6 @@ export default function ClienteOrcamentoPage() {
       <Header />
 
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-5 md:px-6 lg:grid lg:grid-cols-[280px_1fr_320px] lg:px-8 lg:py-8">
-        {/* SIDEBAR ESQUERDA */}
         <aside className="space-y-5">
           <Link
             href="/cliente/meus-pedidos"
@@ -217,7 +217,6 @@ export default function ClienteOrcamentoPage() {
             Voltar
           </Link>
 
-          {/* DETALHES */}
           <section className="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm">
             <span className="mb-4 inline-flex rounded-full bg-yellow-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-yellow-700">
               Em negociação
@@ -285,7 +284,6 @@ export default function ClienteOrcamentoPage() {
             </div>
           </section>
 
-          {/* PRESTADOR */}
           <section className="rounded-[32px] border border-gray-100 bg-white p-5 shadow-sm">
             <div className="flex items-center gap-4">
               <ProviderAvatar
@@ -318,7 +316,6 @@ export default function ClienteOrcamentoPage() {
           </section>
         </aside>
 
-        {/* CHAT */}
         <section className="flex min-h-[650px] flex-col overflow-hidden rounded-[32px] border border-gray-100 bg-white shadow-sm">
           <header className="flex items-center justify-between border-b border-gray-100 bg-yellow-50/40 px-5 py-4">
             <div>
@@ -335,7 +332,6 @@ export default function ClienteOrcamentoPage() {
             </button>
           </header>
 
-          {/* MENSAGENS */}
           <div className="flex-1 space-y-6 overflow-y-auto bg-[#FFFDF8] px-4 py-6 sm:px-6">
             <div className="flex justify-center">
               <span className="rounded-full bg-white px-4 py-1.5 text-[11px] font-bold text-gray-400 shadow-sm">
@@ -452,7 +448,6 @@ export default function ClienteOrcamentoPage() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* PREVIEW */}
           {attachedImage && (
             <div className="border-t border-gray-100 bg-yellow-50/40 px-6 py-3">
               <div className="flex w-fit items-center gap-3 rounded-2xl border border-yellow-100 bg-white p-2 shadow-sm">
@@ -483,7 +478,6 @@ export default function ClienteOrcamentoPage() {
             </div>
           )}
 
-          {/* INPUT */}
           <form
             onSubmit={
               handleSendMessage
@@ -538,9 +532,7 @@ export default function ClienteOrcamentoPage() {
           </form>
         </section>
 
-        {/* SIDEBAR DIREITA */}
         <aside className="space-y-5 lg:sticky lg:top-24 lg:h-fit">
-          {/* PROPOSTA */}
           <section className="rounded-[32px] border-2 border-yellow-200 bg-yellow-50 p-6 shadow-sm">
             <div className="mb-5 flex items-start justify-between">
               <div>
@@ -579,9 +571,7 @@ export default function ClienteOrcamentoPage() {
                 </p>
 
                 <p className="mt-1 text-xs font-medium text-green-600">
-                  Agora você pode seguir
-                  para o pagamento
-                  seguro.
+                  Agora você pode seguir para o pagamento seguro.
                 </p>
               </div>
             ) : (
@@ -613,7 +603,6 @@ export default function ClienteOrcamentoPage() {
             )}
           </section>
 
-          {/* PAGAMENTO */}
           <section className="rounded-[32px] border border-green-100 bg-green-50 p-5 shadow-sm">
             <div className="flex gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-green-100 text-green-600">
@@ -626,21 +615,16 @@ export default function ClienteOrcamentoPage() {
                 </h3>
 
                 <p className="mt-1 text-xs font-medium leading-relaxed text-green-700">
-                  Gere um link de
-                  pagamento seguro
-                  através da nossa
-                  integração.
+                  Gere um link de pagamento seguro através da nossa integração.
                 </p>
 
                 <button className="mt-3 text-xs font-black text-green-600 hover:underline">
-                  Gerar Link
-                  AjeitaiPay
+                  Gerar Link AjeitaiPay
                 </button>
               </div>
             </div>
           </section>
 
-          {/* DICAS */}
           <section className="rounded-[32px] border border-gray-100 bg-white p-5 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
               <ShieldCheck
@@ -660,9 +644,7 @@ export default function ClienteOrcamentoPage() {
                   className="mt-0.5 shrink-0 text-yellow-500"
                 />
 
-                Mantenha toda a
-                negociação dentro do
-                chat.
+                Mantenha toda a negociação dentro do chat.
               </li>
 
               <li className="flex gap-3 text-xs font-medium leading-relaxed text-gray-500">
@@ -671,8 +653,7 @@ export default function ClienteOrcamentoPage() {
                   className="mt-0.5 shrink-0 text-yellow-500"
                 />
 
-                Nunca faça pagamentos
-                fora da plataforma.
+                Nunca faça pagamentos fora da plataforma.
               </li>
 
               <li className="flex gap-3 text-xs font-medium leading-relaxed text-gray-500">
@@ -681,9 +662,7 @@ export default function ClienteOrcamentoPage() {
                   className="mt-0.5 shrink-0 text-yellow-500"
                 />
 
-                Verifique as
-                avaliações do
-                prestador.
+                Verifique as avaliações do prestador.
               </li>
             </ul>
           </section>
@@ -700,6 +679,7 @@ function CheckCheckIcon() {
         size={12}
         className="-mr-1 text-yellow-500"
       />
+
       <Check
         size={12}
         className="text-yellow-500"

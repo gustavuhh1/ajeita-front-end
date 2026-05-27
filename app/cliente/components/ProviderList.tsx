@@ -1,8 +1,8 @@
-import { Provider } from '@/types'; // Importe a interface real
+import { Provider } from '@/types';
 import { ProviderCard } from './ProviderCard';
 
 interface ProviderListProps {
-  providers: Provider[]; // CORREÇÃO: Trocado 'any[]' por 'Provider[]'
+  providers: Provider[];
   viewMode: 'grid' | 'list';
   loading?: boolean;
 }

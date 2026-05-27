@@ -1,6 +1,5 @@
 import { Search } from 'lucide-react';
 
-// Link de Navegação Padronizado
 export const NavLink = ({ label, href, active = false }: { label: string; href: string; active?: boolean }) => (
   <a 
     href={href} 
@@ -12,7 +11,6 @@ export const NavLink = ({ label, href, active = false }: { label: string; href: 
   </a>
 );
 
-// Barra de Busca do Header
 export const HeaderSearchBar = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
   <div className="relative flex items-center group">
     <Search size={16} className="absolute left-4 text-gray-400 group-focus-within:text-yellow-500 transition-colors" />

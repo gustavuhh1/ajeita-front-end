@@ -1,10 +1,10 @@
 "use client";
 
 import React, {
-  useState,
-  useRef,
   ChangeEvent,
   FormEvent,
+  useRef,
+  useState,
 } from "react";
 
 import Image from "next/image";
@@ -12,14 +12,14 @@ import Link from "next/link";
 
 import {
   Camera,
-  X,
   CheckCircle2,
-  ChevronLeft,
-  Info,
   ChevronDown,
-  ListChecks,
+  ChevronLeft,
   Home,
+  Info,
+  ListChecks,
   Plus,
+  X,
 } from "lucide-react";
 
 import Header from "../components/header";
@@ -156,7 +156,7 @@ export default function CreateOrderPage() {
                 sucesso!
               </h1>
 
-              <p className="mt-4 max-w-md text-sm leading-relaxed font-medium text-gray-500">
+              <p className="mt-4 max-w-md text-sm font-medium leading-relaxed text-gray-500">
                 Seu pedido agora está
                 visível para os
                 profissionais da sua
@@ -237,7 +237,7 @@ export default function CreateOrderPage() {
                   Como funciona?
                 </h2>
 
-                <p className="mt-1 text-sm leading-relaxed font-medium text-blue-700">
+                <p className="mt-1 text-sm font-medium leading-relaxed text-blue-700">
                   Seu pedido ficará
                   visível para
                   profissionais da sua
@@ -312,7 +312,7 @@ export default function CreateOrderPage() {
 
                   <ChevronDown
                     size={18}
-                    className="absolute top-1/2 right-5 -translate-y-1/2 text-gray-400"
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
                   />
                 </div>
               </div>
@@ -410,7 +410,7 @@ export default function CreateOrderPage() {
                                     index,
                                   )
                                 }
-                                className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-xl bg-white/90 text-rose-500 shadow-md transition-all hover:bg-white"
+                                className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-xl bg-white/90 text-rose-500 shadow-md transition-all hover:bg-white"
                               >
                                 <X
                                   size={

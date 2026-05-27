@@ -91,7 +91,7 @@ const RegisterForm = () => {
           </p>
         </div>
 
-        {/* LOGIN SOCIAL */}
+
         <div className="flex w-full gap-4">
           <Button
             variant="custom"
@@ -104,7 +104,7 @@ const RegisterForm = () => {
               src="/google-icon.png"
               alt="google-logo"
             />
-            {/* TODO: Implementar login com Google */}
+
             Google
           </Button>
 
@@ -114,7 +114,7 @@ const RegisterForm = () => {
             className="flex flex-1 items-center justify-center gap-2 rounded-full border border-zinc-200 py-3 hover:bg-zinc-200"
           >
             <GithubLogoIcon weight="bold" size={20} />
-            {/* TODO: Implementar login com Github */}
+
             Github
           </Button>
         </div>
@@ -125,7 +125,6 @@ const RegisterForm = () => {
         </div>
       </div>
 
-      {/* FORM */}
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-1">
           <Label htmlFor="name" className="text-sm font-medium">

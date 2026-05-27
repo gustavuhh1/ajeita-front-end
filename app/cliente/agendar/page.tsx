@@ -9,7 +9,6 @@ import {
   XCircle,
 } from "lucide-react";
 
-// Importação da Topbar unificada do projeto
 import Header from "@/app/cliente/components/header";
 
 type Horario = {
@@ -45,7 +44,6 @@ export default function AgendamentoPage() {
     try {
       setLoading(true);
 
-      // Simulação de API
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       alert(
@@ -62,10 +60,8 @@ export default function AgendamentoPage() {
 
   return (
     <div className="min-h-screen bg-[#f4f7fb]">
-      {/* Topbar unificada aplicada aqui */}
       <Header />
 
-      {/* CONTEÚDO PRINCIPAL */}
       <div className="mx-auto max-w-5xl px-6 py-10">
         <div className="rounded-3xl bg-white p-8 shadow-sm">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
@@ -75,8 +71,8 @@ export default function AgendamentoPage() {
               </h1>
 
               <p className="mt-2 text-sm text-gray-500">
-                Escolha a melhor data e horário conforme a
-                disponibilidade do profissional.
+                Escolha a melhor data e horário conforme a disponibilidade do
+                profissional.
               </p>
             </div>
 
@@ -87,7 +83,6 @@ export default function AgendamentoPage() {
           </div>
 
           <div className="mt-10 grid gap-8 lg:grid-cols-2">
-            {/* SELEÇÃO DE DATA */}
             <div className="rounded-3xl border border-gray-100 bg-gray-50 p-6">
               <div className="flex items-center gap-2">
                 <CalendarDays
@@ -116,6 +111,7 @@ export default function AgendamentoPage() {
                     size={16}
                     className="text-green-600"
                   />
+
                   Horários disponíveis
                 </div>
 
@@ -124,12 +120,12 @@ export default function AgendamentoPage() {
                     size={16}
                     className="text-red-500"
                   />
+
                   Horários indisponíveis
                 </div>
               </div>
             </div>
 
-            {/* SELEÇÃO DE HORÁRIO */}
             <div className="rounded-3xl border border-gray-100 bg-gray-50 p-6">
               <div className="flex items-center gap-2">
                 <Clock3
@@ -178,7 +174,6 @@ export default function AgendamentoPage() {
             </div>
           </div>
 
-          {/* RESUMO E CONFIRMAÇÃO */}
           <div className="mt-10 rounded-3xl border border-yellow-100 bg-yellow-50 p-6">
             <h3 className="text-lg font-semibold text-gray-800">
               Resumo do Agendamento
@@ -221,7 +216,6 @@ export default function AgendamentoPage() {
         </div>
       </div>
 
-      {/* FOOTER */}
       <footer className="py-8 text-center text-xs text-gray-400">
         © 2026 Ajeitai. Todos os direitos reservados.
       </footer>

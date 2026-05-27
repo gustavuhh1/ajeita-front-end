@@ -120,7 +120,6 @@ export default function DadosPessoaisPage() {
       description="Gerencie suas informações de contato e mantenha seu perfil atualizado."
     >
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* FOTO */}
         <section className="rounded-[36px] border border-gray-100 bg-white p-8 shadow-sm">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-6">
@@ -171,7 +170,6 @@ export default function DadosPessoaisPage() {
           </div>
         </section>
 
-        {/* FORM */}
         <section className="rounded-[36px] border border-gray-100 bg-white p-8 shadow-sm">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <label className="block">
@@ -228,7 +226,6 @@ export default function DadosPessoaisPage() {
           </div>
         </section>
 
-        {/* ENDEREÇO */}
         <section>
           <h2 className="mb-4 text-lg font-black text-gray-950">Endereço Principal</h2>
           <div className="border-primary/20 flex flex-col gap-4 rounded-[32px] border bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
@@ -251,7 +248,6 @@ export default function DadosPessoaisPage() {
           </div>
         </section>
 
-        {/* ALERTA */}
         {isSaved && (
           <div className="flex items-center gap-3 rounded-2xl border border-green-100 bg-green-50 px-5 py-4 text-sm font-black text-green-700">
             <Check size={18} />
@@ -259,7 +255,6 @@ export default function DadosPessoaisPage() {
           </div>
         )}
 
-        {/* AÇÕES */}
         <div className="flex justify-end gap-4 pt-3">
           <button
             type="button"

@@ -6,7 +6,6 @@ import { Suspense } from "react";
 export default function AuthPage() {
   return (
     <div className="flex h-svh overflow-hidden">
-      {/* LADO ESQUERDO */}
       <div className="relative hidden w-1/2 lg:flex">
         <video
           autoPlay
@@ -18,8 +17,6 @@ export default function AuthPage() {
           <source src="/video-auth.mp4" type="video/mp4" />
           Seu navegador não suporta a tag de vídeo.
         </video>
-
-        {/* Gradiente fundo da imagem */}
         <div className="absolute inset-0 bg-linear-to-t from-black to-transparent opacity-100" />
 
         <div className="absolute bottom-16 left-16 max-w-md text-white">
@@ -33,8 +30,7 @@ export default function AuthPage() {
           </p>
         </div>
       </div>
-
-      {/* LADO DIREITO */}
+      
       <div className="relative flex h-full w-full flex-1 flex-col overflow-y-auto lg:w-1/2">
         <Suspense
           fallback={
