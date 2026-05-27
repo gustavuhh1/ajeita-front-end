@@ -121,7 +121,7 @@ export const MainHeader = ({
 
             <NavLink
               label="Meus Pedidos"
-              href="/pedidos"
+              href="/meus-pedidos"
               active={
                 activePage ===
                 "pedidos"

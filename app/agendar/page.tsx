@@ -52,7 +52,7 @@ export default function AgendamentoPage() {
         `Agendamento confirmado para ${dataSelecionada} às ${horarioSelecionado}`
       );
 
-      router.push("/pedidos");
+      router.push("/meus-pedidos");
     } catch (error) {
       alert("Erro ao confirmar agendamento.");
     } finally {

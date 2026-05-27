@@ -17,7 +17,7 @@ export default function PedidosPage() {
   const router = useRouter()
 
   const verDetalhes = (id: number): void => {
-    router.push(`/pedidos/${id}`)
+    router.push(`/meus-pedidos/${id}`)
   }
 
   const pagarAgora = (id: number): void => {

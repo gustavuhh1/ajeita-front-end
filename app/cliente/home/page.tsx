@@ -123,7 +123,7 @@ export default function Home() {
             </div>
 
             <Link
-              href="/cliente/prestador"
+              href="/cliente/buscar-profissional"
               className="text-primary flex items-center gap-1 text-sm font-semibold hover:underline"
             >
               Ver todos

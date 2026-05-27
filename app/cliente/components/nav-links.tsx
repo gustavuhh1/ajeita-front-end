@@ -19,7 +19,7 @@ const navLinks = [
   },
   {
     label: "Meus Pedidos",
-    path: "/pedidos",
+    path: "/meus-pedidos",
   },
   {
     label: "Mensagens",

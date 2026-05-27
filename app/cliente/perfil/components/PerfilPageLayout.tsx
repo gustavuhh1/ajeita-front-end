@@ -36,7 +36,7 @@ const menuItems = [
   },
   {
     name: "Meus Pedidos",
-    href: "/pedidos",
+    href: "/meus-pedidos",
     icon: ClipboardList,
   },
   {
