@@ -9,47 +9,15 @@ import {
   MessageSquare,
 } from "lucide-react"
 import Link from "next/link"
+import { MainHeader } from '../../cliente/components/MainHeader';
 
 export default function PedidoDetalhe2() {
   return (
     <div className="min-h-screen bg-[#f6f8fb]">
-      <header className="flex items-center justify-between border-b border-gray-200 bg-white px-10 py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
-            🔧
-          </div>
-          <span className="text-lg font-semibold text-gray-800">
-            Ajeitai
-          </span>
-        </div>
-
-        <div className="w-[420px]">
-          <input
-            placeholder="Buscar serviços..."
-            className="w-full rounded-full bg-gray-100 px-5 py-2 text-sm outline-none"
-          />
-        </div>
-
-        <div className="flex items-center gap-6 text-sm text-gray-600">
-          <span>Início</span>
-          <span>Explorar</span>
-          <span>Serviços</span>
-
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
-              <Bell size={16} />
-            </div>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
-              <ShoppingCart size={16} />
-            </div>
-            <div className="h-9 w-9 rounded-full bg-yellow-300" />
-          </div>
-        </div>
-      </header>
-
+      <MainHeader />
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-10">
         <Link
-          href="/pedidos"
+          href="/meus-pedidos"
           className="mb-6 flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700"
         >
           <ArrowLeft size={16} />

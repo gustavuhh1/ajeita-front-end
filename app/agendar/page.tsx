@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react"
+import { MainHeader } from '../cliente/components/MainHeader';
 
 type Horario = {
   hora: string
@@ -52,7 +53,7 @@ export default function AgendamentoPage() {
         `Agendamento confirmado para ${dataSelecionada} às ${horarioSelecionado}`
       )
 
-      router.push("/pedidos")
+      router.push("/meus-pedidos")
     } catch (error) {
       alert("Erro ao confirmar agendamento.")
     } finally {
@@ -62,51 +63,7 @@ export default function AgendamentoPage() {
 
   return (
     <div className="min-h-screen bg-[#f4f7fb]">
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-yellow-400 text-xl shadow-sm">
-              🔧
-            </div>
-
-            <div>
-              <h1 className="text-lg font-bold text-gray-800">
-                Ajeitai
-              </h1>
-
-              <p className="text-xs text-gray-400">
-                Marketplace de serviços
-              </p>
-            </div>
-          </div>
-
-          
-          <div className="hidden w-[420px] items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 md:flex">
-            <Search size={18} className="text-gray-400" />
-
-            <input
-              type="text"
-              placeholder="Buscar serviços..."
-              className="w-full bg-transparent text-sm outline-none"
-            />
-          </div>
-
-
-          <div className="flex items-center gap-4">
-            <button className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 transition hover:bg-gray-200">
-              <Bell size={18} />
-            </button>
-
-            <button className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 transition hover:bg-gray-200">
-              <ShoppingCart size={18} />
-            </button>
-
-            <div className="h-11 w-11 rounded-full bg-yellow-300 ring-2 ring-yellow-100" />
-          </div>
-        </div>
-      </header>
-
+      <MainHeader />
       
       <div className="mx-auto max-w-5xl px-6 py-10">
         <div className="rounded-3xl bg-white p-8 shadow-sm">

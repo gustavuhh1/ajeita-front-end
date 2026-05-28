@@ -6,8 +6,7 @@ import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Início", path: "/cliente/home" },
-  { label: "Buscar Profissional", path: "/cliente/buscar-profissional" },
-  { label: "Meus Pedidos", path: "/cliente/meus-pedidos" },
+  { label: "Meus Pedidos", path: "/meus-pedidos" },
   { label: "Mensagens", path: "/cliente/mensagens" },
 ];
 
