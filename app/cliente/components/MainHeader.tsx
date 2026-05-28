@@ -1,75 +1,136 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Bell, Plus } from 'lucide-react'; // Removi o 'User' que não estava sendo usado
-import { NavLink, HeaderSearchBar } from './HeaderElements';
-import { ProviderAvatar } from './ProviderAvatar';
 
-export const MainHeader = ({ activePage = 'inicio' }: { activePage?: string }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { ArrowUp, Bell, Plus } from "lucide-react";
+import { NavLink } from "./HeaderElements";
+
+export const MainHeader = ({
+  activePage = "inicio",
+}: {
+  activePage?: string;
+}) => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchSavedImage = async () => {
-      const savedImage = localStorage.getItem('userProfileImage');
-      if (savedImage) {
-        setProfileImage(savedImage);
-      }
-    };
+    const savedImage = localStorage.getItem("userProfileImage");
 
-    fetchSavedImage();
+    if (savedImage) {
+      setProfileImage(savedImage);
+    }
   }, []);
 
   return (
-    // Troquei max-w-[1400px] por max-w-7xl para evitar o aviso do Tailwind
-    <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        
-        {/* Lado Esquerdo: Logo e Navegação */}
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white shadow-sm">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-8">
         <div className="flex items-center gap-10">
-          <div className="flex items-center gap-2.5 cursor-pointer">
-            <div className="bg-yellow-400 p-2.5 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-sm">
-              ⚒
-            </div>
-            <span className="font-bold text-gray-900 text-2xl tracking-tight italic">Ajeitai</span>
-          </div>
+          <Link href="/cliente/home" className="flex items-center gap-2">
+  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F5B800] shadow-[0_2px_6px_rgba(0,0,0,0.12)]">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="text-zinc-950"
+    >
+      <path
+        d="M14.7 5.3L18.7 9.3"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M5.5 18.5L11.8 12.2"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M7.2 5.6L18.4 16.8"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16.6 18.7L18.8 16.5"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M5.3 7.3L7.5 5.1"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  </div>
 
-          <div className="hidden lg:flex items-center gap-1.5">
-            <NavLink label="Início" href="/" active={activePage === 'inicio'} />
-            <HeaderSearchBar value={searchQuery} onChange={setSearchQuery} />
-            <NavLink label="Meus Pedidos" href="/pedidos" active={activePage === 'pedidos'} />
-            <NavLink label="Mensagens" href="/mensagens" active={activePage === 'mensagens'} />
-          </div>
+  <span className="text-[22px] font-semibold tracking-[-0.03em] text-[#2F343B]">
+    Ajeitai
+  </span>
+</Link>
+
+          <nav className="hidden items-center gap-2 lg:flex">
+            <NavLink
+              label="Início"
+              href="/cliente/home"
+              active={activePage === "inicio"}
+            />
+
+            <NavLink
+              label="Meus Pedidos"
+              href="/pedidos"
+              active={activePage === "pedidos"}
+            />
+
+            <NavLink
+              label="Mensagens"
+              href="/mensagens"
+              active={activePage === "mensagens"}
+            />
+          </nav>
         </div>
 
-        {/* Lado Direito: Ações e Perfil */}
         <div className="flex items-center gap-6">
-          <button className="hidden sm:flex bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold px-6 py-3 rounded-2xl items-center gap-2.5 transition-all shadow-sm active:scale-95">
-            <div className="bg-gray-950 p-1 rounded-full flex items-center justify-center text-white">
-              <Plus size={14} strokeWidth={3} />
-            </div>
+          <Link
+            href="/cliente/pedido"
+            className="hidden items-center gap-2 rounded-full bg-yellow-400 px-6 py-3 text-sm font-bold text-gray-950 shadow-sm transition hover:bg-yellow-300 active:scale-95 sm:flex"
+          >
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-950 text-white">
+              <Plus size={12} strokeWidth={3} />
+            </span>
             Criar Pedido
+          </Link>
+
+          <div className="hidden h-8 w-px bg-gray-200 sm:block" />
+
+          <button
+            type="button"
+            aria-label="Notificações"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-50 hover:text-gray-600"
+          >
+            <Bell size={21} strokeWidth={1.8} />
           </button>
 
-          <div className="h-8 w-px bg-gray-100 hidden sm:block"></div>
-
-          <div className="flex items-center gap-4">
-            {/* Notificações */}
-            <div className="relative p-2 text-gray-400 hover:text-yellow-500 hover:bg-gray-50 rounded-xl cursor-pointer transition-all">
-              <Bell size={24} />
-              <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
-            </div>
-
-            {/* Avatar Dinâmico */}
-            <a href="/perfil" className="transition-transform hover:scale-105">
-              <ProviderAvatar 
-                src={profileImage} 
-                name="Usuário" 
-                size="sm" 
+          <Link
+            href="/cliente/perfil"
+            aria-label="Perfil"
+            className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-[#8fa179] text-white shadow-sm transition hover:scale-105"
+          >
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Foto de perfil"
+                className="h-full w-full object-cover"
               />
-            </a>
-          </div>
+            ) : (
+              <ArrowUp size={19} strokeWidth={3} />
+            )}
+          </Link>
         </div>
       </div>
-    </nav>
+    </header>
   );
 };

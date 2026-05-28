@@ -1,67 +1,24 @@
-import React from 'react';
-import { 
-  Search, Plus, Bell, User, Star, CheckCircle, 
-  MapPin, Clock, FileText, MessageSquare 
-} from 'lucide-react';
+import React from "react";
+import {
+  Star,
+  CheckCircle,
+  MapPin,
+  Clock,
+  FileText,
+  MessageSquare,
+} from "lucide-react";
+import { MainHeader } from "../../components/MainHeader";
 
 const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 pb-12">
-      
-      {/* 1. HEADER (Início sem fundo) */}
-      <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-        <div className="max-w-350 mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-10">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-yellow-400 p-3 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                ⚒
-              </div>
-              <span className="font-bold text-gray-900 text-2xl tracking-tight">Ajeitai</span>
-            </div>
-
-            <div className="flex items-center gap-1.5 text-sm font-medium">
-              {/* Início sem fundo azul conforme solicitado */}
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors">
-                Início
-              </a>
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors flex items-center gap-2">
-                <Search size={16} className="text-gray-400" />
-                Buscar Profissionais
-              </a>
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors">
-                Meus Pedidos
-              </a>
-              <a href="#" className="text-gray-500 hover:text-gray-900 px-5 py-2.5 rounded-xl transition-colors">
-                Mensagens
-              </a>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold px-6 py-3 rounded-2xl flex items-center gap-2.5 transition-colors">
-              <div className="bg-gray-950 p-1.5 rounded-full flex items-center justify-center text-white text-xs">
-                  <Plus size={14} strokeWidth={3} />
-              </div>
-              Criar Pedido
-            </button>
-            <div className="h-8 w-px bg-gray-100"></div>
-            <div className="flex items-center gap-4">
-              <div className="relative p-1">
-                <Bell className="text-gray-400" size={24} />
-                <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
-              </div>
-              <div className="w-10 h-10 rounded-full border border-gray-200 bg-green-50 flex items-center justify-center text-green-700/60 overflow-hidden">
-                <User size={24} strokeWidth={1.5} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <MainHeader activePage="perfil" />
 
       <main className="max-w-6xl mx-auto mt-6 px-4">
         {/* Breadcrumb */}
         <div className="text-xs text-gray-400 mb-4 flex gap-2 ml-2">
-          <span>Home</span> / <span>Eletricistas</span> / <span className="text-gray-600">Carlos Silva</span>
+          <span>Home</span> / <span>Eletricistas</span> /{" "}
+          <span className="text-gray-600">Carlos Silva</span>
         </div>
 
         {/* 2. BANNER UNIFICADO EM UMA CAIXA */}
