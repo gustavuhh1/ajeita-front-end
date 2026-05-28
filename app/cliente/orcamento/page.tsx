@@ -1,15 +1,18 @@
 "use client";
 
-import React, { FormEvent, useMemo, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import Link from "next/link";
 import {
   ArrowLeft,
   BadgeCheck,
   CalendarDays,
-  Check,
-  CheckCircle2,
   Clock3,
-  FileText,
-  ImagePlus,
   Info,
   LockKeyhole,
   MapPin,
@@ -18,7 +21,6 @@ import {
   SendHorizontal,
   ShieldCheck,
   Sofa,
-  Sparkles,
   Star,
   X,
 } from "lucide-react";
@@ -26,24 +28,47 @@ import {
 import { MainHeader } from "../components/MainHeader";
 import { ProviderAvatar } from "../components/ProviderAvatar";
 
-interface ChatMessage {
-  id: number;
-  author: "cliente" | "prestador";
-  text?: string;
-  image?: string;
-  time: string;
-  proposal?: {
-    title: string;
-    value: number;
-  };
-}
+import {
+  BudgetState,
+  BudgetStatus,
+  ChatMessage,
+} from "../../../components/chat/chat-types";
+
+import {
+  formatDateForInput,
+  formatServiceDate,
+  getCurrentTime,
+  statusContent,
+} from "../../../components/chat/chat-utils";
+
+import { ChatMessageBubble } from "../../../components/chat/chat-message-bubble";
+import { ChatTypingIndicator } from "../../../components/chat/chat-typing-indicator";
+import { CounterProposalModal } from "../../../components/chat/counter-proposal-modal";
+import { BudgetSummaryCard } from "../../../components/chat/budget-summary-card";
 
 export default function ClienteOrcamentoPage() {
-  const [message, setMessage] = useState("");
-  const [isProposalAccepted, setIsProposalAccepted] = useState(false);
-  const [attachedImage, setAttachedImage] = useState<string | null>(null);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [message, setMessage] = useState("");
+  const [attachedImage, setAttachedImage] = useState<string | null>(null);
+  const [isProviderTyping, setIsProviderTyping] = useState(false);
+  const [isCounterModalOpen, setIsCounterModalOpen] = useState(false);
+
+  const [budget, setBudget] = useState<BudgetState>({
+    source: "original",
+    description:
+      "Higienização completa de sofá retrátil de 3 lugares, tecido suede, com remoção de manchas de café e finalização com extratora.",
+    value: 250,
+    serviceDate: "2026-06-11T14:00",
+    status: BudgetStatus.AGUARDANDO_CLIENTE,
+  });
+
+  const [counterProposal, setCounterProposal] = useState({
+    description:
+      "Higienização completa do sofá, mas gostaria de ajustar o valor e confirmar o serviço no mesmo dia sugerido.",
+    value: "220",
+    serviceDate: "2026-06-11T14:00",
+  });
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -63,25 +88,46 @@ export default function ClienteOrcamentoPage() {
     {
       id: 3,
       author: "prestador",
-      text: "Entendi. Consigo remover essas manchas com a extratora. Como é um sofá retrátil de 3 lugares, o serviço leva cerca de 2 horas.",
+      text: "Entendi. Consigo remover essas manchas com a extratora. Como é um sofá retrátil de 3 lugares, o serviço leva cerca de 2 horas. Minha proposta fica assim:",
       proposal: {
-        title: "Proposta de Valor",
+        source: "original",
+        description:
+          "Higienização completa de sofá retrátil de 3 lugares, tecido suede, com remoção de manchas de café e finalização com extratora.",
         value: 250,
+        serviceDate: "2026-06-11T14:00",
       },
       time: "08:50",
     },
   ]);
 
-  const finalValue = useMemo(() => {
-    const proposalMessage = messages.find((item) => item.proposal);
-    return proposalMessage?.proposal?.value ?? 250;
-  }, [messages]);
+  const currentStatus = statusContent[budget.status];
 
-  const getCurrentTime = () => {
-    return new Intl.DateTimeFormat("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date());
+  const lastProposal = useMemo(() => {
+    return (
+      [...messages].reverse().find((chatMessage) => chatMessage.proposal)
+        ?.proposal ?? budget
+    );
+  }, [messages, budget]);
+
+  const canClientAct = budget.status === BudgetStatus.AGUARDANDO_CLIENTE;
+  const canPay = budget.status === BudgetStatus.ACEITO;
+
+  const simulateProviderTyping = () => {
+    setIsProviderTyping(true);
+
+    setTimeout(() => {
+      setIsProviderTyping(false);
+
+      setMessages((previousMessages) => [
+        ...previousMessages,
+        {
+          id: Date.now() + 1,
+          author: "prestador",
+          text: "Perfeito, estou acompanhando por aqui. Se quiser, você também pode aceitar a proposta ou me mandar uma contraproposta pelo card lateral.",
+          time: getCurrentTime(),
+        },
+      ]);
+    }, 1200);
   };
 
   const handleSendMessage = (event: FormEvent) => {
@@ -97,34 +143,122 @@ export default function ClienteOrcamentoPage() {
       time: getCurrentTime(),
     };
 
-    setMessages((previous) => [...previous, newMessage]);
+    setMessages((previousMessages) => [...previousMessages, newMessage]);
     setMessage("");
     setAttachedImage(null);
 
-    setTimeout(() => {
-      setMessages((previous) => [
-        ...previous,
-        {
-          id: Date.now() + 1,
-          author: "prestador",
-          text: "Perfeito! Consigo realizar esse serviço no horário combinado. Qualquer dúvida, pode me chamar por aqui.",
-          time: getCurrentTime(),
-        },
-      ]);
-    }, 900);
+    simulateProviderTyping();
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (!file) return;
 
-    const preview = URL.createObjectURL(file);
-    setAttachedImage(preview);
+    const previewUrl = URL.createObjectURL(file);
+    setAttachedImage(previewUrl);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+  };
+
+  const handleAcceptProposal = () => {
+    setBudget((previousBudget) => ({
+      ...previousBudget,
+      status: BudgetStatus.ACEITO,
+    }));
+
+    setMessages((previousMessages) => [
+      ...previousMessages,
+      {
+        id: Date.now(),
+        author: "system",
+        text: "Proposta aceita pelo cliente. Status do orçamento alterado para aguardando pagamento.",
+        time: getCurrentTime(),
+      },
+    ]);
+  };
+
+  const handleOpenCounterProposalModal = () => {
+    setCounterProposal({
+      description: budget.description,
+      value: String(budget.value),
+      serviceDate: formatDateForInput(budget.serviceDate),
+    });
+
+    setIsCounterModalOpen(true);
+  };
+
+  const handleSendCounterProposal = (event: FormEvent) => {
+    event.preventDefault();
+
+    const parsedValue = Number(counterProposal.value.replace(",", "."));
+
+    if (
+      !counterProposal.description.trim() ||
+      !parsedValue ||
+      !counterProposal.serviceDate
+    ) {
+      return;
+    }
+
+    const updatedBudget: BudgetState = {
+      source: "counter",
+      description: counterProposal.description.trim(),
+      value: parsedValue,
+      serviceDate: counterProposal.serviceDate,
+      status: BudgetStatus.AGUARDANDO_PRESTADOR,
+    };
+
+    setBudget(updatedBudget);
+
+    setMessages((previousMessages) => [
+      ...previousMessages,
+      {
+        id: Date.now(),
+        author: "cliente",
+        text: "Carlos, estou te enviando uma contraproposta com alguns ajustes. Dá uma olhada pra mim?",
+        proposal: {
+          source: updatedBudget.source,
+          description: updatedBudget.description,
+          value: updatedBudget.value,
+          serviceDate: updatedBudget.serviceDate,
+        },
+        time: getCurrentTime(),
+      },
+      {
+        id: Date.now() + 1,
+        author: "system",
+        text: "Contraproposta enviada pelo cliente. Status do orçamento alterado para aguardando prestador.",
+        time: getCurrentTime(),
+      },
+    ]);
+
+    setIsCounterModalOpen(false);
+
+    setIsProviderTyping(true);
+
+    setTimeout(() => {
+      setIsProviderTyping(false);
+    }, 1200);
+  };
+
+  const handleMarkAsPaid = () => {
+    setBudget((previousBudget) => ({
+      ...previousBudget,
+      status: BudgetStatus.PAGO,
+    }));
+
+    setMessages((previousMessages) => [
+      ...previousMessages,
+      {
+        id: Date.now(),
+        author: "system",
+        text: "Pagamento confirmado. Status do orçamento alterado para pago.",
+        time: getCurrentTime(),
+      },
+    ]);
   };
 
   return (
@@ -133,14 +267,19 @@ export default function ClienteOrcamentoPage() {
 
       <main className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 px-6 py-6 xl:grid-cols-[300px_1fr_300px]">
         <aside className="space-y-5">
-          <button className="flex items-center gap-2 text-sm font-bold text-gray-400 transition-colors hover:text-gray-700">
+          <Link
+            href="/pedidos"
+            className="flex items-center gap-2 text-sm font-bold text-gray-400 transition-colors hover:text-gray-700"
+          >
             <ArrowLeft size={18} />
-            Voltar
-          </button>
+            Voltar para pedidos
+          </Link>
 
           <section className="rounded-[28px] border border-yellow-100 bg-white p-6 shadow-sm">
-            <span className="mb-4 inline-flex rounded-full bg-yellow-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-yellow-700">
-              Em negociação
+            <span
+              className={`mb-4 inline-flex rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${currentStatus.badge}`}
+            >
+              {currentStatus.label}
             </span>
 
             <h1 className="text-2xl font-black leading-tight text-gray-950">
@@ -161,6 +300,7 @@ export default function ClienteOrcamentoPage() {
                   <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
                     Localização
                   </p>
+
                   <p className="mt-1 text-sm font-bold text-gray-700">
                     Rua dos Flares, 123 - Meireles, Fortaleza
                   </p>
@@ -176,8 +316,9 @@ export default function ClienteOrcamentoPage() {
                   <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
                     Data sugerida
                   </p>
+
                   <p className="mt-1 text-sm font-bold text-gray-700">
-                    11 de Junho, 14:00
+                    {formatServiceDate(budget.serviceDate)}
                   </p>
                 </div>
               </div>
@@ -191,9 +332,9 @@ export default function ClienteOrcamentoPage() {
                   <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
                     Descrição
                   </p>
+
                   <p className="mt-1 text-sm font-bold leading-relaxed text-gray-700">
-                    Sofá de 3 lugares retrátil, tecido suede. Tem manchas de
-                    café.
+                    {budget.description}
                   </p>
                 </div>
               </div>
@@ -214,9 +355,11 @@ export default function ClienteOrcamentoPage() {
                     size={14}
                     className="fill-yellow-400 text-yellow-400"
                   />
+
                   <span className="text-sm font-bold text-yellow-500">
                     4.9
                   </span>
+
                   <span className="text-sm font-medium text-gray-400">
                     (120)
                   </span>
@@ -233,9 +376,16 @@ export default function ClienteOrcamentoPage() {
                 Conversando com{" "}
                 <span className="font-black text-gray-900">Carlos Silva</span>
               </p>
+
+              <p className="mt-1 text-[11px] font-bold text-gray-400">
+                Negociação vinculada ao orçamento #849201
+              </p>
             </div>
 
-            <button className="rounded-xl p-2 text-gray-400 transition-colors hover:bg-white hover:text-gray-700">
+            <button
+              type="button"
+              className="rounded-xl p-2 text-gray-400 transition-colors hover:bg-white hover:text-gray-700"
+            >
               <MoreVertical size={18} />
             </button>
           </header>
@@ -247,78 +397,22 @@ export default function ClienteOrcamentoPage() {
               </span>
             </div>
 
-            {messages.map((chat) => {
-              const isClient = chat.author === "cliente";
+            {messages.map((chat) => (
+              <ChatMessageBubble
+                key={chat.id}
+                message={chat}
+                currentUserRole="cliente"
+                providerName="Carlos Silva"
+                clientName="Lavor Argento"
+              />
+            ))}
 
-              return (
-                <div
-                  key={chat.id}
-                  className={`flex items-end gap-3 ${
-                    isClient ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  {!isClient && (
-                    <ProviderAvatar name="Carlos Silva" src={null} size="sm" />
-                  )}
-
-                  <div
-                    className={`max-w-[75%] rounded-[24px] px-5 py-4 shadow-sm ${
-                      isClient
-                        ? "rounded-br-md bg-yellow-50 text-gray-800"
-                        : "rounded-bl-md bg-gray-50 text-gray-700"
-                    }`}
-                  >
-                    {chat.text && (
-                      <p className="text-sm font-medium leading-relaxed">
-                        {chat.text}
-                      </p>
-                    )}
-
-                    {chat.image && (
-                      <div className="mt-3 overflow-hidden rounded-2xl border border-white bg-white">
-                        <img
-                          src={chat.image}
-                          alt="Imagem enviada no chat"
-                          className="h-36 w-full object-cover"
-                        />
-                      </div>
-                    )}
-
-                    {chat.proposal && (
-                      <div className="mt-4 rounded-2xl border border-yellow-200 bg-white p-4">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
-                              {chat.proposal.title}
-                            </p>
-                            <p className="mt-1 text-xl font-black text-yellow-600">
-                              R${" "}
-                              {chat.proposal.value.toLocaleString("pt-BR", {
-                                minimumFractionDigits: 2,
-                              })}
-                            </p>
-                          </div>
-
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-white">
-                            <Check size={17} strokeWidth={3} />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="mt-2 flex justify-end">
-                      <span className="text-[10px] font-bold text-gray-400">
-                        {chat.time}
-                      </span>
-                    </div>
-                  </div>
-
-                  {isClient && (
-                    <ProviderAvatar name="Lavor Argento" src={null} size="sm" />
-                  )}
-                </div>
-              );
-            })}
+            {isProviderTyping && (
+              <div className="flex items-end gap-3">
+                <ProviderAvatar name="Carlos Silva" src={null} size="sm" />
+                <ChatTypingIndicator />
+              </div>
+            )}
           </div>
 
           {attachedImage && (
@@ -342,6 +436,12 @@ export default function ClienteOrcamentoPage() {
                   <X size={14} />
                 </button>
               </div>
+            </div>
+          )}
+
+          {message.trim() && (
+            <div className="border-t border-gray-100 bg-white px-6 pt-3 text-[11px] font-bold text-yellow-600">
+              Você está digitando...
             </div>
           )}
 
@@ -382,65 +482,16 @@ export default function ClienteOrcamentoPage() {
         </section>
 
         <aside className="space-y-5">
-          <section className="rounded-[28px] border-2 border-yellow-300 bg-yellow-50/50 p-6 shadow-sm">
-            <div className="mb-5 flex items-start justify-between">
-              <div>
-                <h2 className="text-lg font-black text-gray-950">
-                  Proposta Final
-                </h2>
-              </div>
-
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-yellow-500">
-                <FileText size={20} />
-              </div>
-            </div>
-
-            <div className="rounded-3xl bg-white p-6 text-center shadow-sm">
-              <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
-                Valor total
-              </p>
-
-              <p className="mt-2 text-4xl font-black text-gray-950">
-                R${" "}
-                {finalValue.toLocaleString("pt-BR", {
-                  minimumFractionDigits: 2,
-                })}
-              </p>
-            </div>
-
-            {isProposalAccepted ? (
-              <div className="mt-4 rounded-2xl bg-green-50 p-4 text-center">
-                <CheckCircle2 className="mx-auto mb-2 text-green-500" />
-                <p className="text-sm font-black text-green-700">
-                  Proposta aceita!
-                </p>
-                <p className="mt-1 text-xs font-medium text-green-600">
-                  Agora você pode seguir para o pagamento seguro.
-                </p>
-              </div>
-            ) : (
-              <div className="mt-4 space-y-3">
-                <button
-                  onClick={() => setIsProposalAccepted(true)}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-5 py-4 text-sm font-black text-gray-950 shadow-md shadow-yellow-100 transition-all hover:bg-yellow-500 active:scale-95"
-                >
-                  Aceitar e Pagar
-                  <Sparkles size={17} />
-                </button>
-
-                <button
-                  onClick={() =>
-                    setMessage(
-                      "Carlos, gostei da proposta, mas você consegue fazer por um valor menor?"
-                    )
-                  }
-                  className="w-full rounded-2xl border border-gray-100 bg-white px-5 py-3 text-sm font-black text-gray-600 transition-colors hover:border-yellow-200 hover:bg-yellow-50"
-                >
-                  Contraproposta
-                </button>
-              </div>
-            )}
-          </section>
+          <BudgetSummaryCard
+            proposal={lastProposal}
+            status={budget.status}
+            canAccept={canClientAct}
+            canCounterOffer={canClientAct}
+            canPay={canPay}
+            onAccept={handleAcceptProposal}
+            onCounterOffer={handleOpenCounterProposalModal}
+            onPay={handleMarkAsPaid}
+          />
 
           <section className="rounded-[28px] border border-green-100 bg-green-50 p-5 shadow-sm">
             <div className="flex gap-3">
@@ -452,13 +503,18 @@ export default function ClienteOrcamentoPage() {
                 <h3 className="text-sm font-black text-green-900">
                   Pagamento Seguro
                 </h3>
+
                 <p className="mt-1 text-xs font-medium leading-relaxed text-green-700">
-                  Gere um link de pagamento seguro através da nossa integração.
+                  No back-end real, depois do orçamento ficar ACEITO, o botão
+                  deve chamar a rota de pagamento.
                 </p>
 
-                <button className="mt-3 text-xs font-black text-green-600 hover:underline">
-                  Gerar Link AjeitaiPay
-                </button>
+                <Link
+                  href="/pagamento"
+                  className="mt-3 inline-block text-xs font-black text-green-600 hover:underline"
+                >
+                  Ir para pagamento
+                </Link>
               </div>
             </div>
           </section>
@@ -466,6 +522,7 @@ export default function ClienteOrcamentoPage() {
           <section className="rounded-[28px] border border-gray-100 bg-white p-5 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
               <ShieldCheck size={18} className="text-yellow-500" />
+
               <h3 className="text-sm font-black text-gray-950">
                 Dicas de Segurança
               </h3>
@@ -478,7 +535,10 @@ export default function ClienteOrcamentoPage() {
               </li>
 
               <li className="flex gap-3 text-xs font-medium leading-relaxed text-gray-500">
-                <Clock3 size={15} className="mt-0.5 shrink-0 text-yellow-500" />
+                <Clock3
+                  size={15}
+                  className="mt-0.5 shrink-0 text-yellow-500"
+                />
                 Nunca faça pagamentos fora da plataforma.
               </li>
 
@@ -487,12 +547,20 @@ export default function ClienteOrcamentoPage() {
                   size={15}
                   className="mt-0.5 shrink-0 text-yellow-500"
                 />
-                Verifique as avaliações do prestador.
+                Verifique as avaliações do prestador antes de aceitar.
               </li>
             </ul>
           </section>
         </aside>
       </main>
+
+      <CounterProposalModal
+        isOpen={isCounterModalOpen}
+        counterProposal={counterProposal}
+        onChange={setCounterProposal}
+        onClose={() => setIsCounterModalOpen(false)}
+        onSubmit={handleSendCounterProposal}
+      />
     </div>
   );
 }
