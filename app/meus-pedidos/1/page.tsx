@@ -93,7 +93,8 @@ export default function PedidoDetalhe() {
                     </div>
                   </div>
 
-                  <button className="rounded-2xl bg-gray-50 px-5 py-3 text-sm font-black text-gray-600 transition-all hover:bg-gray-100 active:scale-95">
+                  <button className="rounded-2xl bg-yellow-400 px-5 py-3 text-sm font-black text-gray-950 transition-all hover:bg-yellow-500 active:scale-95 flex items-center justify-center gap-2">
+                   <MessageSquare size={16} />
                     Ver Proposta
                   </button>
                 </div>
