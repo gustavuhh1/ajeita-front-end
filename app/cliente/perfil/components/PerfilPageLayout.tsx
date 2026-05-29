@@ -136,10 +136,17 @@ export function PerfilPageLayout({
             </nav>
 
             <div className="mt-10 border-t border-gray-50 pt-6">
-              <button className="flex w-full items-center gap-4 rounded-2xl px-5 py-3 text-sm font-black text-rose-500 transition-all hover:bg-rose-50">
-                <LogOut size={18} />
-                Sair da Conta
-              </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem("userProfileImage");
+
+                window.location.href = "/";
+              }}
+              className="flex w-full items-center gap-4 rounded-2xl px-5 py-3 text-sm font-black text-rose-500 transition-all hover:bg-rose-50"
+            >
+              <LogOut size={18} />
+              Sair da Conta
+            </button>
             </div>
           </section>
         </aside>
