@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { FormEvent, useMemo, useRef, useState } from "react";
@@ -25,6 +26,28 @@ import {
 import { MainHeader } from "../components/MainHeader";
 import { ProviderAvatar } from "../components/ProviderAvatar";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 interface ChatMessage {
   id: number;
   author: "cliente" | "prestador";
@@ -43,6 +66,8 @@ const conversas = [
     nome: "Carlos Silva",
     msg: "Entendi. Consigo remover essas manchas...",
     hora: "08:50",
+    active: true,
+  
     messages: [
       {
         id: 1,
@@ -50,6 +75,7 @@ const conversas = [
         text: "Olá, Lavor! Vi seu pedido para higienização do sofá. O tecido suede precisa de um cuidado especial. Você teria fotos das manchas?",
         time: "08:42",
       },
+
       {
         id: 2,
         author: "cliente",
@@ -58,6 +84,7 @@ const conversas = [
           "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop",
         time: "08:45",
       },
+
       {
         id: 3,
         author: "prestador",
@@ -76,6 +103,8 @@ const conversas = [
     nome: "Maria Oliveira",
     msg: "Você tem disponibilidade amanhã?",
     hora: "07:30",
+    active: false,
+
     messages: [
       {
         id: 1,
@@ -83,12 +112,14 @@ const conversas = [
         text: "Olá! Tenho disponibilidade amanhã 😊",
         time: "07:10",
       },
+
       {
         id: 2,
         author: "cliente",
         text: "Perfeito. Qual horário?",
         time: "07:15",
       },
+
       {
         id: 3,
         author: "prestador",
@@ -102,7 +133,10 @@ const conversas = [
 export default function ClienteOrcamentoPage() {
   const [message, setMessage] = useState("");
   const [isProposalAccepted, setIsProposalAccepted] = useState(false);
-  const [attachedImage, setAttachedImage] = useState<string | null>(null);
+
+  const [attachedImage, setAttachedImage] = useState<string | null>(
+    null
+  );
 
   const [selectedConversation, setSelectedConversation] = useState(
     conversas[0]
@@ -115,7 +149,9 @@ export default function ClienteOrcamentoPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const finalValue = useMemo(() => {
-    const proposalMessage = messages.find((item) => item.proposal);
+    const proposalMessage = messages.find(
+      (item) => item.proposal
+    );
 
     return proposalMessage?.proposal?.value ?? 250;
   }, [messages]);
@@ -148,6 +184,7 @@ export default function ClienteOrcamentoPage() {
     setTimeout(() => {
       setMessages((previous) => [
         ...previous,
+
         {
           id: Date.now() + 1,
           author: "prestador",
@@ -242,8 +279,8 @@ export default function ClienteOrcamentoPage() {
                   </p>
 
                   <p className="mt-1 text-sm font-bold leading-relaxed text-gray-700">
-                    Sofá de 3 lugares retrátil, tecido suede. Tem manchas de
-                    café.
+                    Sofá de 3 lugares retrátil, tecido suede. Tem
+                    manchas de café.
                   </p>
                 </div>
               </div>
@@ -277,12 +314,12 @@ export default function ClienteOrcamentoPage() {
                   }}
                   className={`cursor-pointer rounded-2xl p-4 transition-all ${
                     selectedConversation.id === c.id
-                      ? "border border-yellow-100 bg-[#FFFCF5]"
+                      ? "bg-[#FFFCF5] border border-yellow-100"
                       : "hover:bg-gray-50"
                   }`}
                 >
-                  <div className="mb-1 flex items-start justify-between">
-                    <span className="text-sm font-black text-gray-950">
+                  <div className="flex justify-between items-start mb-1">
+                    <span className="font-black text-sm text-gray-950">
                       {c.nome}
                     </span>
 
@@ -291,7 +328,7 @@ export default function ClienteOrcamentoPage() {
                     </span>
                   </div>
 
-                  <p className="truncate text-xs font-medium text-gray-500">
+                  <p className="text-xs font-medium text-gray-500 truncate">
                     {c.msg}
                   </p>
                 </div>
@@ -330,7 +367,9 @@ export default function ClienteOrcamentoPage() {
                 <div
                   key={chat.id}
                   className={`flex items-end gap-3 ${
-                    isClient ? "justify-end" : "justify-start"
+                    isClient
+                      ? "justify-end"
+                      : "justify-start"
                   }`}
                 >
                   {!isClient && (
@@ -374,14 +413,20 @@ export default function ClienteOrcamentoPage() {
 
                             <p className="mt-1 text-xl font-black text-yellow-600">
                               R${" "}
-                              {chat.proposal.value.toLocaleString("pt-BR", {
-                                minimumFractionDigits: 2,
-                              })}
+                              {chat.proposal.value.toLocaleString(
+                                "pt-BR",
+                                {
+                                  minimumFractionDigits: 2,
+                                }
+                              )}
                             </p>
                           </div>
 
                           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-white">
-                            <Check size={17} strokeWidth={3} />
+                            <Check
+                              size={17}
+                              strokeWidth={3}
+                            />
                           </div>
                         </div>
                       </div>
@@ -444,7 +489,9 @@ export default function ClienteOrcamentoPage() {
 
             <button
               type="button"
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() =>
+                fileInputRef.current?.click()
+              }
               className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-gray-400 transition-colors hover:bg-yellow-50 hover:text-yellow-500"
             >
               <Paperclip size={20} />
@@ -452,7 +499,9 @@ export default function ClienteOrcamentoPage() {
 
             <input
               value={message}
-              onChange={(event) => setMessage(event.target.value)}
+              onChange={(event) =>
+                setMessage(event.target.value)
+              }
               placeholder="Digite sua mensagem..."
               className="h-12 flex-1 rounded-2xl border border-gray-100 bg-gray-50 px-5 text-sm font-medium outline-none transition-all placeholder:text-gray-400 focus:border-yellow-300 focus:bg-white focus:ring-4 focus:ring-yellow-100"
             />
@@ -461,7 +510,10 @@ export default function ClienteOrcamentoPage() {
               type="submit"
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-400 text-white shadow-lg shadow-yellow-100 transition-all hover:bg-yellow-500 active:scale-95"
             >
-              <SendHorizontal size={20} fill="currentColor" />
+              <SendHorizontal
+                size={20}
+                fill="currentColor"
+              />
             </button>
           </form>
         </section>
@@ -507,24 +559,93 @@ export default function ClienteOrcamentoPage() {
               </div>
             ) : (
               <div className="mt-4 space-y-3">
-                <button
-                  onClick={() => setIsProposalAccepted(true)}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-5 py-4 text-sm font-black text-gray-950 shadow-md shadow-yellow-100 transition-all hover:bg-yellow-500 active:scale-95"
-                >
-                  Aceitar e Pagar
-                  <Sparkles size={17} />
-                </button>
 
-                <button
-                  onClick={() =>
-                    setMessage(
-                      "Carlos, gostei da proposta, mas você consegue fazer por um valor menor?"
-                    )
-                  }
-                  className="w-full rounded-2xl border border-gray-100 bg-white px-5 py-3 text-sm font-black text-gray-600 transition-colors hover:border-yellow-200 hover:bg-yellow-50"
-                >
-                  Contraproposta
-                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      className="flex w-full items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-5 py-4 text-sm font-black text-gray-950 shadow-md shadow-yellow-100 transition-all hover:bg-yellow-500 active:scale-95"
+                    >
+                      Aceitar e Pagar
+                      <Sparkles size={17} />
+                    </button>
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent className="rounded-3xl border-0">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-xl font-black">
+                        Confirmar proposta?
+                      </AlertDialogTitle>
+
+                      <AlertDialogDescription className="text-sm text-gray-500">
+                        Você está prestes a aceitar a proposta e seguir para o pagamento seguro da plataforma.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="rounded-2xl">
+                        Cancelar
+                      </AlertDialogCancel>
+
+                      <AlertDialogAction
+                        onClick={() =>
+                          setIsProposalAccepted(true)
+                        }
+                        className="rounded-2xl bg-yellow-400 text-gray-950 hover:bg-yellow-500"
+                      >
+                        Confirmar
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      className="w-full rounded-2xl border border-gray-100 bg-white px-5 py-3 text-sm font-black text-gray-600 transition-colors hover:border-yellow-200 hover:bg-yellow-50"
+                    >
+                      Contraproposta
+                    </button>
+                  </DialogTrigger>
+
+                  <DialogContent className="rounded-3xl border-0 sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-black">
+                        Enviar contraproposta
+                      </DialogTitle>
+
+                      <DialogDescription>
+                        Negocie um novo valor diretamente com o prestador.
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-2">
+                      <textarea
+                        defaultValue="Carlos, gostei da proposta, mas você consegue fazer por um valor menor?"
+                        className="min-h-[120px] w-full rounded-2xl border border-gray-200 p-4 text-sm outline-none focus:border-yellow-300 focus:ring-4 focus:ring-yellow-100"
+                      />
+
+                      <input
+                        type="number"
+                        placeholder="Digite um valor"
+                        className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-sm outline-none focus:border-yellow-300 focus:ring-4 focus:ring-yellow-100"
+                      />
+                    </div>
+
+                    <DialogFooter>
+                      <button
+                        onClick={() =>
+                          setMessage(
+                            "Carlos, gostei da proposta, mas você consegue fazer por um valor menor?"
+                          )
+                        }
+                        className="w-full rounded-2xl bg-yellow-400 px-5 py-3 text-sm font-black text-gray-950 transition-all hover:bg-yellow-500"
+                      >
+                        Enviar contraproposta
+                      </button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
               </div>
             )}
           </section>
