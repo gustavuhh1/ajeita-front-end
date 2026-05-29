@@ -67,7 +67,7 @@ const conversas = [
     msg: "Entendi. Consigo remover essas manchas...",
     hora: "08:50",
     active: true,
-  
+    
     messages: [
       {
         id: 1,
@@ -287,7 +287,7 @@ export default function ClienteOrcamentoPage() {
             </div>
           </section>
 
-          <section className="rounded-[28px] border border-gray-100 bg-white p-6 shadow-sm">
+          <section className="rounded-[28px] border border-yellow-100 bg-white p-6 shadow-sm">
             <h2 className="mb-6 text-lg font-black text-gray-950">
               Mensagens
             </h2>
