@@ -619,18 +619,16 @@ export default function ClienteOrcamentoPage() {
                     </DialogHeader>
 
                     <div className="space-y-4 py-2">
-                      <textarea
-                        defaultValue="Carlos, gostei da proposta, mas você consegue fazer por um valor menor?"
-                        className="min-h-[120px] w-full rounded-2xl border border-gray-200 p-4 text-sm outline-none focus:border-yellow-300 focus:ring-4 focus:ring-yellow-100"
-                      />
-
-                      <input
-                        type="number"
-                        placeholder="Digite um valor"
-                        className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-sm outline-none focus:border-yellow-300 focus:ring-4 focus:ring-yellow-100"
-                      />
+                     <textarea
+                      defaultValue="Carlos, gostei da proposta, mas você consegue fazer por um valor menor?"
+                      className="min-h-30 w-full rounded-2xl border border-gray-200 p-4 text-sm outline-none transition-all focus:border-yellow-400 focus:ring-4 focus:ring-yellow-100"
+                       />
+                     <input
+                      type="number"
+                      placeholder="Digite um valor"
+                      className="h-12 w-full rounded-2xl border border-gray-200 px-4 text-sm outline-none transition-all focus:border-yellow-400 focus:ring-4 focus:ring-yellow-100"
+                        />
                     </div>
-
                     <DialogFooter>
                       <button
                         onClick={() =>
