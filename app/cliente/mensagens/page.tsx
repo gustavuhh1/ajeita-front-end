@@ -1,170 +1,497 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, MoreVertical, Paperclip, Send, CheckCheck, Phone, Video } from "lucide-react";
-import { MainHeader } from '../components/MainHeader';
+import React, { FormEvent, useMemo, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  BadgeCheck,
+  CalendarDays,
+  Check,
+  CheckCircle2,
+  Clock3,
+  FileText,
+  ImagePlus,
+  Info,
+  LockKeyhole,
+  MapPin,
+  MoreVertical,
+  Paperclip,
+  SendHorizontal,
+  ShieldCheck,
+  Sofa,
+  Sparkles,
+  Star,
+  X,
+} from "lucide-react";
 
-// Definição das interfaces para garantir a segurança do TypeScript
-interface Message {
-  id: number;
-  sender: 'user' | 'pro';
-  text: string;
-}
+import { MainHeader } from "../components/MainHeader";
+import { ProviderAvatar } from "../components/ProviderAvatar";
 
-interface Chat {
+interface ChatMessage {
   id: number;
-  name: string;
-  lastMessage: string;
+  author: "cliente" | "prestador";
+  text?: string;
+  image?: string;
   time: string;
-  unread: number;
-  online: boolean;
-  messages: Message[];
+  proposal?: {
+    title: string;
+    value: number;
+  };
 }
 
-const CHATS: Chat[] = [
-  { 
-    id: 1, 
-    name: "João Silva", 
-    lastMessage: "O material já foi comprado, chego aí às 09:00.", 
-    time: "14:30", 
-    unread: 2, 
-    online: true,
-    messages: [
-      { id: 1, sender: "user", text: "Bom dia, João! Conseguiu ver o orçamento dos fios?" },
-      { id: 2, sender: "pro", text: "Bom dia! Sim, tudo certo. O material já foi comprado, chego aí às 09:00." }
-    ]
-  },
-  { 
-    id: 2, 
-    name: "Ana Costa", 
-    lastMessage: "A limpeza pós-obra foi concluída com sucesso.", 
-    time: "Ontem", 
-    unread: 0, 
-    online: false,
-    messages: [
-      { id: 1, sender: "user", text: "Ana, como está o andamento da faxina?" },
-      { id: 2, sender: "pro", text: "Oi! A limpeza pós-obra foi concluída com sucesso. Pode conferir!" }
-    ]
-  },
-  { 
-    id: 3, 
-    name: "Carlos Mendes", 
-    lastMessage: "Preciso de uma foto do registro para confirmar o modelo.", 
-    time: "10:15", 
-    unread: 1, 
-    online: true,
-    messages: [
-      { id: 1, sender: "user", text: "Carlos, o vazamento na pia continua." },
-      { id: 2, sender: "pro", text: "Olá, sobre o vazamento na pia, preciso de uma foto do registro para confirmar o modelo." }
-    ]
-  },
-  { 
-    id: 4, 
-    name: "Fernanda Lima", 
-    lastMessage: "O projeto do jardim está ficando incrível!", 
-    time: "09:00", 
-    unread: 0, 
-    online: false,
-    messages: [
-      { id: 1, sender: "pro", text: "Bom dia! O projeto do jardim está ficando incrível! Vamos adicionar aquelas plantas que você pediu." }
-    ]
-  }
-];
-
-export default function MessagesPage() {
-  const [selectedChat, setSelectedChat] = useState<Chat>(CHATS[0]);
+export default function ClienteOrcamentoPage() {
   const [message, setMessage] = useState("");
+  const [isProposalAccepted, setIsProposalAccepted] = useState(false);
+  const [attachedImage, setAttachedImage] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: 1,
+      author: "prestador",
+      text: "Olá, Lavor! Vi seu pedido para higienização do sofá. O tecido suede precisa de um cuidado especial. Você teria fotos das manchas?",
+      time: "08:42",
+    },
+    {
+      id: 2,
+      author: "cliente",
+      text: "Oi Carlos! Sim, acabei de tirar. Segue em anexo.",
+      image:
+        "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop",
+      time: "08:45",
+    },
+    {
+      id: 3,
+      author: "prestador",
+      text: "Entendi. Consigo remover essas manchas com a extratora. Como é um sofá retrátil de 3 lugares, o serviço leva cerca de 2 horas.",
+      proposal: {
+        title: "Proposta de Valor",
+        value: 250,
+      },
+      time: "08:50",
+    },
+  ]);
+
+  const finalValue = useMemo(() => {
+    const proposalMessage = messages.find((item) => item.proposal);
+    return proposalMessage?.proposal?.value ?? 250;
+  }, [messages]);
+
+  const getCurrentTime = () => {
+    return new Intl.DateTimeFormat("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date());
+  };
+
+  const handleSendMessage = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (!message.trim() && !attachedImage) return;
+
+    const newMessage: ChatMessage = {
+      id: Date.now(),
+      author: "cliente",
+      text: message.trim() || undefined,
+      image: attachedImage || undefined,
+      time: getCurrentTime(),
+    };
+
+    setMessages((previous) => [...previous, newMessage]);
+    setMessage("");
+    setAttachedImage(null);
+
+    setTimeout(() => {
+      setMessages((previous) => [
+        ...previous,
+        {
+          id: Date.now() + 1,
+          author: "prestador",
+          text: "Perfeito! Consigo realizar esse serviço no horário combinado. Qualquer dúvida, pode me chamar por aqui.",
+          time: getCurrentTime(),
+        },
+      ]);
+    }, 900);
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const preview = URL.createObjectURL(file);
+    setAttachedImage(preview);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#FFFCF5]">
-      <MainHeader />
-      <main className="mx-auto flex h-[calc(100vh-120px)] max-w-7xl gap-4 p-6">
-        
-        {/* SIDEBAR DE CONVERSAS */}
-        <aside className="w-96 rounded-[32px] border border-gray-100 bg-white shadow-sm flex flex-col overflow-hidden">
-          <div className="p-6 border-b border-gray-100">
-            <h2 className="text-xl font-black mb-4">Mensagens</h2>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-              <input 
-                className="w-full bg-gray-50 rounded-2xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" 
-                placeholder="Buscar conversa..." 
-              />
-            </div>
-          </div>
-          <div className="flex-1 overflow-y-auto">
-            {CHATS.map((chat) => (
-              <div 
-                key={chat.id}
-                onClick={() => setSelectedChat(chat)}
-                className={`p-5 cursor-pointer flex gap-4 transition-all border-b border-gray-50 ${selectedChat.id === chat.id ? 'bg-yellow-50/50' : 'hover:bg-gray-50'}`}
-              >
-                <div className={`relative h-12 w-12 rounded-full ${chat.online ? 'bg-green-100' : 'bg-gray-200'} flex items-center justify-center font-bold text-gray-500`}>
-                  {chat.name.charAt(0)}
+    <div className="min-h-screen bg-[#FFFCF5] text-gray-800">
+      <MainHeader activePage="mensagens" />
+
+      <main className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 px-6 py-6 xl:grid-cols-[300px_1fr_300px]">
+        <aside className="space-y-5">
+          <button className="flex items-center gap-2 text-sm font-bold text-gray-400 transition-colors hover:text-gray-700">
+            <ArrowLeft size={18} />
+            Voltar
+          </button>
+
+          <section className="rounded-[28px] border border-yellow-100 bg-white p-6 shadow-sm">
+            <span className="mb-4 inline-flex rounded-full bg-yellow-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-yellow-700">
+              Em negociação
+            </span>
+
+            <h1 className="text-2xl font-black leading-tight text-gray-950">
+              Higienização de Sofá
+            </h1>
+
+            <p className="mt-2 text-xs font-bold uppercase tracking-widest text-gray-400">
+              ID: #849201
+            </p>
+
+            <div className="mt-6 space-y-5">
+              <div className="flex gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-yellow-50 text-yellow-500">
+                  <MapPin size={18} />
                 </div>
-                <div className="flex-1">
-                  <div className="flex justify-between">
-                    <h4 className="font-bold text-gray-950">{chat.name}</h4>
-                    <span className="text-[10px] text-gray-400 font-bold">{chat.time}</span>
-                  </div>
-                  <p className="text-xs text-gray-500 truncate mt-1">{chat.lastMessage}</p>
+
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
+                    Localização
+                  </p>
+                  <p className="mt-1 text-sm font-bold text-gray-700">
+                    Rua dos Flares, 123 - Meireles, Fortaleza
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
+
+              <div className="flex gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-yellow-50 text-yellow-500">
+                  <CalendarDays size={18} />
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
+                    Data sugerida
+                  </p>
+                  <p className="mt-1 text-sm font-bold text-gray-700">
+                    11 de Junho, 14:00
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-yellow-50 text-yellow-500">
+                  <Sofa size={18} />
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
+                    Descrição
+                  </p>
+                  <p className="mt-1 text-sm font-bold leading-relaxed text-gray-700">
+                    Sofá de 3 lugares retrátil, tecido suede. Tem manchas de
+                    café.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-[28px] border border-gray-100 bg-white p-5 shadow-sm">
+            <div className="flex items-center gap-4">
+              <ProviderAvatar name="Carlos Silva" src={null} size="sm" />
+
+              <div>
+                <h3 className="text-base font-black text-gray-950">
+                  Carlos Silva
+                </h3>
+
+                <div className="mt-1 flex items-center gap-1">
+                  <Star
+                    size={14}
+                    className="fill-yellow-400 text-yellow-400"
+                  />
+                  <span className="text-sm font-bold text-yellow-500">
+                    4.9
+                  </span>
+                  <span className="text-sm font-medium text-gray-400">
+                    (120)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
         </aside>
 
-        {/* ÁREA DE CHAT */}
-        <section className="flex-1 rounded-[32px] border border-gray-100 bg-white shadow-sm flex flex-col">
-          <div className="p-5 border-b border-gray-100 flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-yellow-400 flex items-center justify-center font-bold text-sm">
-                {selectedChat.name.charAt(0)}
-              </div>
-              <div>
-                <h3 className="font-bold">{selectedChat.name}</h3>
-                <span className={`text-[10px] font-bold uppercase ${selectedChat.online ? 'text-green-500' : 'text-gray-400'}`}>
-                  {selectedChat.online ? "Online agora" : "Offline"}
-                </span>
-              </div>
+        <section className="flex min-h-180 flex-col overflow-hidden rounded-[30px] border border-gray-100 bg-white shadow-sm">
+          <header className="flex items-center justify-between border-b border-gray-100 bg-yellow-50/50 px-6 py-4">
+            <div>
+              <p className="text-xs font-medium text-gray-500">
+                Conversando com{" "}
+                <span className="font-black text-gray-900">Carlos Silva</span>
+              </p>
             </div>
-            <div className="flex gap-3 text-gray-400">
-              <Phone size={18} className="cursor-pointer hover:text-gray-900" />
-              <Video size={18} className="cursor-pointer hover:text-gray-900" />
-              <MoreVertical size={18} className="cursor-pointer hover:text-gray-900" />
-            </div>
-          </div>
 
-          <div className="flex-1 p-8 overflow-y-auto space-y-6">
-            {selectedChat.messages.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[70%] p-4 rounded-2xl text-sm ${
-                  msg.sender === 'user' 
-                  ? 'bg-yellow-400 rounded-br-none text-gray-950' 
-                  : 'bg-gray-100 rounded-bl-none text-gray-700'
-                }`}>
-                  {msg.text}
-                  <div className={`flex items-center gap-1 mt-1 text-[10px] ${msg.sender === 'user' ? 'opacity-70 justify-end' : 'text-gray-400'}`}>
-                    <CheckCheck size={12}/> 14:35
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="p-4 border-t border-gray-100 flex gap-2">
-            <button className="p-3 text-gray-400 hover:text-gray-900 transition-colors"><Paperclip size={20} /></button>
-            <input 
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="flex-1 bg-gray-50 rounded-2xl px-5 text-sm outline-none focus:ring-2 focus:ring-yellow-400" 
-              placeholder="Escreva sua mensagem..." 
-            />
-            <button className="bg-gray-950 text-white p-4 rounded-2xl hover:bg-gray-800 transition-all shadow-lg active:scale-95">
-              <Send size={18} />
+            <button className="rounded-xl p-2 text-gray-400 transition-colors hover:bg-white hover:text-gray-700">
+              <MoreVertical size={18} />
             </button>
+          </header>
+
+          <div className="flex-1 space-y-6 overflow-y-auto px-6 py-6">
+            <div className="flex justify-center">
+              <span className="rounded-full bg-gray-50 px-4 py-1.5 text-[11px] font-bold text-gray-400">
+                Hoje
+              </span>
+            </div>
+
+            {messages.map((chat) => {
+              const isClient = chat.author === "cliente";
+
+              return (
+                <div
+                  key={chat.id}
+                  className={`flex items-end gap-3 ${
+                    isClient ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  {!isClient && (
+                    <ProviderAvatar name="Carlos Silva" src={null} size="sm" />
+                  )}
+
+                  <div
+                    className={`max-w-[75%] rounded-[24px] px-5 py-4 shadow-sm ${
+                      isClient
+                        ? "rounded-br-md bg-yellow-50 text-gray-800"
+                        : "rounded-bl-md bg-gray-50 text-gray-700"
+                    }`}
+                  >
+                    {chat.text && (
+                      <p className="text-sm font-medium leading-relaxed">
+                        {chat.text}
+                      </p>
+                    )}
+
+                    {chat.image && (
+                      <div className="mt-3 overflow-hidden rounded-2xl border border-white bg-white">
+                        <img
+                          src={chat.image}
+                          alt="Imagem enviada no chat"
+                          className="h-36 w-full object-cover"
+                        />
+                      </div>
+                    )}
+
+                    {chat.proposal && (
+                      <div className="mt-4 rounded-2xl border border-yellow-200 bg-white p-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
+                              {chat.proposal.title}
+                            </p>
+                            <p className="mt-1 text-xl font-black text-yellow-600">
+                              R${" "}
+                              {chat.proposal.value.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </p>
+                          </div>
+
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-white">
+                            <Check size={17} strokeWidth={3} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-2 flex justify-end">
+                      <span className="text-[10px] font-bold text-gray-400">
+                        {chat.time}
+                      </span>
+                    </div>
+                  </div>
+
+                  {isClient && (
+                    <ProviderAvatar name="Lavor Argento" src={null} size="sm" />
+                  )}
+                </div>
+              );
+            })}
           </div>
+
+          {attachedImage && (
+            <div className="border-t border-gray-100 bg-yellow-50/40 px-6 py-3">
+              <div className="flex w-fit items-center gap-3 rounded-2xl border border-yellow-100 bg-white p-2 shadow-sm">
+                <img
+                  src={attachedImage}
+                  alt="Prévia do anexo"
+                  className="h-12 w-16 rounded-xl object-cover"
+                />
+
+                <span className="text-xs font-bold text-gray-500">
+                  Imagem anexada
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => setAttachedImage(null)}
+                  className="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          <form
+            onSubmit={handleSendMessage}
+            className="flex items-center gap-3 border-t border-gray-100 bg-white px-6 py-5"
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-gray-400 transition-colors hover:bg-yellow-50 hover:text-yellow-500"
+            >
+              <Paperclip size={20} />
+            </button>
+
+            <input
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              placeholder="Digite sua mensagem..."
+              className="h-12 flex-1 rounded-2xl border border-gray-100 bg-gray-50 px-5 text-sm font-medium outline-none transition-all placeholder:text-gray-400 focus:border-yellow-300 focus:bg-white focus:ring-4 focus:ring-yellow-100"
+            />
+
+            <button
+              type="submit"
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-yellow-400 text-white shadow-lg shadow-yellow-100 transition-all hover:bg-yellow-500 active:scale-95"
+            >
+              <SendHorizontal size={20} fill="currentColor" />
+            </button>
+          </form>
         </section>
+
+        <aside className="space-y-5">
+          <section className="rounded-[28px] border-2 border-yellow-300 bg-yellow-50/50 p-6 shadow-sm">
+            <div className="mb-5 flex items-start justify-between">
+              <div>
+                <h2 className="text-lg font-black text-gray-950">
+                  Proposta Final
+                </h2>
+              </div>
+
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-yellow-500">
+                <FileText size={20} />
+              </div>
+            </div>
+
+            <div className="rounded-3xl bg-white p-6 text-center shadow-sm">
+              <p className="text-[11px] font-black uppercase tracking-widest text-gray-400">
+                Valor total
+              </p>
+
+              <p className="mt-2 text-4xl font-black text-gray-950">
+                R${" "}
+                {finalValue.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                })}
+              </p>
+            </div>
+
+            {isProposalAccepted ? (
+              <div className="mt-4 rounded-2xl bg-green-50 p-4 text-center">
+                <CheckCircle2 className="mx-auto mb-2 text-green-500" />
+                <p className="text-sm font-black text-green-700">
+                  Proposta aceita!
+                </p>
+                <p className="mt-1 text-xs font-medium text-green-600">
+                  Agora você pode seguir para o pagamento seguro.
+                </p>
+              </div>
+            ) : (
+              <div className="mt-4 space-y-3">
+                <button
+                  onClick={() => setIsProposalAccepted(true)}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-5 py-4 text-sm font-black text-gray-950 shadow-md shadow-yellow-100 transition-all hover:bg-yellow-500 active:scale-95"
+                >
+                  Aceitar e Pagar
+                  <Sparkles size={17} />
+                </button>
+
+                <button
+                  onClick={() =>
+                    setMessage(
+                      "Carlos, gostei da proposta, mas você consegue fazer por um valor menor?"
+                    )
+                  }
+                  className="w-full rounded-2xl border border-gray-100 bg-white px-5 py-3 text-sm font-black text-gray-600 transition-colors hover:border-yellow-200 hover:bg-yellow-50"
+                >
+                  Contraproposta
+                </button>
+              </div>
+            )}
+          </section>
+
+          <section className="rounded-[28px] border border-green-100 bg-green-50 p-5 shadow-sm">
+            <div className="flex gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-green-100 text-green-600">
+                <LockKeyhole size={18} />
+              </div>
+
+              <div>
+                <h3 className="text-sm font-black text-green-900">
+                  Pagamento Seguro
+                </h3>
+                <p className="mt-1 text-xs font-medium leading-relaxed text-green-700">
+                  Gere um link de pagamento seguro através da nossa integração.
+                </p>
+
+                <button className="mt-3 text-xs font-black text-green-600 hover:underline">
+                  Gerar Link AjeitaiPay
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-[28px] border border-gray-100 bg-white p-5 shadow-sm">
+            <div className="mb-4 flex items-center gap-2">
+              <ShieldCheck size={18} className="text-yellow-500" />
+              <h3 className="text-sm font-black text-gray-950">
+                Dicas de Segurança
+              </h3>
+            </div>
+
+            <ul className="space-y-3">
+              <li className="flex gap-3 text-xs font-medium leading-relaxed text-gray-500">
+                <Info size={15} className="mt-0.5 shrink-0 text-yellow-500" />
+                Mantenha toda a negociação dentro do chat.
+              </li>
+
+              <li className="flex gap-3 text-xs font-medium leading-relaxed text-gray-500">
+                <Clock3 size={15} className="mt-0.5 shrink-0 text-yellow-500" />
+                Nunca faça pagamentos fora da plataforma.
+              </li>
+
+              <li className="flex gap-3 text-xs font-medium leading-relaxed text-gray-500">
+                <BadgeCheck
+                  size={15}
+                  className="mt-0.5 shrink-0 text-yellow-500"
+                />
+                Verifique as avaliações do prestador.
+              </li>
+            </ul>
+          </section>
+        </aside>
       </main>
     </div>
   );

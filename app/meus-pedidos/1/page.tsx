@@ -1,14 +1,7 @@
-"use client"
+"use client";
 
-import {
-  ArrowLeft,
-  MapPin,
-  Star,
-  ShoppingCart,
-  Bell,
-  MessageSquare,
-} from "lucide-react"
-import Link from "next/link"
+import { ArrowLeft, MapPin, Star, MessageSquare } from "lucide-react";
+import Link from "next/link";
 import { MainHeader } from '../../cliente/components/MainHeader';
 
 export default function PedidoDetalhe() {
@@ -16,215 +9,103 @@ export default function PedidoDetalhe() {
     <div className="min-h-screen bg-[#f6f8fb]">
       <MainHeader />
 
-    
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-10">
-
-        
+      <main className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-10">
+        {/* Botão Voltar */}
         <Link
           href="/meus-pedidos"
-          className="mb-6 flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700"
+          className="mb-6 flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
         >
           <ArrowLeft size={16} />
           Voltar para Meus Pedidos
         </Link>
 
-        
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        {/* Header do Pedido */}
+        <div className="flex flex-col gap-4 border-b border-gray-200 pb-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-800 md:text-[28px]">
+            <h1 className="text-2xl font-black text-gray-950 md:text-3xl">
               Conserto de Vazamento
             </h1>
-            <p className="text-sm text-gray-500">
+            <p className="mt-1 text-sm font-medium text-gray-400">
               Pedido #AJ-88291 · Criado em 12 de Outubro, 2023
             </p>
           </div>
 
-          <span className="w-fit rounded-full bg-yellow-100 px-4 py-2 text-xs font-medium text-yellow-700">
-            ● EM NEGOCIAÇÃO
+          <span className="w-fit rounded-full bg-orange-100 px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-orange-600">
+            EM NEGOCIAÇÃO
           </span>
         </div>
 
-        
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-
+        {/* Grid Principal */}
+        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
           
-          <div className="rounded-3xl border border-gray-200 bg-white p-5 md:p-6">
-
-            <h2 className="mb-5 text-sm font-semibold text-gray-700">
-              Detalhes do Pedido
-            </h2>
-
-            <div className="space-y-5 text-sm">
-
-              <div>
-                <p className="text-xs text-gray-400">CATEGORIA</p>
-                <p className="mt-1 font-medium text-gray-700">
-                  🔧 Hidráulica / Encanador
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-400">LOCALIZAÇÃO</p>
-                <p className="mt-1 flex items-center gap-2 text-gray-700">
-                  <MapPin size={14} /> Moema, São Paulo - SP
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-400">DESCRIÇÃO</p>
-                <p className="mt-1 leading-relaxed text-gray-600">
-                  Preciso de um profissional para identificar e consertar um
-                  vazamento na parede do banheiro social. A mancha de umidade
-                  está aumentando rapidamente. Necessário ter ferramentas próprias.
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-400">FOTOS ANEXADAS</p>
-
-                <div className="mt-3 flex flex-wrap gap-3">
-                  <img
-                    src="https://i.pravatar.cc/100?img=1"
-                    className="h-16 w-16 rounded-xl object-cover"
-                  />
-                  <img
-                    src="https://i.pravatar.cc/100?img=2"
-                    className="h-16 w-16 rounded-xl object-cover"
-                  />
-                  <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 border-dashed text-gray-400">
-                    +
-                  </div>
+          {/* Coluna Esquerda: Detalhes */}
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+              <h2 className="mb-5 text-sm font-black text-gray-950">Detalhes</h2>
+              <div className="space-y-5 text-sm">
+                <div>
+                  <p className="text-[10px] font-bold uppercase text-gray-400">Categoria</p>
+                  <p className="mt-1 font-bold text-gray-700">🔧 Hidráulica / Encanador</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase text-gray-400">Localização</p>
+                  <p className="mt-1 flex items-center gap-2 font-bold text-gray-700">
+                    <MapPin size={14} /> Moema, São Paulo - SP
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase text-gray-400">Descrição</p>
+                  <p className="mt-1 leading-relaxed text-gray-600">
+                    Preciso de um profissional para identificar e consertar um vazamento na parede do banheiro social. A mancha de umidade está aumentando rapidamente.
+                  </p>
                 </div>
               </div>
-
             </div>
           </div>
 
-          
+          {/* Coluna Direita: Propostas */}
           <div className="lg:col-span-2">
-
-            <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <h2 className="text-sm font-semibold text-gray-700">
-                Propostas Recebidas (3)
-              </h2>
-
-              <span className="text-xs text-gray-400">
-                Selecione o melhor profissional para você
-              </span>
-            </div>
-
-            <div className="space-y-5">
-
-              
-              <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-white p-4 transition hover:shadow-md md:flex-row md:items-center md:justify-between md:p-5">
-                <div className="flex items-center gap-4">
-                  <img
-                    src="https://i.pravatar.cc/100?img=3"
-                    className="h-14 w-14 rounded-full object-cover"
-                  />
-
-                  <div>
-                    <h3 className="font-medium text-gray-800">
-                      Marcos Oliveira
-                    </h3>
-
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Star size={14} className="text-yellow-500" />
-                      4.9 <span>(124)</span>
+            <h2 className="mb-5 text-sm font-black text-gray-950">Propostas Recebidas (3)</h2>
+            
+            <div className="space-y-4">
+              {[
+                { nome: "Marcos Oliveira", nota: "4.9", preco: "150,00", img: "3" },
+                { nome: "Ana Costa", nota: "4.7", preco: "135,00", img: "4" },
+                { nome: "Carlos Mendes", nota: "5.0", preco: "180,00", img: "5" },
+              ].map((proposta, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col gap-4 rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-yellow-200 md:flex-row md:items-center md:justify-between"
+                >
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={`https://i.pravatar.cc/100?img=${proposta.img}`}
+                      className="h-14 w-14 rounded-2xl object-cover"
+                      alt={proposta.nome}
+                    />
+                    <div>
+                      <h3 className="font-black text-gray-950">{proposta.nome}</h3>
+                      <div className="flex items-center gap-1 text-xs font-bold text-gray-500">
+                        <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                        {proposta.nota}
+                      </div>
+                      <p className="text-sm font-black text-gray-950 mt-1">R$ {proposta.preco}</p>
                     </div>
-
-                    <p className="text-xs text-gray-400">
-                      Hidráulica • 12 anos de exp.
-                    </p>
-
-                    <p className="mt-1 text-sm font-semibold text-gray-800">
-                      R$ 150,00
-                    </p>
                   </div>
+
+                  <button className="rounded-2xl bg-gray-50 px-5 py-3 text-sm font-black text-gray-600 transition-all hover:bg-gray-100 active:scale-95">
+                    Ver Proposta
+                  </button>
                 </div>
-
-                <button className="flex w-full items-center justify-center gap-2 rounded-full bg-yellow-400 px-5 py-3 text-sm font-medium hover:bg-yellow-500 md:w-auto">
-                  <MessageSquare size={16} />
-                  Conversar / Ver Proposta
-                </button>
-              </div>
-
-              
-              <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-white p-4 transition hover:shadow-md md:flex-row md:items-center md:justify-between md:p-5">
-                <div className="flex items-center gap-4">
-                  <img
-                    src="https://i.pravatar.cc/100?img=4"
-                    className="h-14 w-14 rounded-full object-cover"
-                  />
-
-                  <div>
-                    <h3 className="font-medium text-gray-800">
-                      Ana Costa
-                    </h3>
-
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Star size={14} className="text-yellow-500" />
-                      4.7 <span>(89)</span>
-                    </div>
-
-                    <p className="text-xs text-gray-400">
-                      Reparos Residenciais
-                    </p>
-
-                    <p className="mt-1 text-sm font-semibold text-gray-800">
-                      R$ 135,00
-                    </p>
-                  </div>
-                </div>
-
-                <button className="flex w-full items-center justify-center gap-2 rounded-full bg-yellow-400 px-5 py-3 text-sm font-medium hover:bg-yellow-500 md:w-auto">
-                  <MessageSquare size={16} />
-                  Conversar / Ver Proposta
-                </button>
-              </div>
-
-              
-              <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-white p-4 transition hover:shadow-md md:flex-row md:items-center md:justify-between md:p-5">
-                <div className="flex items-center gap-4">
-                  <img
-                    src="https://i.pravatar.cc/100?img=5"
-                    className="h-14 w-14 rounded-full object-cover"
-                  />
-
-                  <div>
-                    <h3 className="font-medium text-gray-800">
-                      Carlos Mendes
-                    </h3>
-
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Star size={14} className="text-yellow-500" />
-                      5.0 <span>(42)</span>
-                    </div>
-
-                    <p className="text-xs text-gray-400">
-                      Encanador Certificado
-                    </p>
-
-                    <p className="mt-1 text-sm font-semibold text-gray-800">
-                      R$ 180,00
-                    </p>
-                  </div>
-                </div>
-
-                <button className="flex w-full items-center justify-center gap-2 rounded-full bg-yellow-400 px-5 py-3 text-sm font-medium hover:bg-yellow-500 md:w-auto">
-                  <MessageSquare size={16} />
-                  Conversar / Ver Proposta
-                </button>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
-      
-      <footer className="text-center text-xs text-gray-400 py-6">
+      <footer className="py-8 text-center text-xs font-medium text-gray-400">
         © 2026 Ajeitai - Todos os direitos reservados.
       </footer>
     </div>
-  )
+  );
 }

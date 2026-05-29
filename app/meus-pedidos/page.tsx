@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PerfilPageLayout } from "@/app/cliente/perfil/components/PerfilPageLayout";
+import { MainHeader } from '../cliente/components/MainHeader';
+
 
 type Pedido = {
   id: number;
@@ -55,17 +56,24 @@ export default function PedidosPage() {
   ];
 
   return (
-    <>
-      <PerfilPageLayout
-        title="Meus Pedidos"
-        description="Acompanhe seus serviços em andamento e veja seu histórico."
-      >
+    <div className="min-h-screen bg-[#f6f8fb]">
+      <MainHeader />
+
+      <main className="mx-auto max-w-5xl px-4 py-10 md:px-6">
+        {/* Título da Página */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-black text-gray-950">Meus Pedidos</h1>
+          <p className="mt-1 text-sm text-gray-400">
+            Acompanhe seus serviços em andamento e veja seu histórico.
+          </p>
+        </div>
+
         {/* Abas Internas */}
-        <div className="mt-2 flex gap-6 border-b text-sm">
-          <span className="cursor-pointer border-b-2 border-yellow-400 pb-3 font-medium text-yellow-600">
+        <div className="flex gap-6 border-b border-gray-200 text-sm">
+          <span className="cursor-pointer border-b-2 border-yellow-400 pb-3 font-black text-yellow-600">
             Ativos
           </span>
-          <span className="cursor-pointer pb-3 text-gray-400 transition-colors hover:text-gray-600">
+          <span className="cursor-pointer pb-3 font-medium text-gray-400 transition-colors hover:text-gray-600">
             Histórico
           </span>
         </div>
@@ -75,7 +83,7 @@ export default function PedidosPage() {
           {pedidos.map((pedido) => (
             <div
               key={pedido.id}
-              className="flex flex-col justify-between gap-4 rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:flex-row sm:items-center"
+              className="flex flex-col justify-between gap-4 rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-md sm:flex-row sm:items-center"
             >
               <div className="flex items-center gap-4">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gray-50 text-xl">
@@ -119,7 +127,11 @@ export default function PedidosPage() {
             </div>
           ))}
         </div>
-      </PerfilPageLayout>
-    </>
+      </main>
+
+      <footer className="py-8 text-center text-xs font-medium text-gray-400">
+        © 2026 Ajeitai - Todos os direitos reservados.
+      </footer>
+    </div>
   );
 }
