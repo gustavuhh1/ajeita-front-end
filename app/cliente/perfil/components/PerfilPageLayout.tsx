@@ -38,7 +38,7 @@ const menuItems = [
   },
   {
     name: "Segurança",
-    href: "#",
+    href: "/cliente/perfil/seguranca",
     icon: ShieldCheck,
   },
 ];
