@@ -61,7 +61,7 @@ export default function TrocarSenhaPage() {
           {/* CARD PRINCIPAL */}
           <section className="overflow-hidden rounded-[36px] border border-gray-100 bg-white shadow-sm">
             {/* HEADER */}
-            <div className="border-b border-gray-100 bg-gradient-to-r from-yellow-50 to-white px-8 py-7">
+            <div className="border-b border-gray-100 from-yellow-50 to-white px-8 py-7">
               <div className="flex items-center gap-5">
                 <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-yellow-400 text-white shadow-lg shadow-yellow-100">
                   <ShieldCheck size={30} />
