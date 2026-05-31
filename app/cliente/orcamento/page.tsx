@@ -42,7 +42,7 @@ import {
 } from "../../../components/chat/chat-utils";
 
 import { ChatMessageBubble } from "../../../components/chat/chat-message-bubble";
-import { ChatTypingIndicator } from "../../../components/chat/chat-typing-indicator";
+import ChatTypingIndicator from "../../../components/chat/chat-typing-indicator";
 import { CounterProposalModal } from "../../../components/chat/counter-proposal-modal";
 import { BudgetSummaryCard } from "../../../components/chat/budget-summary-card";
 
@@ -408,7 +408,7 @@ export default function ClienteOrcamentoPage() {
             ))}
 
             {isProviderTyping && (
-              <div className="flex items-end gap-3">
+              <div className="flex items-end gap-3 justify-start">
                 <ProviderAvatar name="Carlos Silva" src={null} size="sm" />
                 <ChatTypingIndicator />
               </div>
@@ -436,12 +436,6 @@ export default function ClienteOrcamentoPage() {
                   <X size={14} />
                 </button>
               </div>
-            </div>
-          )}
-
-          {message.trim() && (
-            <div className="border-t border-gray-100 bg-white px-6 pt-3 text-[11px] font-bold text-yellow-600">
-              Você está digitando...
             </div>
           )}
 
