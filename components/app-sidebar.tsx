@@ -35,7 +35,7 @@ const links = [
   },
   {
     name: "Agenda",
-    url: "/profissional/dashboard/agendamentos",
+    url: "/profissional/dashboard/agenda",
     icon: CalendarDotsIcon,
   },
   {

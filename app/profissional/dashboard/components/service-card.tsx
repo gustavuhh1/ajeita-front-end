@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   MapPin,
   Navigation,
@@ -10,8 +11,6 @@ import {
   Star,
   Clock,
   ChevronRight,
-  Bookmark,
-  BookmarkCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -104,6 +103,7 @@ function RatingStars({ rating }: { rating: number }) {
 }
 
 export function ServiceCard({
+  id,
   icon,
   title,
   isNew,
@@ -120,8 +120,6 @@ export function ServiceCard({
   reviewCount,
   description,
 }: ServiceCardProps) {
-  const [saved, setSaved] = useState(false);
-
   const imageUrl = photos && photos.length > 0 ? photos[0] : null;
 
   // ─── GRID CARD ────────────────────────────────────────────────
@@ -237,16 +235,18 @@ export function ServiceCard({
           </div>
 
           {/* CTA */}
-          <Button
-            className={`w-full text-sm font-semibold ${
-              highlighted
-                ? "bg-yellow-400 text-yellow-900 shadow-sm hover:bg-yellow-500"
-                : "bg-gray-900 text-white shadow-sm hover:bg-gray-800"
-            }`}
-          >
-            Ver Detalhes
-            <ChevronRight className="ml-1 h-4 w-4" />
-          </Button>
+          <Link href={`/profissional/dashboard/servicos/${id}`} className="w-full">
+            <Button
+              className={`w-full text-sm font-semibold ${
+                highlighted
+                  ? "bg-yellow-400 text-yellow-900 shadow-sm hover:bg-yellow-500"
+                  : "bg-gray-900 text-white shadow-sm hover:bg-gray-800"
+              }`}
+            >
+              Ver Detalhes
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     );
@@ -370,17 +370,19 @@ export function ServiceCard({
             )}
           </div>
 
-          <Button
-            size="sm"
-            className={`shrink-0 text-sm font-semibold ${
-              highlighted
-                ? "bg-yellow-400 text-yellow-900 shadow-sm hover:bg-yellow-500"
-                : "bg-gray-900 text-white shadow-sm hover:bg-gray-800"
-            }`}
-          >
-            Ver Detalhes
-            <ChevronRight className="ml-1 h-3.5 w-3.5" />
-          </Button>
+          <Link href={`/profissional/dashboard/servicos/${id}`}>
+            <Button
+              size="sm"
+              className={`shrink-0 text-sm font-semibold ${
+                highlighted
+                  ? "bg-yellow-400 text-yellow-900 shadow-sm hover:bg-yellow-500"
+                  : "bg-gray-900 text-white shadow-sm hover:bg-gray-800"
+              }`}
+            >
+              Ver Detalhes
+              <ChevronRight className="ml-1 h-3.5 w-3.5" />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
