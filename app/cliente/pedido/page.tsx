@@ -149,6 +149,19 @@ const CreateOrderPage = () => {
             </div>
 
             <div>
+             <label className="block text-sm font-bold text-gray-700 mb-2">
+               Endereço do Serviço <span className="text-rose-500">*</span>
+             </label>
+
+             <input
+              required
+              type="text"
+              placeholder="Ex: Rua das Flores, 123 - Centro"
+              className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium"
+              />
+           </div>
+
+            <div>
               <label className="block text-sm font-bold text-gray-700 mb-3">Fotos do Problema <span className="text-gray-400 font-medium text-xs">(Máximo 5 fotos)</span></label>
               <div className="flex gap-4">
                 <div 
