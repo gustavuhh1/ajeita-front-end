@@ -54,22 +54,22 @@ const LoginForm = () => {
 
   const { isPending, mutateAsync } = useMutation({
     mutationFn: loginCliente,
-
     mutationKey: ["login-client"],
-    onSuccess(data) {
-      if (data) {
-        alert("Login bem-sucedido! Redirecionando...");
-        reset(); // Limpa o formulário após o login bem-sucedido
-        router.push("/cliente/home"); // Redireciona para o dashboard do cliente
-      }
+    onSuccess() {
+      reset();
+      router.push("/cliente/home");
     },
-    onError() {
-      setError("email", { message: "E-mail ou senha incorretos" });
-      setError("password", { message: "E-mail ou senha incorretos" });
-      setValue("password", ""); // Limpa o campo de senha para segurança
+    onError(error) {
+      const message =
+        error instanceof Error ? error.message : "E-mail ou senha incorretos";
+
+      setError("email", { message });
+      setError("password", { message: "Verifique sua senha" });
+      setValue("password", "");
     },
-    retry: false, // Não tenta novamente automaticamente em caso de erro
+    retry: false,
   });
+
   const onSubmit = async (data: LoginClientForm) => {
     await mutateAsync(data);
   };
@@ -79,15 +79,16 @@ const LoginForm = () => {
       <div className="mb-5 flex flex-col items-start gap-8">
         <div className="space-y-1">
           <h2 className="text-3xl font-bold">Bem-vindo de volta!</h2>
+
           <p className="text-gray-500">
             Acesse sua conta para solicitar e gerenciar seus serviços de
             manutenção.
           </p>
         </div>
 
-        {/* LOGIN SOCIAL */}
         <div className="flex w-full gap-4">
           <Button
+            type="button"
             variant="custom"
             size="xl"
             className="flex flex-1 items-center justify-center gap-2 rounded-full border border-zinc-200 py-3 hover:bg-zinc-200"
@@ -98,20 +99,20 @@ const LoginForm = () => {
               src="/google-icon.png"
               alt="google-logo"
             />
-            {/* TODO: Implementar login com Google */}
             Google
           </Button>
 
           <Button
+            type="button"
             variant="custom"
             size="xl"
             className="flex flex-1 items-center justify-center gap-2 rounded-full border border-zinc-200 py-3 hover:bg-zinc-200"
           >
             <GithubLogoIcon weight="bold" size={20} />
-            {/* TODO: Implementar login com Github */}
             Github
           </Button>
         </div>
+
         <div className="flex w-full items-center justify-center gap-2 text-zinc-400">
           <hr className="flex-1 border-zinc-200" />
           <span className="text-center text-sm">ou continue com e-mail</span>
@@ -119,12 +120,12 @@ const LoginForm = () => {
         </div>
       </div>
 
-      {/* FORM */}
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-1">
           <Label htmlFor="email" className="text-sm font-medium">
             E-mail
           </Label>
+
           <div className="relative">
             <Controller
               name="email"
@@ -140,12 +141,14 @@ const LoginForm = () => {
                 />
               )}
             />
+
             <EnvelopeSimpleIcon
               weight="bold"
               className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
               size={18}
             />
           </div>
+
           {errors.email && (
             <p className="text-xs text-red-500">{errors.email.message}</p>
           )}
@@ -155,6 +158,7 @@ const LoginForm = () => {
           <Label htmlFor="password" className="text-sm font-medium">
             Senha
           </Label>
+
           <div className="relative">
             <Controller
               name="password"
@@ -165,32 +169,32 @@ const LoginForm = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="h-12 rounded-full pl-9 shadow-sm"
-                  autoComplete="password"
+                  className="h-12 rounded-full pl-9 pr-10 shadow-sm"
+                  autoComplete="current-password"
                 />
               )}
             />
+
             <LockIcon
               weight="fill"
               className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"
               size={18}
             />
-            {!showPassword ? (
-              <EyeSlashIcon
-                weight="regular"
-                className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400"
-                size={20}
-                onClick={() => setShowPassword(true)}
-              />
-            ) : (
-              <EyeIcon
-                weight="regular"
-                className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400"
-                size={20}
-                onClick={() => setShowPassword(false)}
-              />
-            )}
+
+            <button
+              type="button"
+              onClick={() => setShowPassword((current) => !current)}
+              className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400"
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+            >
+              {showPassword ? (
+                <EyeIcon weight="regular" size={20} />
+              ) : (
+                <EyeSlashIcon weight="regular" size={20} />
+              )}
+            </button>
           </div>
+
           {errors.password && (
             <p className="text-xs text-red-500">{errors.password.message}</p>
           )}
@@ -205,12 +209,12 @@ const LoginForm = () => {
                 setValue("rememberMe", Boolean(checked))
               }
             />
+
             <p className="text-sm font-medium">Lembrar de mim</p>
           </Label>
 
-          {/* TODO: Implementar rota de recuperação de senha */}
           <Link
-            href="#"
+            href="/forget-password"
             className="text-sm font-medium text-yellow-600 hover:underline"
           >
             Esqueceu sua senha?
@@ -220,10 +224,10 @@ const LoginForm = () => {
         <Button
           size="xl"
           type="submit"
-          className="w-full rounded-full bg-yellow-400 py-4 font-semibold"
+          className="w-full rounded-full bg-yellow-400 py-4 font-semibold text-black hover:bg-yellow-500"
           disabled={isPending}
         >
-          Entrar na conta
+          {isPending ? "Entrando..." : "Entrar na conta"}
         </Button>
       </form>
 
