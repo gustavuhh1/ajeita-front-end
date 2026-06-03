@@ -36,14 +36,10 @@ const step1Schema = z
     password: z.string().min(8, "Senha deve ter ao menos 8 caracteres"),
     confirmPassword: z.string(),
   })
-  .refine(
-    (data: { password: string; confirmPassword: string }) =>
-      data.password === data.confirmPassword,
-    {
-      message: "As senhas não coincidem",
-      path: ["confirmPassword"],
-    },
-  );
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
 
 const step2Schema = z.object({
   bio: z
@@ -79,6 +75,7 @@ const TOTAL_STEPS = 4;
 export default function RegisterPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [step, setStep] = useState(0);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const {
     control,
@@ -96,15 +93,18 @@ export default function RegisterPage() {
       confirmPassword: "",
       bio: "",
       categories: [],
+      otherCategory: "",
       neighborhood: "",
       radius: 10,
     },
     mode: "onChange",
   });
 
-  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+  function handleAvatarChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
     if (!file) return;
+
     const url = URL.createObjectURL(file);
     setPreview(url);
   }
@@ -112,6 +112,7 @@ export default function RegisterPage() {
   async function handleNextStep() {
     const fields = stepFields[step];
     const isValid = fields ? await trigger(fields) : true;
+
     if (step < TOTAL_STEPS && isValid) {
       setStep((prev) => prev + 1);
     }
@@ -121,11 +122,32 @@ export default function RegisterPage() {
 
   const onSubmit = handleSubmit(
     async (data) => {
-      const res = await registerPrestador(data);
-      if (res === 201) setStep(4);
-      if (res !== 201) {
-        alert("Ocorreu um erro ao criar sua conta. Tente novamente.");
+      try {
+        setIsRegistering(true);
+
+        await registerPrestador({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          cpf: data.cpf,
+          image: data.image,
+          phone: "",
+          birthDate: new Date().toISOString(),
+          description: data.bio,
+          bio: data.bio,
+        });
+
+        setStep(4);
+      } catch (error) {
+        alert(
+          error instanceof Error
+            ? error.message
+            : "Ocorreu um erro ao criar sua conta. Tente novamente.",
+        );
+
         setStep(1);
+      } finally {
+        setIsRegistering(false);
       }
     },
     (errors) => {
@@ -144,23 +166,30 @@ export default function RegisterPage() {
             <ArrowUUpLeftIcon size={24} className="text-black" />
           </Link>
         </div>
-        {/* Step indicator */}
+
         <div className="mb-3 w-full max-w-lg">
           <div className="mb-2 flex items-center justify-between text-sm">
             <span className="text-muted-foreground font-medium">
               Passo {step} de {TOTAL_STEPS}
             </span>
+
             <span className="font-semibold text-yellow-500">
               {progress}% Completo
             </span>
           </div>
+
           <Progress
             value={progress}
             className="h-2 bg-yellow-100 [&>div]:bg-yellow-400"
           />
         </div>
 
-        {/* Card */}
+        {isRegistering && (
+          <div className="w-full max-w-xl rounded-2xl border border-yellow-100 bg-white px-5 py-3 text-center text-sm font-bold text-gray-500 shadow-sm">
+            Enviando cadastro para a API...
+          </div>
+        )}
+
         <div
           className={cn(
             "w-full max-w-xl rounded-2xl bg-white p-8 shadow-sm",
@@ -197,8 +226,10 @@ export default function RegisterPage() {
             />
           )}
         </div>
+
         {step === 4 && <Step04 />}
       </div>
+
       <Footer variant="default" />
     </div>
   );

@@ -1,173 +1,202 @@
 "use client";
 
-import { useState } from "react";
-import { Eye, EyeOff, LockKeyhole, CheckCircle2 } from "lucide-react";
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  ShieldAlert,
+} from "lucide-react";
+import { resetPassword } from "@/app/api/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-export default function EsqueceuSenhaPage() {
-  const [novaSenha, setNovaSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [mostrarNovaSenha, setMostrarNovaSenha] = useState(false);
-  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
-  const [erro, setErro] = useState("");
-  const [sucesso, setSucesso] = useState(false);
+export default function ResetPasswordPage() {
+  const searchParams = useSearchParams();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const token = searchParams.get("token");
+
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setErro("");
-    setSucesso(false);
 
-    if (!novaSenha || !confirmarSenha) {
-      setErro("Preencha todos os campos.");
+    setError("");
+    setSuccess("");
+
+    if (!token) {
+      setError("Token ausente. Solicite um novo link de recuperação.");
       return;
     }
 
-    if (novaSenha.length < 6) {
-      setErro("A senha precisa ter pelo menos 6 caracteres.");
+    if (!newPassword || !confirmPassword) {
+      setError("Preencha todos os campos.");
       return;
     }
 
-    if (novaSenha !== confirmarSenha) {
-      setErro("As senhas não coincidem.");
+    if (newPassword.length < 8) {
+      setError("A nova senha precisa ter pelo menos 8 caracteres.");
       return;
     }
 
-    setSucesso(true);
+    if (newPassword !== confirmPassword) {
+      setError("As senhas não coincidem.");
+      return;
+    }
 
-    /**
-     * Aqui futuramente entra a chamada da API/Firebase/Supabase.
-     *
-     * Exemplo:
-     * await resetPassword(novaSenha)
-     */
-  };
+    try {
+      setIsLoading(true);
+
+      await resetPassword({
+        token,
+        newPassword,
+      });
+
+      setSuccess("Senha redefinida com sucesso. Você já pode fazer login.");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível redefinir sua senha.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
-      <section className="w-full max-w-md">
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 px-6 py-8 sm:px-8">
-          <div className="flex flex-col items-center text-center mb-8">
-            <div className="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mb-4">
-              <LockKeyhole className="text-yellow-500" size={30} strokeWidth={1.8} />
-            </div>
+    <main className="flex min-h-screen items-center justify-center bg-[#FFFCF5] px-6 py-10">
+      <section className="w-full max-w-md rounded-3xl border border-yellow-100 bg-white p-8 shadow-sm">
+        <Link
+          href="/auth?mode=login"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-gray-500 transition-colors hover:text-yellow-600"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Voltar para login
+        </Link>
 
-            <h1 className="text-2xl font-bold text-gray-900">
-              Redefinir senha
-            </h1>
-
-            <p className="text-sm text-gray-500 mt-2 leading-relaxed">
-              Informe sua nova senha e confirme para recuperar o acesso à sua conta.
-            </p>
+        <div className="mb-8 text-center">
+          <div
+            className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl ${
+              token
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-red-50 text-red-600"
+            }`}
+          >
+            {token ? (
+              <LockKeyhole className="h-8 w-8" />
+            ) : (
+              <ShieldAlert className="h-8 w-8" />
+            )}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label
-                htmlFor="novaSenha"
-                className="block text-sm font-bold text-gray-700 mb-2"
-              >
-                Nova senha
-              </label>
+          <h1 className="text-2xl font-black text-gray-950">
+            Redefinir senha
+          </h1>
 
-              <div className="relative">
-                <input
-                  id="novaSenha"
-                  type={mostrarNovaSenha ? "text" : "password"}
-                  value={novaSenha}
-                  onChange={(event) => setNovaSenha(event.target.value)}
-                  placeholder="Digite sua nova senha"
-                  className="w-full px-5 py-4 pr-12 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium placeholder:text-gray-400"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setMostrarNovaSenha(!mostrarNovaSenha)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                  aria-label={mostrarNovaSenha ? "Ocultar senha" : "Mostrar senha"}
-                >
-                  {mostrarNovaSenha ? (
-                    <EyeOff size={20} strokeWidth={1.7} />
-                  ) : (
-                    <Eye size={20} strokeWidth={1.7} />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmarSenha"
-                className="block text-sm font-bold text-gray-700 mb-2"
-              >
-                Confirmar senha
-              </label>
-
-              <div className="relative">
-                <input
-                  id="confirmarSenha"
-                  type={mostrarConfirmarSenha ? "text" : "password"}
-                  value={confirmarSenha}
-                  onChange={(event) => setConfirmarSenha(event.target.value)}
-                  placeholder="Confirme sua nova senha"
-                  className="w-full px-5 py-4 pr-12 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-400 focus:bg-white transition-all font-medium placeholder:text-gray-400"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setMostrarConfirmarSenha(!mostrarConfirmarSenha)
-                  }
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                  aria-label={
-                    mostrarConfirmarSenha ? "Ocultar senha" : "Mostrar senha"
-                  }
-                >
-                  {mostrarConfirmarSenha ? (
-                    <EyeOff size={20} strokeWidth={1.7} />
-                  ) : (
-                    <Eye size={20} strokeWidth={1.7} />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {erro && (
-              <div className="rounded-2xl bg-red-50 border border-red-100 px-4 py-3">
-                <p className="text-sm font-medium text-red-600">{erro}</p>
-              </div>
-            )}
-
-            {sucesso && (
-              <div className="rounded-2xl bg-green-50 border border-green-100 px-4 py-3 flex items-center gap-2">
-                <CheckCircle2
-                  className="text-green-600"
-                  size={18}
-                  strokeWidth={1.8}
-                />
-                <p className="text-sm font-medium text-green-700">
-                  Senha redefinida com sucesso.
-                </p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full py-4 rounded-2xl bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold transition-all shadow-sm"
-            >
-              Salvar nova senha
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <Link
-              href="/login"
-              className="text-sm font-bold text-gray-600 hover:text-yellow-500 transition-colors"
-            >
-              Voltar para o login
-            </Link>
-          </div>
+          <p className="mt-2 text-sm leading-relaxed text-gray-500">
+            {token
+              ? "Crie uma nova senha para recuperar o acesso à sua conta."
+              : "Não encontramos o token no link. Solicite uma nova recuperação."}
+          </p>
         </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <PasswordField
+            id="newPassword"
+            label="Nova senha"
+            value={newPassword}
+            onChange={setNewPassword}
+            show={showPassword}
+            onToggle={() => setShowPassword((current) => !current)}
+          />
+
+          <PasswordField
+            id="confirmPassword"
+            label="Confirmar senha"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            show={showConfirmPassword}
+            onToggle={() => setShowConfirmPassword((current) => !current)}
+          />
+
+          {error && (
+            <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="flex gap-3 rounded-2xl border border-green-100 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" />
+              {success}
+            </div>
+          )}
+
+          <Button
+            type="submit"
+            disabled={!token || isLoading}
+            className="h-12 w-full rounded-2xl bg-yellow-400 font-black text-gray-950 hover:bg-yellow-500 disabled:opacity-60"
+          >
+            {isLoading ? "Redefinindo..." : "Redefinir senha"}
+          </Button>
+        </form>
       </section>
     </main>
+  );
+}
+
+function PasswordField({
+  id,
+  label,
+  value,
+  onChange,
+  show,
+  onToggle,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  show: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+
+      <div className="relative">
+        <Input
+          id={id}
+          type={show ? "text" : "password"}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="••••••••"
+          className="h-12 rounded-2xl pr-12"
+          autoComplete="new-password"
+        />
+
+        <button
+          type="button"
+          onClick={onToggle}
+          className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
+        >
+          {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        </button>
+      </div>
+    </div>
   );
 }
